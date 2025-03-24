@@ -2,17 +2,19 @@ package main
 
 import (
 	"backend/internal/config"
-
-	"github.com/gin-gonic/gin"
+	"backend/internal/router"
+	"log"
 )
 
 func main() {
 	config.LoadEnv()
-	r := gin.Default()
 
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{"message": "welcome"})
-	})
+	db, err := config.ConnectDB()
+	if err != nil {
+		log.Fatal("DB接続に失敗:", err)
+	}
 
+	// ルーター起動
+	r := router.NewRouter(db)
 	r.Run(":8888")
 }
