@@ -1,8 +1,13 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"backend/internal/config"
+
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
+	config.LoadEnv()
 	r := gin.Default()
 
 	r.GET("/", func(c *gin.Context) {
