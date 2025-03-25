@@ -59,6 +59,7 @@ export const LoginForm = () => {
           id="email"
           {...register("email")}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
+          autoComplete="current-email"
         />
         {errors.email && (
           <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
@@ -78,6 +79,7 @@ export const LoginForm = () => {
           id="password"
           {...register("password")}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
+          autoComplete="current-password"
         />
         {errors.password && (
           <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>

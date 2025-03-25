@@ -54,3 +54,12 @@ func (h *AuthHandler) Login(c *gin.Context) {
 	// レスポンス
 	c.JSON(http.StatusOK, gin.H{"message": "ログインに成功しました"})
 }
+
+// ログアウト
+func (h *AuthHandler) Logout(c *gin.Context) {
+	// クッキーを削除 JWTを無効化
+	c.SetCookie("access_token", "", -1, "/", "", false, true)
+
+	// レスポンス
+	c.JSON(http.StatusOK, gin.H{"message": "ログアウトしました"})
+}

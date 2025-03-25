@@ -1,6 +1,8 @@
 "use client";
 
+import LogoutButton from "@/components/auth/LogoutButton";
 import { useAuth } from "@/hooks/useAuth";
+import Link from "next/link";
 
 /**
  * 管理者ダッシュボード画面
@@ -20,16 +22,20 @@ export default function AdminDashboardPage() {
       <h1 className="text-2xl font-bold mb-4">
         ようこそ {user?.username} さん！
       </h1>
-      <p className="mb-8 text-gary-600">
+      <p className="mb-4 text-gary-600">
         あなたは {user?.role === "admin" ? "管理者" : "ユーザー"}{" "}
         としてログインしています。
       </p>
-      <button
-        onClick={logout}
-        className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded"
-      >
-        ログアウト
-      </button>
+
+      {/* ボタン */}
+      <div className="flex flex-col items-center">
+        <LogoutButton onLogout={logout} />
+        <Link href="/admin/settings">
+          <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+            設定
+          </button>
+        </Link>
+      </div>
     </div>
   );
 }

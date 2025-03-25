@@ -37,6 +37,7 @@ func NewRouter(db *gorm.DB) *gin.Engine {
 	}
 
 	r.POST("/login", authHandler.Login)
+	r.POST("/logout", authHandler.Logout)
 
 	return r
 }
