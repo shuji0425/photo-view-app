@@ -5,6 +5,7 @@ SET NAMES utf8mb4;
 -- ============================================
 
 INSERT INTO tags (name, category_id)
+SELECT 'おすすめ', id FROM categories WHERE name = 'その他' UNION ALL
 SELECT '北海道', id FROM categories WHERE name = '都道府県' UNION ALL
 SELECT '青森県', id FROM categories WHERE name = '都道府県' UNION ALL
 SELECT '岩手県', id FROM categories WHERE name = '都道府県' UNION ALL

@@ -29,11 +29,12 @@ CREATE TABLE IF NOT EXISTS categories (
 -- ============================================
 CREATE TABLE IF NOT EXISTS photos (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  filename VARCHAR(255) NOT NULL UNIQUE, -- アップロードされた画像のユニークファイル名
-  title VARCHAR(255),                    -- タイトル（任意）
-  description TEXT,                      -- 説明文（任意）
-  category_id INT,                       -- カテゴリ（外部キー）
-  user_id INT,                           -- 投稿者（外部キー）
+  filename VARCHAR(255) NOT NULL UNIQUE,     -- アップロードされた画像のユニークファイル名
+  title VARCHAR(255),                        -- タイトル（任意）
+  description TEXT,                          -- 説明文（任意）
+  category_id INT,                           -- カテゴリ（外部キー）
+  user_id INT,                               -- 投稿者（外部キー）
+  is_visible BOOLEAN NOT NULL DEFAULT FALSE, -- 表示切り替え
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL,
@@ -108,6 +109,7 @@ CREATE TABLE IF NOT EXISTS tag_relations (
 CREATE TABLE IF NOT EXISTS photo_tags (
   photo_id INT NOT NULL,
   tag_id INT NOT NULL,
+  sort_order INT NOT NULL DEFAULT 0,  -- 並び順
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (photo_id, tag_id),
