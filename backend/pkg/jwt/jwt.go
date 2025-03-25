@@ -2,6 +2,7 @@ package jwt
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"time"
 
@@ -16,7 +17,7 @@ var tokenExpiry = time.Hour * 24
 
 // JWTに埋め込むクレーム構造体（ペイロード)
 type CustomClaims struct {
-	UserID   string `json:"user_id"`
+	UserID   int64  `json:"user_id"`
 	Email    string `json:"email"`
 	Username string `json:"username"`
 	Role     string `json:"role"`
@@ -24,7 +25,7 @@ type CustomClaims struct {
 }
 
 // ユーザー情報からトークンを発行
-func GenerateToken(userID, email, username, role string) (string, error) {
+func GenerateToken(userID int64, email, username, role string) (string, error) {
 	claims := CustomClaims{
 		UserID:   userID,
 		Email:    email,
@@ -37,6 +38,7 @@ func GenerateToken(userID, email, username, role string) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	fmt.Println("token", token)
 	return token.SignedString(jwtSecret)
 }
 

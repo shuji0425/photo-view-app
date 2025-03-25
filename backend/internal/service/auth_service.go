@@ -5,6 +5,7 @@ import (
 	"backend/pkg/hash"
 	"backend/pkg/jwt"
 	"errors"
+	"fmt"
 )
 
 // 認証サービスのインターフェース
@@ -36,10 +37,11 @@ func (s *authService) Login(email, password string) (string, error) {
 	}
 
 	// JWTトークン発行
-	token, err := jwt.GenerateToken(user.ID.String(), user.Email, user.Username, user.Role)
+	token, err := jwt.GenerateToken(user.ID, user.Email, user.Username, user.Role)
 	if err != nil {
 		return "", errors.New("JWTの発行に失敗しました")
 	}
+	fmt.Println("jwt")
 
 	return token, nil
 }

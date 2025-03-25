@@ -1,12 +1,10 @@
 package domain
 
-import "github.com/google/uuid"
-
-// ユーザーエンティティ
+// DB保存用
 type User struct {
-	ID       uuid.UUID
-	Email    string
+	ID       int64  `gorm:"primaryKey"`
+	Email    string `gorm:"unique"`
 	Username string
-	Password string
+	Password string `gorm:"column:password_hash"`
 	Role     string
 }
