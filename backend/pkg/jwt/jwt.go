@@ -2,7 +2,6 @@ package jwt
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"time"
 
@@ -38,7 +37,6 @@ func GenerateToken(userID int64, email, username, role string) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	fmt.Println("token", token)
 	return token.SignedString(jwtSecret)
 }
 

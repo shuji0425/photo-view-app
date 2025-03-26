@@ -5,7 +5,7 @@ import { LoginParams } from "@/types/auth";
  * @param params ログイン用のパラメータ
  * @throws エラーの時は例外処理
  */
-export const login = async (params: LoginParams): Promise<void> => {
+export const login = async (params: LoginParams): Promise<string> => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
     method: "POST",
     headers: {
@@ -19,4 +19,7 @@ export const login = async (params: LoginParams): Promise<void> => {
     const error = await res.json();
     throw new Error(error.message || "ログインに失敗しました");
   }
+
+  const data = await res.json();
+  return data.message;
 };
