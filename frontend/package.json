@@ -16,6 +16,7 @@
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
     "react-swipeable": "^7.0.2",
+    "swr": "^2.3.3",
     "zod": "^3.24.2"
   },
   "devDependencies": {
