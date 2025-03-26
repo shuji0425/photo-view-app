@@ -5,7 +5,6 @@ import (
 	"backend/pkg/hash"
 	"backend/pkg/jwt"
 	"errors"
-	"fmt"
 )
 
 // 認証サービスのインターフェース
@@ -41,7 +40,6 @@ func (s *authService) Login(email, password string) (string, error) {
 	if err != nil {
 		return "", errors.New("JWTの発行に失敗しました")
 	}
-	fmt.Println("jwt")
 
 	return token, nil
 }

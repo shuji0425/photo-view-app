@@ -4,7 +4,6 @@ import (
 	"backend/internal/config"
 	"backend/internal/router"
 	"log"
-	"net/http"
 )
 
 func main() {
@@ -19,7 +18,5 @@ func main() {
 	r := router.NewRouter(db)
 
 	port := ":8800"
-	if err := http.ListenAndServe(port, r); err != nil {
-		log.Fatal(err)
-	}
+	r.Engine.Run(port)
 }
