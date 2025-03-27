@@ -6,6 +6,7 @@ import { updateProfile } from "@/lib/api/profile";
 import { ProfileParams } from "@/types/profile";
 import { mutate } from "swr";
 import ProfileForm from "./ProfileForm";
+import toast from "react-hot-toast";
 
 type ProfileEditProps = {
   userId: number;
@@ -24,7 +25,7 @@ export default function ProfileEdit({ userId }: ProfileEditProps) {
       await updateProfile(userId, data);
       await mutate(`/profiles/${userId}`);
     } catch {
-      alert("プロフィールの更新に失敗しました");
+      toast.error("プロフィールの更新に失敗しました");
     } finally {
       setIsSubmitting(false);
     }

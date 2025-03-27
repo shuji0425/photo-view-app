@@ -6,6 +6,7 @@ import { ProfileParams, profileSchema } from "@/lib/schema/profileSchema";
 import { useEffect, useState } from "react";
 import AvatarUploader from "./AvatarUploader";
 import { uploadProfileImage } from "@/lib/api/profile/upload";
+import toast from "react-hot-toast";
 
 type ProfileFormProps = {
   defaultValues?: ProfileParams;
@@ -54,12 +55,13 @@ const ProfileForm = ({
         const { url } = await uploadProfileImage(userId, file);
         avatarUrl = url;
       } catch {
-        alert("画像アップロードに失敗しました");
+        toast.error("画像アップロードに失敗しました");
         return;
       }
     }
 
     await onSubmit({ ...formData, avatar: avatarUrl });
+    toast.success("プロフィールを更新しました！");
   };
 
   return (
