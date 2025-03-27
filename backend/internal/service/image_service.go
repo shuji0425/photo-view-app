@@ -2,11 +2,11 @@ package service
 
 import (
 	"backend/internal/infrastructure"
+	"backend/pkg/filename"
+	"backend/pkg/fileutil"
 	"fmt"
 	"mime/multipart"
-	"os"
 	"path/filepath"
-	"time"
 )
 
 // インターフェース
@@ -30,15 +30,11 @@ func (s *imageService) SaveAvatar(userID int64, file *multipart.FileHeader) (str
 	saveDir := filepath.Join(s.imageSaver.BasePath(), "profile")
 
 	// 古い画像を削除
-	pattern := fmt.Sprintf("user_%d_*.webp", userID)
-	matches, _ := filepath.Glob(filepath.Join(saveDir, pattern))
-	for _, m := range matches {
-		os.Remove(m)
-	}
+	pattern := fmt.Sprintf("user_%d_avatar_*.webp", userID)
+	_ = fileutil.RemoveFilesByGlob(saveDir, pattern)
 
-	// 新しいファイルパスを作成
-	timestamp := time.Now().Format("2006010215045")
-	filename := fmt.Sprintf("user_%d_%s.webp", userID, timestamp)
+	// 新しいファイル名を作成
+	filename := filename.GenerateProfileAvatarFilename(userID)
 
 	// ファイル保存
 	url, err := s.imageSaver.Save(file, "profile", filename)
