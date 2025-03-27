@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { login } from "@/lib/api/auth";
 import { LoginFormSchema, loginSchema } from "@/lib/schema/loginSchema";
+import { useAuth } from "@/hooks/useAuth";
 
 /**
  * 管理者用ログインフォーム
@@ -23,6 +23,7 @@ export const LoginForm = () => {
 
   const [apiError, setApiError] = useState("");
   const router = useRouter();
+  const { login } = useAuth();
 
   // フォーム送信処理
   const onSubmit = async (data: LoginFormSchema) => {

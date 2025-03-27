@@ -17,12 +17,18 @@ export function middleware(req: NextRequest) {
     PUBLIC_FILE.test(pathname);
 
   // CookieからJWTを取得
-  const token = req.cookies.get("access_token")?.value;
+  const token = req.cookies.get("access_token")?.value ?? "";
 
   // admin配下かつ未承認ならリダイレクト
   if (pathname.startsWith("/admin") && !isPublicPath && !token) {
     const loginURL = new URL("/admin/login", req.url);
     return NextResponse.redirect(loginURL);
+  }
+
+  // ログイン済みでアクセスしたときはダッシュボードへ遷移
+  if (pathname === "/admin/login" && token) {
+    const dashboardURL = new URL("/admin/dashboard", req.url);
+    return NextResponse.redirect(dashboardURL);
   }
 
   return NextResponse.next();

@@ -1,35 +1,26 @@
-import { useEffect, useState } from "react";
-import { getMe, logout } from "@/lib/api/auth";
-import { AuthUser } from "@/types/auth";
+import useSWR, { mutate } from "swr";
+import { getMe, login as apiLogin, logout as apiLogout } from "@/lib/api/auth";
+import { AuthUser, LoginParams } from "@/types/auth";
 
 export const useAuth = () => {
-  const [user, setUser] = useState<AuthUser | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: user, error } = useSWR<AuthUser>("/me", getMe, {
+    shouldRetryOnError: false,
+  });
 
-  // 初回マウント時にユーザーを取得
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userData = await getMe();
-        setUser(userData);
-      } catch {
-        setUser(null); // 未認証
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchUser();
-  }, []);
+  // ログイン状態
+  const isLoading = !user && !error;
 
-  // ログアウト処理
-  const handleLogout = async () => {
-    try {
-      await logout();
-      setUser(null);
-    } catch (err) {
-      console.error("ログアウトに失敗しました", err);
-    }
+  // ログイン処理
+  const login = async (params: LoginParams) => {
+    await apiLogin(params);
+    await mutate("/me");
   };
 
-  return { user, isLoading, isLoggedIn: !!user, logout: handleLogout };
+  // ログアウト処理
+  const logout = async () => {
+    await apiLogout();
+    mutate("/me", null, false); // useSWRのキャッシュクリア
+  };
+
+  return { user, isLoading, login, logout };
 };

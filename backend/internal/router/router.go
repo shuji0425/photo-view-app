@@ -1,43 +1,32 @@
 package router
 
 import (
-	"backend/internal/handler"
+	"backend/internal/injector"
 	"backend/internal/middleware"
-	"backend/internal/repository"
-	"backend/internal/service"
-	"backend/internal/usecase"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
+// 構造体
+type Router struct {
+	Engine *gin.Engine
+}
+
 // ルーティング設定
-func NewRouter(db *gorm.DB) *gin.Engine {
+func NewRouter(db *gorm.DB) *Router {
 	r := gin.Default()
 	r.Use(middleware.CORSMiddleware())
 	r.SetTrustedProxies(nil) // プロキシをローカルのみ許可
 
-	// 依存注入
-	// ユーザー
-	userRepo := repository.NewUserRepository(db)
-	userService := service.NewUserService(userRepo)
-	userUsecase := usecase.NewUserUsecase(userService)
-	userHandler := handler.NewUserHandler(userUsecase)
+	// ハンドラーを取得
+	handlers := injector.InjectAll(db)
 
-	// 認証
-	authService := service.NewAuthService(userRepo)
-	authUsecase := usecase.NewAuthUsecase(authService)
-	authHandler := handler.NewAuthHandler(authUsecase)
+	// ルーティング設定
+	SetupProfileRoutes(r, handlers.ProfileHandler)
+	SetupAuthRoutes(r, handlers.AuthHandler)
+	SetupUserRoutes(r, handlers.UserHandler)
+	SetupAvatarRoutes(r, handlers.AvatarHandler)
 
-	// ルート定義
-	// 認証が必要
-	auth := r.Group("/").Use(middleware.AuthMiddleware())
-	{
-		auth.GET("/me", userHandler.GetMe)
-	}
-
-	r.POST("/login", authHandler.Login)
-	r.POST("/logout", authHandler.Logout)
-
-	return r
+	return &Router{Engine: r}
 }
