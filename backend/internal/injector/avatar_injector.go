@@ -11,10 +11,13 @@ import (
 )
 
 func InjectAvatarHandler(db *gorm.DB) *handler.AvatarHandler {
+	// 画像
+	imageSaver := infrastructure.NewImageSaver("../frontend/public/images")
+	imageService := service.NewImageService(imageSaver)
+
 	// アバター
 	profileRepo := repository.NewProfileRepository(db)
-	imageSaver := infrastructure.NewImageSaver("../frontend/public/images")
-	profileService := service.NewProfileService(profileRepo, imageSaver)
-	profileUsecase := usecase.NewProfileUsecase(profileService)
+	profileService := service.NewProfileService(profileRepo)
+	profileUsecase := usecase.NewProfileUsecase(profileService, imageService)
 	return handler.NewAvatarHandler(profileUsecase)
 }
