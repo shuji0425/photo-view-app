@@ -103,17 +103,21 @@ export default function AvatarUploader({
       {/* 画像取りやめボタン */}
       {previewUrl && (
         <div className="flex justify-between text-sm text-gray-600">
-          <button
-            type="button"
-            onClick={handleRetrim}
-            className="text-blue-500 underline"
-          >
-            トリミング修正
-          </button>
+          {originalImageUrl ? (
+            <button
+              type="button"
+              onClick={handleRetrim}
+              className="text-blue-500 underline cursor-pointer"
+            >
+              トリミング修正
+            </button>
+          ) : (
+            <span className="text-gray-400 italic">再アップロード可能</span>
+          )}
           <button
             type="button"
             onClick={handleCancelImage}
-            className="text-red-500 underline"
+            className="text-red-500 underline cursor-pointer"
           >
             画像を削除
           </button>
