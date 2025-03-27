@@ -2,17 +2,20 @@
 
 import LogoutButton from "@/components/auth/LogoutButton";
 import { useAuth } from "@/hooks/useAuth";
-import Link from "next/link";
+import { useProfile } from "@/lib/swr/useProfile";
+import NavButton from "@/components/ui/NavButton";
 
 /**
  * 管理者ダッシュボード画面
  * @returns JSX
  */
 export default function AdminDashboardPage() {
-  const { user, isLoading, logout } = useAuth();
+  const { user, isLoading: authLoading, logout } = useAuth();
+  const userId = Number(user?.id ?? 0);
+  const { profile, isLoading: profileLoading } = useProfile(userId);
 
   // ローディング中表示
-  if (isLoading) {
+  if (authLoading || profileLoading) {
     return <p className="text-center mt-10">読み込み中...</p>;
   }
 
@@ -29,12 +32,15 @@ export default function AdminDashboardPage() {
 
       {/* ボタン */}
       <div className="flex flex-col items-center">
+        {/* ログアウト */}
         <LogoutButton onLogout={logout} />
-        <Link href="/admin/settings">
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
-            設定
-          </button>
-        </Link>
+
+        {/* プロフィール */}
+        <NavButton
+          href="/admin/profile"
+          label={profile ? "プロフィール編集" : "プロフィール作成"}
+          color={profile ? "green" : "yellow"}
+        />
       </div>
     </div>
   );

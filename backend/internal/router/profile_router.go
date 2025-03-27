@@ -9,7 +9,7 @@ import (
 
 // プロフィール関連のルーター
 func SetupProfileRoutes(r *gin.Engine, profileHandler *handler.ProfileHandler) {
-	adminGroup := r.Group("/admin/profiles")
+	adminGroup := r.Group("/profiles")
 	adminGroup.Use(middleware.AuthMiddleware())
 
 	// ルート
