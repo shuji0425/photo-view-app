@@ -3,7 +3,9 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProfileParams, profileSchema } from "@/lib/schema/profileSchema";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import AvatarUploader from "./AvatarUploader";
+import { uploadProfileImage } from "@/lib/api/profile/upload";
 
 type ProfileFormProps = {
   defaultValues?: ProfileParams;
@@ -21,6 +23,7 @@ const ProfileForm = ({
   isSubmitting,
   submitLabel,
 }: ProfileFormProps) => {
+  const [avatarBlob, setAvatarBlob] = useState<Blob | null>(null);
   const {
     register,
     handleSubmit,
@@ -37,22 +40,37 @@ const ProfileForm = ({
     }
   }, [defaultValues, reset]);
 
+  // ボタン押下の処理
+  const handleFormSubmit = async (formData: ProfileParams) => {
+    let avatarUrl = formData.avatar;
+
+    if (avatarBlob) {
+      try {
+        const file = new File([avatarBlob], "avatar.webp", {
+          type: "image/webp",
+        });
+        const { url } = await uploadProfileImage(file);
+        avatarUrl = url;
+      } catch {
+        alert("画像アップロードに失敗しました");
+        return;
+      }
+    }
+
+    await onSubmit({ ...formData, avatar: avatarUrl });
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
       {/* Avatar */}
       <div>
         <label htmlFor="avatar" className="block text-sm font-medium">
-          プロフィール画像URL
+          アイコン画像
         </label>
-        <input
-          id="avatar"
-          type="text"
-          {...register("avatar")}
-          className="w-full mt-1 border rounded px-3 py-2"
+        <AvatarUploader
+          onImageSelected={(blob) => setAvatarBlob(blob)}
+          initialUrl={defaultValues?.avatar}
         />
-        {errors.avatar && (
-          <p className="text-sm text-red-500 mt-1">{errors.avatar.message}</p>
-        )}
       </div>
 
       {/* Bio */}
