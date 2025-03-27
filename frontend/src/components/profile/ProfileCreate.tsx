@@ -38,6 +38,7 @@ export default function ProfileCreate({ userId }: ProfileCreateProps) {
       onSubmit={handleCreate}
       isSubmitting={isSubmitting}
       submitLabel="作成"
+      userId={userId}
     />
   );
 }

@@ -2,7 +2,6 @@ package handler
 
 import (
 	"backend/internal/usecase"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -27,8 +26,6 @@ func (h *UserHandler) GetMe(c *gin.Context) {
 	}
 
 	userID := userIDRaw.(int64)
-
-	log.Println("ID", userIDRaw)
 
 	// ユースケースからユーザーを取得
 	userDTO, err := h.usecase.GetMe(userID)

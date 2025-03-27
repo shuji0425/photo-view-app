@@ -75,7 +75,7 @@ export default function AvatarUploader({
   };
 
   return (
-    <div className="w-full flex justify-center mt-1">
+    <div className="w-full flex flex-col justify-center mt-1">
       {/* プレビュー表示 */}
       <div
         onClick={handleAvatarClick}

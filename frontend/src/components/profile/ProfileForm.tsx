@@ -12,6 +12,7 @@ type ProfileFormProps = {
   onSubmit: (data: ProfileParams) => Promise<void>;
   isSubmitting?: boolean;
   submitLabel: string;
+  userId: number;
 };
 
 /**
@@ -22,6 +23,7 @@ const ProfileForm = ({
   onSubmit,
   isSubmitting,
   submitLabel,
+  userId,
 }: ProfileFormProps) => {
   const [avatarBlob, setAvatarBlob] = useState<Blob | null>(null);
   const {
@@ -49,7 +51,7 @@ const ProfileForm = ({
         const file = new File([avatarBlob], "avatar.webp", {
           type: "image/webp",
         });
-        const { url } = await uploadProfileImage(file);
+        const { url } = await uploadProfileImage(userId, file);
         avatarUrl = url;
       } catch {
         alert("画像アップロードに失敗しました");

@@ -39,6 +39,7 @@ export default function ProfileEdit({ userId }: ProfileEditProps) {
       onSubmit={handleUpdate}
       isSubmitting={isSubmitting}
       submitLabel="更新"
+      userId={userId}
     />
   );
 }

@@ -26,6 +26,7 @@ func NewRouter(db *gorm.DB) *Router {
 	SetupProfileRoutes(r, handlers.ProfileHandler)
 	SetupAuthRoutes(r, handlers.AuthHandler)
 	SetupUserRoutes(r, handlers.UserHandler)
+	SetupAvatarRoutes(r, handlers.AvatarHandler)
 
 	return &Router{Engine: r}
 }

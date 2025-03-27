@@ -10,12 +10,11 @@ import (
 	"gorm.io/gorm"
 )
 
-// プロフィールの依存関係
-func InjectProfileHandler(db *gorm.DB) *handler.ProfileHandler {
-	// プロフィール
+func InjectAvatarHandler(db *gorm.DB) *handler.AvatarHandler {
+	// アバター
 	profileRepo := repository.NewProfileRepository(db)
 	imageSaver := infrastructure.NewImageSaver("../frontend/public/images")
 	profileService := service.NewProfileService(profileRepo, imageSaver)
 	profileUsecase := usecase.NewProfileUsecase(profileService)
-	return handler.NewProfileHandler(profileUsecase)
+	return handler.NewAvatarHandler(profileUsecase)
 }

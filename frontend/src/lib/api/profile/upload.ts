@@ -4,13 +4,14 @@
  * @returns アップロードされた画像のURL
  */
 export const uploadProfileImage = async (
+  userId: number,
   file: File
 ): Promise<{ url: string }> => {
   const formData = new FormData();
   formData.append("file", file);
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/profiles/avatar`,
+    `${process.env.NEXT_PUBLIC_API_URL}/profiles/avatar/${userId}`,
     {
       method: "POST",
       credentials: "include",

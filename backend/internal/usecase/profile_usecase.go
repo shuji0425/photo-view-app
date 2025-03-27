@@ -5,6 +5,7 @@ import (
 	"backend/internal/dto"
 	"backend/internal/service"
 	"errors"
+	"mime/multipart"
 )
 
 // インターフェース
@@ -12,6 +13,7 @@ type ProfileUsecase interface {
 	GetUserProfile(userID int64) (*dto.UserProfileResponse, error)
 	CreateUserProfile(userID int64, req *dto.CreateProfileRequest) (*dto.UserProfileResponse, error)
 	UpdateUserProfile(userID int64, req *dto.UpdateProfileRequest) (*dto.UserProfileResponse, error)
+	UploadAvatar(userID int64, file *multipart.FileHeader) (string, error)
 }
 
 // 構造体
@@ -90,4 +92,9 @@ func (u *profileUsecase) UpdateUserProfile(userID int64, req *dto.UpdateProfileR
 
 	// 変換して返却
 	return ConvertToUserProfileResponse(profile), nil
+}
+
+// アバター画像アップロード
+func (u *profileUsecase) UploadAvatar(userID int64, file *multipart.FileHeader) (string, error) {
+	return u.profileService.SaveAvatar(userID, file)
 }
