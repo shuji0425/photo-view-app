@@ -63,9 +63,7 @@ const ProfileForm = ({
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
       {/* Avatar */}
       <div>
-        <label htmlFor="avatar" className="block text-sm font-medium">
-          アイコン画像
-        </label>
+        <label className="block text-sm font-medium">アイコン画像</label>
         <AvatarUploader
           onImageSelected={(blob) => setAvatarBlob(blob)}
           initialUrl={defaultValues?.avatar}
@@ -108,6 +106,7 @@ const ProfileForm = ({
           color="green"
           label={submitLabel}
           disabled={isSubmitting}
+          isLoading={isSubmitting}
         />
       </div>
     </form>

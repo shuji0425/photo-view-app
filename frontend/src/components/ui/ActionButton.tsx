@@ -4,12 +4,14 @@ import {
   colorClasses,
   ButtonColor,
 } from "@/lib/styles/button";
+import { Spinner } from "./Spinner";
 
 type ActionButtonProps = {
   label: string;
   color: ButtonColor;
   type?: "button" | "submit";
   disabled?: boolean;
+  isLoading?: boolean;
   onClick?: () => void;
 };
 
@@ -21,6 +23,7 @@ export const ActionButton = ({
   color,
   type = "button",
   disabled,
+  isLoading = false,
   onClick,
 }: ActionButtonProps) => (
   <button
@@ -33,6 +36,6 @@ export const ActionButton = ({
       disabled && "opacity-50 cursor-not-allowed"
     )}
   >
-    {label}
+    {isLoading ? <Spinner /> : label}
   </button>
 );
