@@ -5,8 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ProfileParams, profileSchema } from "@/lib/schema/profileSchema";
 import { useEffect, useState } from "react";
 import AvatarUploader from "./AvatarUploader";
-import { uploadProfileImage } from "@/lib/api/profile/upload";
 import toast from "react-hot-toast";
+import { useAvatarUploader } from "@/hooks/useAvatarUploader";
+import { FormError } from "../ui/FormError";
 
 type ProfileFormProps = {
   defaultValues?: ProfileParams;
@@ -27,6 +28,7 @@ const ProfileForm = ({
   userId,
 }: ProfileFormProps) => {
   const [avatarBlob, setAvatarBlob] = useState<Blob | null>(null);
+  const { uploadAvatar } = useAvatarUploader();
   const {
     register,
     handleSubmit,
@@ -47,18 +49,8 @@ const ProfileForm = ({
   const handleFormSubmit = async (formData: ProfileParams) => {
     let avatarUrl = formData.avatar;
 
-    if (avatarBlob) {
-      try {
-        const file = new File([avatarBlob], "avatar.webp", {
-          type: "image/webp",
-        });
-        const { url } = await uploadProfileImage(userId, file);
-        avatarUrl = url;
-      } catch {
-        toast.error("画像アップロードに失敗しました");
-        return;
-      }
-    }
+    const uploadedUrl = await uploadAvatar(userId, avatarBlob);
+    if (uploadedUrl) avatarUrl = uploadedUrl;
 
     await onSubmit({ ...formData, avatar: avatarUrl });
     toast.success("プロフィールを更新しました！");
@@ -88,9 +80,7 @@ const ProfileForm = ({
           {...register("bio")}
           className="w-full mt-1 border rounded px-3 py-2"
         />
-        {errors.bio && (
-          <p className="text-sm text-red-500 mt-1">{errors.bio.message}</p>
-        )}
+        <FormError message={errors.bio?.message} />
       </div>
 
       {/* Website */}
@@ -104,9 +94,7 @@ const ProfileForm = ({
           {...register("website")}
           className="w-full mt-1 border rounded px-3 py-2"
         />
-        {errors.website && (
-          <p className="text-sm text-red-500 mt-1">{errors.website.message}</p>
-        )}
+        <FormError message={errors.website?.message} />
       </div>
 
       {/* Location */}
@@ -120,9 +108,7 @@ const ProfileForm = ({
           {...register("location")}
           className="w-full mt-1 border rounded px-3 py-2"
         />
-        {errors.location && (
-          <p className="text-sm text-red-500 mt-1">{errors.location.message}</p>
-        )}
+        <FormError message={errors.location?.message} />
       </div>
 
       {/* Submit */}
