@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ActionButton } from "../ui/ActionButton";
 
 type LogoutButtonProps = {
   onLogout: () => Promise<void>;
@@ -30,17 +31,13 @@ const LogoutButton = ({ onLogout }: LogoutButtonProps) => {
 
   return (
     <div className="mb-2">
-      <button
-        onClick={handleLogout}
+      <ActionButton
+        label="ログアウト"
+        color="red"
         disabled={isLoggingOut}
-        className={`px-4 py-2 text-white rounded transition ${
-          isLoggingOut
-            ? "bg-gray-400 cursor-not-allowed"
-            : "bg-red-500  hover:bg-red-600"
-        }`}
-      >
-        {isLoggingOut ? "ログアウト中..." : "ログアウト"}
-      </button>
+        isLoading={isLoggingOut}
+        onClick={handleLogout}
+      />
       {error && <p className="mt-2 text-red-500">{error}</p>}
     </div>
   );
