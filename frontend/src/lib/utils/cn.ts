@@ -5,5 +5,5 @@
  * 例: cn("text-sm", isError && "text-red-500") => "text-sm text-red-500"
  */
 export function cn(...classes: (string | false | null | undefined)[]): string {
-  return classes.filter(Boolean).join("");
+  return classes.filter(Boolean).join(" ");
 }

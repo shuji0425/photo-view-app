@@ -23,10 +23,16 @@ type NavButtonProps = {
  */
 export const NavButton = ({ href, label, color }: NavButtonProps) => {
   return (
-    <Link href={href}>
-      <button className={cn(baseButtonClass, colorClasses[color])}>
-        {label}
-      </button>
+    <Link
+      href={href}
+      role="button"
+      className={cn(
+        baseButtonClass,
+        colorClasses[color],
+        "inline-block transform active:scale-95"
+      )}
+    >
+      {label}
     </Link>
   );
 };
