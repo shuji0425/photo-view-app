@@ -7,8 +7,10 @@ import { useEffect, useState } from "react";
 import AvatarUploader from "./AvatarUploader";
 import toast from "react-hot-toast";
 import { useAvatarUploader } from "@/hooks/useAvatarUploader";
-import { FormError } from "../ui/FormError";
 import { ActionButton } from "../ui/ActionButton";
+import { FormField } from "../ui/FormField";
+import { Input } from "../ui/Input";
+import { Textarea } from "../ui/Textarea";
 
 type ProfileFormProps = {
   defaultValues?: ProfileParams;
@@ -72,44 +74,31 @@ const ProfileForm = ({
 
       {/* Bio */}
       <div>
-        <label htmlFor="bio" className="block text-sm font-medium">
-          自己紹介
-        </label>
-        <textarea
-          id="bio"
-          rows={4}
-          {...register("bio")}
-          className="w-full mt-1 border rounded px-3 py-2"
-        />
-        <FormError message={errors.bio?.message} />
+        <FormField label="自己紹介" htmlFor="bio" error={errors.bio?.message}>
+          <Textarea id="bio" rows={4} {...register("bio")} />
+        </FormField>
       </div>
 
       {/* Website */}
       <div>
-        <label htmlFor="website" className="block text-sm font-medium">
-          ウェブサイト
-        </label>
-        <input
-          id="website"
-          type="url"
-          {...register("website")}
-          className="w-full mt-1 border rounded px-3 py-2"
-        />
-        <FormError message={errors.website?.message} />
+        <FormField
+          label="ウェブサイト"
+          htmlFor="website"
+          error={errors.website?.message}
+        >
+          <Input id="website" type="url" {...register("website")} />
+        </FormField>
       </div>
 
       {/* Location */}
       <div>
-        <label htmlFor="location" className="block text-sm font-medium">
-          所在地
-        </label>
-        <input
-          id="location"
-          type="text"
-          {...register("location")}
-          className="w-full mt-1 border rounded px-3 py-2"
-        />
-        <FormError message={errors.location?.message} />
+        <FormField
+          label="所在地"
+          htmlFor="location"
+          error={errors.location?.message}
+        >
+          <Input id="location" {...register("location")} />
+        </FormField>
       </div>
 
       {/* Submit */}
