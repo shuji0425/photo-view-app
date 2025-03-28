@@ -3,7 +3,7 @@
 import LogoutButton from "@/components/auth/LogoutButton";
 import { useAuth } from "@/hooks/useAuth";
 import { useProfile } from "@/lib/swr/useProfile";
-import NavButton from "@/components/ui/NavButton";
+import { NavButton } from "@/components/ui/NavButton";
 
 /**
  * 管理者ダッシュボード画面

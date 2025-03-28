@@ -19,11 +19,12 @@ type ProfileUsecase interface {
 // 構造体
 type profileUsecase struct {
 	profileService service.ProfileService
+	imageService   service.ImageService
 }
 
 // 依存注入用
-func NewProfileUsecase(profileService service.ProfileService) ProfileUsecase {
-	return &profileUsecase{profileService}
+func NewProfileUsecase(profileService service.ProfileService, imageService service.ImageService) ProfileUsecase {
+	return &profileUsecase{profileService, imageService}
 }
 
 // プローフィルを取得し、変換して返却
@@ -96,5 +97,5 @@ func (u *profileUsecase) UpdateUserProfile(userID int64, req *dto.UpdateProfileR
 
 // アバター画像アップロード
 func (u *profileUsecase) UploadAvatar(userID int64, file *multipart.FileHeader) (string, error) {
-	return u.profileService.SaveAvatar(userID, file)
+	return u.imageService.SaveAvatar(userID, file)
 }

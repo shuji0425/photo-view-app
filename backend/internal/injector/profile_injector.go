@@ -12,10 +12,13 @@ import (
 
 // プロフィールの依存関係
 func InjectProfileHandler(db *gorm.DB) *handler.ProfileHandler {
+	// 画像
+	imageSaver := infrastructure.NewImageSaver("../frontend/public/images")
+	imageService := service.NewImageService(imageSaver)
+
 	// プロフィール
 	profileRepo := repository.NewProfileRepository(db)
-	imageSaver := infrastructure.NewImageSaver("../frontend/public/images")
-	profileService := service.NewProfileService(profileRepo, imageSaver)
-	profileUsecase := usecase.NewProfileUsecase(profileService)
+	profileService := service.NewProfileService(profileRepo)
+	profileUsecase := usecase.NewProfileUsecase(profileService, imageService)
 	return handler.NewProfileHandler(profileUsecase)
 }

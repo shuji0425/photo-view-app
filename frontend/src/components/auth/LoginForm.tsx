@@ -6,6 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { LoginFormSchema, loginSchema } from "@/lib/schema/loginSchema";
 import { useAuth } from "@/hooks/useAuth";
+import { FormField } from "../ui/FormField";
+import { Input } from "../ui/Input";
+import { ActionButton } from "../ui/ActionButton";
+import { PasswordInput } from "../ui/PasswordInput";
 
 /**
  * 管理者用ログインフォーム
@@ -49,42 +53,33 @@ export const LoginForm = () => {
 
       {/* メールアドレス入力 */}
       <div className="mb-4">
-        <label
+        <FormField
+          label="メールアドレス"
           htmlFor="email"
-          className="block text-gray-700 text-sm font-bold mb-2"
+          error={errors.email?.message}
         >
-          メールアドレス
-        </label>
-        <input
-          type="email"
-          id="email"
-          {...register("email")}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-          autoComplete="current-email"
-        />
-        {errors.email && (
-          <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
-        )}
+          <Input
+            id="email"
+            type="email"
+            {...register("email")}
+            autoComplete="email"
+          />
+        </FormField>
       </div>
 
       {/* パスワード入力 */}
       <div className="mb-6">
-        <label
+        <FormField
+          label="パスワード"
           htmlFor="password"
-          className="block text-gray-700 text-sm font-bold mb-2"
+          error={errors.password?.message}
         >
-          パスワード
-        </label>
-        <input
-          type="password"
-          id="password"
-          {...register("password")}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-          autoComplete="current-password"
-        />
-        {errors.password && (
-          <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
-        )}
+          <PasswordInput
+            id="password"
+            {...register("password")}
+            autoComplete="current-password"
+          />
+        </FormField>
       </div>
 
       {/* APIエラー表示 */}
@@ -92,13 +87,13 @@ export const LoginForm = () => {
 
       {/* 送信ボタン */}
       <div className="flex items-center justify-center">
-        <button
+        <ActionButton
+          label="ログイン"
+          color="blue"
           type="submit"
           disabled={isSubmitting}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
-        >
-          {isSubmitting ? "ログイン中..." : "ログイン"}
-        </button>
+          isLoading={isSubmitting}
+        />
       </div>
     </form>
   );
