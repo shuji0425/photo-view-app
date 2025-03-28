@@ -48,13 +48,13 @@ func (u *profileUsecase) CreateUserProfile(userID int64, req *dto.CreateProfileR
 		return nil, err
 	}
 	if existingProfile != nil {
-		return nil, errors.New("プロフィールが存在しません")
+		return nil, errors.New("プロフィールが存在してます")
 	}
 
 	// スライス化(nil対策)
-	snsLinks := []domain.SNSLink{}
+	var snsLinks domain.SNSLinks
 	if req.SNSLinks != nil {
-		snsLinks = *req.SNSLinks
+		snsLinks = domain.SNSLinks(*req.SNSLinks)
 	}
 
 	// 新規プロフィールを作成
@@ -106,7 +106,7 @@ func (u *profileUsecase) UpdateUserProfile(userID int64, req *dto.UpdateProfileR
 	profile.Location = req.Location
 	profile.BirthPlace = req.BirthPlace
 	if req.SNSLinks != nil {
-		profile.SNSLinks = *req.SNSLinks
+		profile.SNSLinks = domain.SNSLinks(*req.SNSLinks)
 	}
 
 	// 更新

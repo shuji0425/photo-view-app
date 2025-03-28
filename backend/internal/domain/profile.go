@@ -15,8 +15,8 @@ type Profile struct {
 	Website     *string
 	Location    *string
 	BirthPlace  *string
-	SNSLinks    []SNSLink
-	IsPublic    bool `gorm:"default:true"`
+	SNSLinks    SNSLinks `gorm:"type:json"`
+	IsPublic    bool     `gorm:"default:true"`
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }

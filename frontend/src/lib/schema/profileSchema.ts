@@ -1,5 +1,12 @@
 import { z } from "zod";
 
+// SNSの定義
+const snsLinksSchema = z.object({
+  platform: z.enum(["twitter", "instagram", "facebook", "other"]),
+  url: z.string().url("正しいURLを入力してください"),
+  platform_name: z.string().optional(), // otherのみ
+});
+
 export const profileSchema = z.object({
   display_name: z
     .string()
@@ -44,10 +51,7 @@ export const profileSchema = z.object({
     .optional()
     .nullable()
     .transform((val) => (val === "" ? null : val)),
-  sns_links: z
-    .record(z.string().url({ message: "有効なURLを入力してください" }))
-    .optional()
-    .nullable(),
+  sns_links: z.array(snsLinksSchema).optional().nullable(),
 });
 
 /** フォーム入力データ型 */

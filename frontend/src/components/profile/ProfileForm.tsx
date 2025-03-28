@@ -7,11 +7,10 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useAvatarUploader } from "@/hooks/useAvatarUploader";
 import { ActionButton } from "../ui/ActionButton";
-import { FormField } from "../ui/FormField";
-import { Input } from "../ui/Input";
 import { ProfileBasicSection } from "./ProfileBasicSection";
 import { ProfileImageSection } from "./ProfileImageSection";
 import { ProfileLocationSection } from "./ProfileLocationSection";
+import { ProfileLinksSection } from "./ProfileLinksSection";
 
 type ProfileFormProps = {
   defaultValues?: ProfileParams;
@@ -38,6 +37,7 @@ const ProfileForm = ({
     handleSubmit,
     formState: { errors },
     reset,
+    control,
   } = useForm<ProfileParams>({
     resolver: zodResolver(profileSchema),
     defaultValues,
@@ -57,7 +57,7 @@ const ProfileForm = ({
     if (uploadedUrl) avatarUrl = uploadedUrl;
 
     await onSubmit({ ...formData, avatar: avatarUrl });
-    toast.success("プロフィールを更新しました！");
+    toast.success("プロフィールを保存しました！");
   };
 
   return (
@@ -71,17 +71,11 @@ const ProfileForm = ({
         initialAvatarUrl={defaultValues?.avatar}
       />
       <ProfileLocationSection register={register} errors={errors} />
-
-      {/* Website */}
-      <div>
-        <FormField
-          label="ウェブサイト"
-          htmlFor="website"
-          error={errors.website?.message}
-        >
-          <Input id="website" type="url" {...register("website")} />
-        </FormField>
-      </div>
+      <ProfileLinksSection
+        register={register}
+        errors={errors}
+        control={control}
+      />
 
       {/* Submit */}
       <div className="text-center">
