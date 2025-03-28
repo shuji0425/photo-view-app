@@ -79,6 +79,7 @@ func (h *ProfileHandler) UpdateProfileHandler(c *gin.Context) {
 	profile, err := h.profileUsecase.UpdateUserProfile(userID, &req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	c.JSON(http.StatusOK, profile)

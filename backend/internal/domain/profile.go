@@ -2,8 +2,6 @@ package domain
 
 import (
 	"time"
-
-	"gorm.io/datatypes"
 )
 
 // プロフィール（DBモデル）
@@ -17,8 +15,8 @@ type Profile struct {
 	Website     *string
 	Location    *string
 	BirthPlace  *string
-	SNSLinks    datatypes.JSON // JSON型（SNSリンク）
-	IsPublic    bool           `gorm:"default:true"`
+	SNSLinks    []SNSLink
+	IsPublic    bool `gorm:"default:true"`
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }

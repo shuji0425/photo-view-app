@@ -24,11 +24,7 @@ func NewProfileService(profileRepo repository.ProfileRepository) ProfileService 
 
 // ユーザーIDでプロフィールを取得
 func (s *profileService) GetProfile(userID int64) (*domain.Profile, error) {
-	profile, err := s.profileRepo.GetProfileByUserID(userID)
-	if err != nil {
-		return nil, err
-	}
-	return profile, nil
+	return s.profileRepo.GetProfileByUserID(userID)
 }
 
 // プロフィールの新規作成

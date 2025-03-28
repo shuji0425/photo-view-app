@@ -4,13 +4,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProfileParams, profileSchema } from "@/lib/schema/profileSchema";
 import { useEffect, useState } from "react";
-import AvatarUploader from "./AvatarUploader";
 import toast from "react-hot-toast";
 import { useAvatarUploader } from "@/hooks/useAvatarUploader";
 import { ActionButton } from "../ui/ActionButton";
 import { FormField } from "../ui/FormField";
 import { Input } from "../ui/Input";
-import { Textarea } from "../ui/Textarea";
+import { ProfileBasicSection } from "./ProfileBasicSection";
+import { ProfileImageSection } from "./ProfileImageSection";
+import { ProfileLocationSection } from "./ProfileLocationSection";
 
 type ProfileFormProps = {
   defaultValues?: ProfileParams;
@@ -61,21 +62,15 @@ const ProfileForm = ({
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
-      {/* Avatar */}
-      <div>
-        <label className="block text-sm font-medium">アイコン画像</label>
-        <AvatarUploader
-          onImageSelected={(blob) => setAvatarBlob(blob)}
-          initialUrl={defaultValues?.avatar}
-        />
-      </div>
-
-      {/* Bio */}
-      <div>
-        <FormField label="自己紹介" htmlFor="bio" error={errors.bio?.message}>
-          <Textarea id="bio" rows={4} {...register("bio")} />
-        </FormField>
-      </div>
+      {/* 自己紹介入力欄 */}
+      <ProfileBasicSection register={register} errors={errors} />
+      <ProfileImageSection
+        register={register}
+        errors={errors}
+        onAvatarSelect={(blob) => setAvatarBlob(blob)}
+        initialAvatarUrl={defaultValues?.avatar}
+      />
+      <ProfileLocationSection register={register} errors={errors} />
 
       {/* Website */}
       <div>
@@ -85,17 +80,6 @@ const ProfileForm = ({
           error={errors.website?.message}
         >
           <Input id="website" type="url" {...register("website")} />
-        </FormField>
-      </div>
-
-      {/* Location */}
-      <div>
-        <FormField
-          label="所在地"
-          htmlFor="location"
-          error={errors.location?.message}
-        >
-          <Input id="location" {...register("location")} />
         </FormField>
       </div>
 

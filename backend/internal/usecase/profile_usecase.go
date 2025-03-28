@@ -4,6 +4,7 @@ import (
 	"backend/internal/domain"
 	"backend/internal/dto"
 	"backend/internal/service"
+	"backend/internal/usecase/converter"
 	"errors"
 	"mime/multipart"
 )
@@ -34,9 +35,9 @@ func (u *profileUsecase) GetUserProfile(userID int64) (*dto.UserProfileResponse,
 		return nil, err
 	}
 	if profile == nil {
-		return nil, errors.New("profile not found")
+		return nil, errors.New("プロフィールが存在しません")
 	}
-	return ConvertToUserProfileResponse(profile), nil
+	return converter.ConvertToUserProfileResponse(profile), nil
 }
 
 // プロフィール新規登録
@@ -47,7 +48,13 @@ func (u *profileUsecase) CreateUserProfile(userID int64, req *dto.CreateProfileR
 		return nil, err
 	}
 	if existingProfile != nil {
-		return nil, errors.New("profile already exists")
+		return nil, errors.New("プロフィールが存在しません")
+	}
+
+	// スライス化(nil対策)
+	snsLinks := []domain.SNSLink{}
+	if req.SNSLinks != nil {
+		snsLinks = *req.SNSLinks
 	}
 
 	// 新規プロフィールを作成
@@ -61,7 +68,7 @@ func (u *profileUsecase) CreateUserProfile(userID int64, req *dto.CreateProfileR
 		Website:     req.Website,
 		Location:    req.Location,
 		BirthPlace:  req.BirthPlace,
-		SNSLinks:    req.MarshalSNSLinks(), // JSONに変換
+		SNSLinks:    snsLinks,
 		IsPublic:    true,
 	}
 
@@ -72,7 +79,7 @@ func (u *profileUsecase) CreateUserProfile(userID int64, req *dto.CreateProfileR
 	}
 
 	// 変換して返却
-	return ConvertToUserProfileResponse(profile), nil
+	return converter.ConvertToUserProfileResponse(profile), nil
 }
 
 // プロフィールの更新
@@ -83,7 +90,7 @@ func (u *profileUsecase) UpdateUserProfile(userID int64, req *dto.UpdateProfileR
 		return nil, err
 	}
 	if profile == nil {
-		return nil, errors.New("profile not found")
+		return nil, errors.New("プロフィールが存在しません")
 	}
 
 	// プロフィールを更新
@@ -99,16 +106,17 @@ func (u *profileUsecase) UpdateUserProfile(userID int64, req *dto.UpdateProfileR
 	profile.Location = req.Location
 	profile.BirthPlace = req.BirthPlace
 	if req.SNSLinks != nil {
-		profile.SNSLinks = req.MarshalSNSLinks()
+		profile.SNSLinks = *req.SNSLinks
 	}
 
+	// 更新
 	err = u.profileService.UpdateProfile(profile)
 	if err != nil {
 		return nil, err
 	}
 
 	// 変換して返却
-	return ConvertToUserProfileResponse(profile), nil
+	return converter.ConvertToUserProfileResponse(profile), nil
 }
 
 // アバター画像アップロード
