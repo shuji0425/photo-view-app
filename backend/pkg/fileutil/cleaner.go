@@ -1,6 +1,7 @@
 package fileutil
 
 import (
+	"log"
 	"os"
 	"path/filepath"
 )
@@ -17,6 +18,8 @@ func RemoveFilesByGlob(dir string, pattern string) error {
 	// 削除処理
 	for _, path := range matches {
 		if err := os.Remove(path); err != nil {
+			log.Printf("ファイル削除失敗: %s, エラー: %v", path, err)
+
 			continue
 		}
 	}
