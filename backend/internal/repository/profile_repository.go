@@ -2,6 +2,7 @@ package repository
 
 import (
 	"backend/internal/domain"
+	"context"
 	"errors"
 
 	"gorm.io/gorm"
@@ -10,6 +11,7 @@ import (
 // インターフェース
 type ProfileRepository interface {
 	GetProfileByUserID(userID int64) (*domain.Profile, error)
+	FindFirstAdminProfile(ctx context.Context) (*domain.Profile, error)
 	CreateProfile(profile *domain.Profile) error
 	UpdateProfile(profile *domain.Profile) error
 }
@@ -32,6 +34,22 @@ func (r *profileRepository) GetProfileByUserID(userID int64) (*domain.Profile, e
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
+		return nil, err
+	}
+
+	return &profile, nil
+}
+
+// 最も若いIDの管理者プロフィールを取得
+func (r *profileRepository) FindFirstAdminProfile(ctx context.Context) (*domain.Profile, error) {
+	var profile domain.Profile
+	err := r.db.WithContext(ctx).
+		Joins("JOIN users ON users.id = profile.user_id").
+		Where("users.role = ?", "admin").
+		Order("users.id ASC").
+		Limit(1).
+		First(&profile).Error
+	if err != nil {
 		return nil, err
 	}
 

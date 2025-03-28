@@ -28,5 +28,8 @@ func NewRouter(db *gorm.DB) *Router {
 	SetupUserRoutes(r, handlers.UserHandler)
 	SetupAvatarRoutes(r, handlers.AvatarHandler)
 
+	// 公開用
+	SetupPublicRoutes(r, handlers.ProfileHandler)
+
 	return &Router{Engine: r}
 }

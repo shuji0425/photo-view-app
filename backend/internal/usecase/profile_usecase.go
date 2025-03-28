@@ -5,6 +5,7 @@ import (
 	"backend/internal/dto"
 	"backend/internal/service"
 	"backend/internal/usecase/converter"
+	"context"
 	"errors"
 	"mime/multipart"
 )
@@ -12,6 +13,7 @@ import (
 // インターフェース
 type ProfileUsecase interface {
 	GetUserProfile(userID int64) (*dto.UserProfileResponse, error)
+	GetPublicAdminProfile() (*dto.UserProfileResponse, error)
 	CreateUserProfile(userID int64, req *dto.CreateProfileRequest) (*dto.UserProfileResponse, error)
 	UpdateUserProfile(userID int64, req *dto.UpdateProfileRequest) (*dto.UserProfileResponse, error)
 	UploadAvatar(userID int64, file *multipart.FileHeader) (string, error)
@@ -36,6 +38,18 @@ func (u *profileUsecase) GetUserProfile(userID int64) (*dto.UserProfileResponse,
 	}
 	if profile == nil {
 		return nil, errors.New("プロフィールが存在しません")
+	}
+	return converter.ConvertToUserProfileResponse(profile), nil
+}
+
+// 管理者のIDが最も若いユーザーを取得
+func (u *profileUsecase) GetPublicAdminProfile() (*dto.UserProfileResponse, error) {
+	profile, err := u.profileService.GetFirstAdminProfile(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	if profile == nil {
+		return nil, errors.New("公開プロフィールが存在しません")
 	}
 	return converter.ConvertToUserProfileResponse(profile), nil
 }
