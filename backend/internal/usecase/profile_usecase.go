@@ -52,11 +52,17 @@ func (u *profileUsecase) CreateUserProfile(userID int64, req *dto.CreateProfileR
 
 	// 新規プロフィールを作成
 	profile := &domain.Profile{
-		UserID:   userID,
-		Avatar:   req.Avatar,
-		Bio:      req.Bio,
-		Website:  req.Website,
-		Location: req.Location,
+		UserID:      userID,
+		DisplayName: req.DisplayName,
+		Avatar:      req.Avatar,
+		CoverImage:  req.CoverImage,
+		Bio:         req.Bio,
+		JobTitle:    req.JobTitle,
+		Website:     req.Website,
+		Location:    req.Location,
+		BirthPlace:  req.BirthPlace,
+		SNSLinks:    req.MarshalSNSLinks(), // JSONに変換
+		IsPublic:    true,
 	}
 
 	// プロフィールの保存
@@ -81,10 +87,20 @@ func (u *profileUsecase) UpdateUserProfile(userID int64, req *dto.UpdateProfileR
 	}
 
 	// プロフィールを更新
+	// 更新処理（null許容のため個別チェック）
+	if req.DisplayName != nil {
+		profile.DisplayName = *req.DisplayName
+	}
 	profile.Avatar = req.Avatar
+	profile.CoverImage = req.CoverImage
 	profile.Bio = req.Bio
+	profile.JobTitle = req.JobTitle
 	profile.Website = req.Website
 	profile.Location = req.Location
+	profile.BirthPlace = req.BirthPlace
+	if req.SNSLinks != nil {
+		profile.SNSLinks = req.MarshalSNSLinks()
+	}
 
 	err = u.profileService.UpdateProfile(profile)
 	if err != nil {
