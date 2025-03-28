@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useProfile } from "@/lib/swr/useProfile";
 import ProfileCreate from "@/components/profile/ProfileCreate";
 import ProfileEdit from "@/components/profile/ProfileEdit";
-import NavButton from "@/components/ui/NavButton";
+import { NavButton } from "@/components/ui/NavButton";
 
 /**
  * 管理者用プロフィールページ

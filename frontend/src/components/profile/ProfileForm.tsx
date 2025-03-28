@@ -8,6 +8,7 @@ import AvatarUploader from "./AvatarUploader";
 import toast from "react-hot-toast";
 import { useAvatarUploader } from "@/hooks/useAvatarUploader";
 import { FormError } from "../ui/FormError";
+import { ActionButton } from "../ui/ActionButton";
 
 type ProfileFormProps = {
   defaultValues?: ProfileParams;
@@ -113,13 +114,12 @@ const ProfileForm = ({
 
       {/* Submit */}
       <div className="text-center">
-        <button
+        <ActionButton
           type="submit"
+          color="green"
+          label={submitLabel}
           disabled={isSubmitting}
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:opacity-50"
-        >
-          {submitLabel}
-        </button>
+        />
       </div>
     </form>
   );
