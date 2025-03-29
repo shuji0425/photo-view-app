@@ -1,9 +1,13 @@
 import { SNSLink } from "@/types/profile";
+import { getPlatformIcon } from "@/lib/icons/snsIcons";
 
 type Props = {
   links: SNSLink[];
 };
 
+/**
+ * SNSリンク表示
+ */
 export const ProfileSNS = ({ links }: Props) => {
   if (!links || links.length === 0) return null;
 
@@ -17,9 +21,9 @@ export const ProfileSNS = ({ links }: Props) => {
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="w-10 h-10 flex items-center justify-center rounded-full border hover:bg-gray-100 transition"
             >
-              {link.platform === "other" ? link.platform_name : link.platform}
+              {getPlatformIcon(link.platform)}
             </a>
           </li>
         ))}
