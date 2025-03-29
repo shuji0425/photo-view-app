@@ -9,6 +9,7 @@ export const postUploadImages = async (
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/photos/upload`, {
     method: "POST",
     body: formData,
+    credentials: "include",
   });
 
   if (!res.ok) {
