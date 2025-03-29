@@ -1,4 +1,5 @@
-import { Profile, ProfileParams } from "@/types/profile";
+import { ProfileParams } from "@/lib/schema/profileSchema";
+import { Profile } from "@/types/profile";
 
 /**
  * プロフィール作成
