@@ -8,17 +8,19 @@ import (
 
 // 構造体
 type InjectedHandlers struct {
-	ProfileHandler *handler.ProfileHandler
-	AuthHandler    *handler.AuthHandler
-	UserHandler    *handler.UserHandler
-	AvatarHandler  *handler.AvatarHandler
+	ProfileHandler       *handler.ProfileHandler
+	AuthHandler          *handler.AuthHandler
+	UserHandler          *handler.UserHandler
+	AvatarHandler        *handler.AvatarHandler
+	PublicProfileHandler *handler.PublicProfileHandler
 }
 
 func InjectAll(db *gorm.DB) *InjectedHandlers {
 	return &InjectedHandlers{
-		ProfileHandler: InjectProfileHandler(db),
-		UserHandler:    InjectUserHandler(db),
-		AuthHandler:    InjectAuthHandler(db),
-		AvatarHandler:  InjectAvatarHandler(db),
+		ProfileHandler:       InjectProfileHandler(db),
+		UserHandler:          InjectUserHandler(db),
+		AuthHandler:          InjectAuthHandler(db),
+		AvatarHandler:        InjectAvatarHandler(db),
+		PublicProfileHandler: InjectPublicProfileHandler(db),
 	}
 }

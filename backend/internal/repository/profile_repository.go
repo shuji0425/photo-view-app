@@ -44,7 +44,7 @@ func (r *profileRepository) GetProfileByUserID(userID int64) (*domain.Profile, e
 func (r *profileRepository) FindFirstAdminProfile(ctx context.Context) (*domain.Profile, error) {
 	var profile domain.Profile
 	err := r.db.WithContext(ctx).
-		Joins("JOIN users ON users.id = profile.user_id").
+		Joins("JOIN users ON users.id = profiles.user_id").
 		Where("users.role = ?", "admin").
 		Order("users.id ASC").
 		Limit(1).

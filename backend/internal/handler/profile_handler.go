@@ -36,16 +36,6 @@ func (h *ProfileHandler) GetProfileHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, profile)
 }
 
-// 公開プロフィールを返す
-func (h *ProfileHandler) GetPublicAdminProfile(c *gin.Context) {
-	profile, err := h.profileUsecase.GetPublicAdminProfile()
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, profile)
-}
-
 // プロフィールの作成
 func (h *ProfileHandler) CreateProfileHandler(c *gin.Context) {
 	userID, err := strconv.ParseInt(c.Param("user_id"), 10, 64)
