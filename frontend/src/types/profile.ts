@@ -1,16 +1,20 @@
-/** 管理者のプロフィール情報 */
-export type Profile = {
-  userId: number;
-  avatar?: string | null;
-  bio?: string | null;
-  website?: string | null;
-  location?: string | null;
+/** SNSリンク構造 */
+export type SNSLink = {
+  platform: "twitter" | "instagram" | "facebook" | "other";
+  platform_name?: string;
+  url: string;
 };
 
-/** プロフィール作成・更新用パラメータ */
-export type ProfileParams = {
+/** 管理者の公開プロフィール情報 */
+export type Profile = {
+  displayName: string;
   avatar?: string | null;
+  coverImage?: string | null;
   bio?: string | null;
+  jobTitle?: string | null;
   website?: string | null;
   location?: string | null;
+  birthPlace?: string | null;
+  snsLinks: SNSLink[];
+  isPublic: boolean;
 };
