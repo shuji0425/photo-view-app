@@ -22,6 +22,9 @@ func NewRouter(db *gorm.DB) *Router {
 	// ハンドラーを取得
 	handlers := injector.InjectAll(db)
 
+	// 公開用から先に読むこむ
+	SetupPublicRoutes(r, handlers.PublicProfileHandler)
+
 	// ルーティング設定
 	SetupProfileRoutes(r, handlers.ProfileHandler)
 	SetupAuthRoutes(r, handlers.AuthHandler)

@@ -1,4 +1,4 @@
-package usecase
+package converter
 
 import (
 	"backend/internal/domain"

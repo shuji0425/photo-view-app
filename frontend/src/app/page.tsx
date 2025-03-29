@@ -4,7 +4,6 @@ import { useState } from "react";
 import CategoryTagList from "@/components/category/CategoryTagList";
 import { mockPhotos } from "@/data/photo";
 import PhotoViewer from "@/components/photo/PhotoViewer";
-import Header from "@/components/layout/Header";
 // import PhotoStackView from "@/components/photo/PhotoStackView";
 
 const availableTags = [
@@ -26,9 +25,6 @@ export default function HomePage() {
 
   return (
     <div className="h-screen w-screen max-w-full flex flex-col overflow-hidden bg-white">
-      {/* ヘッダー */}
-      <Header />
-
       {/* カテゴリータグ */}
       <div className="shrink-0 w-full overflow-x-auto">
         <div className="flex gap-2 w-max">

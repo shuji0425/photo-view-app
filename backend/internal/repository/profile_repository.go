@@ -2,6 +2,7 @@ package repository
 
 import (
 	"backend/internal/domain"
+	"context"
 	"errors"
 
 	"gorm.io/gorm"
@@ -10,6 +11,7 @@ import (
 // インターフェース
 type ProfileRepository interface {
 	GetProfileByUserID(userID int64) (*domain.Profile, error)
+	FindFirstAdminProfile(ctx context.Context) (*domain.Profile, error)
 	CreateProfile(profile *domain.Profile) error
 	UpdateProfile(profile *domain.Profile) error
 }
@@ -27,13 +29,31 @@ func NewProfileRepository(db *gorm.DB) ProfileRepository {
 // プロフィールを取得
 func (r *profileRepository) GetProfileByUserID(userID int64) (*domain.Profile, error) {
 	var profile domain.Profile
-	result := r.db.Where("user_id = ?", userID).First(&profile)
 	// 見つからないときはnilを返却
-	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		return nil, nil
+	if err := r.db.Where("user_id = ?", userID).First(&profile).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, err
 	}
 
-	return &profile, result.Error
+	return &profile, nil
+}
+
+// 最も若いIDの管理者プロフィールを取得
+func (r *profileRepository) FindFirstAdminProfile(ctx context.Context) (*domain.Profile, error) {
+	var profile domain.Profile
+	err := r.db.WithContext(ctx).
+		Joins("JOIN users ON users.id = profiles.user_id").
+		Where("users.role = ?", "admin").
+		Order("users.id ASC").
+		Limit(1).
+		First(&profile).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &profile, nil
 }
 
 // プロフィールを作成

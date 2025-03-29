@@ -121,11 +121,17 @@ CREATE TABLE IF NOT EXISTS photo_tags (
 -- プロフィール情報を管理するテーブル
 -- ============================================
 CREATE TABLE IF NOT EXISTS profiles (
-  user_id INT PRIMARY KEY,
-  avatar VARCHAR(255),   -- プロフィール画像URL
-  bio TEXT,              -- 自己紹介
-  website VARCHAR(255),  -- ウェブサイトURL
-  location VARCHAR(100), -- 居住地
+  user_id INT PRIMARY KEY,                      -- users テーブルとの1対1
+  display_name VARCHAR(100) NOT NULL,           -- 表示名（作家名・公開名）
+  avatar VARCHAR(255),                          -- プロフィール画像URL
+  cover_image VARCHAR(255),                     -- カバー画像URL（OGP向け）
+  bio TEXT,                                     -- 自己紹介
+  job_title VARCHAR(100),                       -- 肩書き（例：風景写真家）
+  website VARCHAR(255),                         -- ウェブサイトURL
+  location VARCHAR(100),                        -- 居住地・活動拠点
+  birth_place VARCHAR(100),                     -- 出身地
+  sns_links JSON,                               -- SNSリンク（JSON形式）
+  is_public BOOLEAN DEFAULT TRUE,               -- 公開/非公開フラグ
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE

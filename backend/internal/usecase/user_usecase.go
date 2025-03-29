@@ -3,6 +3,7 @@ package usecase
 import (
 	"backend/internal/dto"
 	"backend/internal/service"
+	"backend/internal/usecase/converter"
 )
 
 // ユースケースインターフェース
@@ -25,5 +26,5 @@ func (u *userUsecase) GetMe(userID int64) (*dto.UserResponse, error) {
 	if err != nil {
 		return nil, err
 	}
-	return ConvertToUserResponse(user), nil
+	return converter.ConvertToUserResponse(user), nil
 }

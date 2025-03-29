@@ -6,6 +6,7 @@ import { ProfileParams } from "@/types/profile";
 import { useRouter } from "next/navigation";
 import ProfileForm from "./ProfileForm";
 import { mutate } from "swr";
+import toast from "react-hot-toast";
 
 type ProfileCreateProps = {
   userId: number;
@@ -27,7 +28,7 @@ export default function ProfileCreate({ userId }: ProfileCreateProps) {
       await mutate(`/profiles/${userId}`);
       router.push("/admin/dashboard");
     } catch {
-      alert("プロフィールの作成に失敗しました");
+      toast.error("プロフィールの登録に失敗しました");
     } finally {
       setIsSubmitting(false);
     }

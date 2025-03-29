@@ -13,6 +13,7 @@ type ActionButtonProps = {
   disabled?: boolean;
   isLoading?: boolean;
   onClick?: () => void;
+  className?: string;
 };
 
 /**
@@ -25,6 +26,7 @@ export const ActionButton = ({
   disabled,
   isLoading = false,
   onClick,
+  className,
 }: ActionButtonProps) => (
   <button
     type={type}
@@ -33,7 +35,8 @@ export const ActionButton = ({
     className={cn(
       baseButtonClass,
       colorClasses[color],
-      disabled && "opacity-50 cursor-not-allowed"
+      disabled && "opacity-50 cursor-not-allowed",
+      className
     )}
   >
     {isLoading ? <Spinner /> : label}
