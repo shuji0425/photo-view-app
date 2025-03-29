@@ -17,7 +17,8 @@ export default function AdminProfilePage() {
   if (authLoading || profileLoading) return <p>読み込み中...</p>;
 
   return (
-    <div className="min-w-screen min-h-screen flex flex-col items-center justify-center bg-white p-4 shadow-lg rounded-md">
+    <>
+      <h1 className="text-xl font-bold mb-4">プロフィール</h1>
       {profile ? (
         <ProfileEdit userId={userId} />
       ) : (
@@ -28,6 +29,6 @@ export default function AdminProfilePage() {
       <div className="mt-6">
         <NavButton href="/admin/dashboard" label="戻る" color="blue" />
       </div>
-    </div>
+    </>
   );
 }

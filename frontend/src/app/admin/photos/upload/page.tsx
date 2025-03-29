@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { postUploadImages } from "@/lib/api/photo/upload";
 import Image from "next/image";
 import { ActionButton } from "@/components/ui/ActionButton";
@@ -47,7 +47,7 @@ export default function PhotoUploadPage() {
   };
 
   return (
-    <div className="p-4 max-w-xl mx-auto">
+    <>
       <h1 className="text-xl font-bold mb-4">画像アップロード</h1>
       <input
         type="file"
@@ -77,6 +77,6 @@ export default function PhotoUploadPage() {
         isLoading={isUploading}
         color="green"
       />
-    </div>
+    </>
   );
 }
