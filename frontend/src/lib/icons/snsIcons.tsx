@@ -6,7 +6,7 @@ import {
   SiGithub,
   SiYoutube,
 } from "react-icons/si";
-import { FaGlobe } from "react-icons/fa";
+import { FaLink } from "react-icons/fa";
 import { ReactElement } from "react";
 
 /**
@@ -30,6 +30,6 @@ export function getPlatformIcon(platform: string): ReactElement {
     case "youtube":
       return <SiYoutube size={20} color="#FF0000" />;
     default:
-      return <FaGlobe size={20} color="#666" />;
+      return <FaLink size={20} color="#666" />;
   }
 }
