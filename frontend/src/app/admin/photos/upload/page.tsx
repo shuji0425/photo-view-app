@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { postUploadImages } from "@/lib/api/photo/upload";
 import Image from "next/image";
 import { ActionButton } from "@/components/ui/ActionButton";
+import { useAuth } from "@/hooks/useAuth";
 import toast from "react-hot-toast";
 
 /**
@@ -16,6 +17,8 @@ export default function PhotoUploadPage() {
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+  const { user, isLoading: authLoading } = useAuth();
+  const userId = Number(user?.id ?? 0);
 
   // プレビュー用の処理
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +36,7 @@ export default function PhotoUploadPage() {
     const formData = new FormData();
     files.forEach((file) => formData.append("images", file));
     try {
-      const uploadedIds = await postUploadImages(formData);
+      const uploadedIds = await postUploadImages(userId, formData);
       // 成功したら遷移
       if (uploadedIds && uploadedIds.length > 0) {
         toast.success("アップロードが完了しました");
@@ -45,6 +48,8 @@ export default function PhotoUploadPage() {
       setIsUploading(false);
     }
   };
+
+  if (authLoading) return <p>読み込み中...</p>;
 
   return (
     <>
