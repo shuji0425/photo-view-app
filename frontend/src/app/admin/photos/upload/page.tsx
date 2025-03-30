@@ -3,10 +3,10 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { postUploadImages } from "@/lib/api/photo/upload";
-import Image from "next/image";
 import { ActionButton } from "@/components/ui/ActionButton";
 import { useAuth } from "@/hooks/useAuth";
 import toast from "react-hot-toast";
+import { ImageDropzone } from "@/components/ui/ImageDropzone";
 
 /**
  * 画像アップロード画面
@@ -20,16 +20,6 @@ export default function PhotoUploadPage() {
   const { user, isLoading: authLoading } = useAuth();
   const userId = Number(user?.id ?? 0);
 
-  // プレビュー用の処理
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = e.target.files
-      ? Array.from(e.target.files).slice(0, 10)
-      : [];
-    setFiles(selectedFiles);
-    const urls = selectedFiles.map((file) => URL.createObjectURL(file));
-    setPreviews(urls);
-  };
-
   // ファイルをアップロード
   const handleUpload = async () => {
     setIsUploading(true);
@@ -37,6 +27,8 @@ export default function PhotoUploadPage() {
     files.forEach((file) => formData.append("images", file));
     try {
       const uploadedIds = await postUploadImages(userId, formData);
+      setFiles([]);
+      setPreviews([]);
       // 成功したら遷移
       if (uploadedIds && uploadedIds.length > 0) {
         toast.success("アップロードが完了しました");
@@ -54,26 +46,13 @@ export default function PhotoUploadPage() {
   return (
     <>
       <h1 className="text-xl font-bold mb-4">画像アップロード</h1>
-      <input
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={handleChange}
-        className="mb-4"
-      />
 
-      <div className="grid grid-cols-3 gap-2 mb-4">
-        {previews?.map((src, idx) => (
-          <div key={idx} className="relative w-full aspect-square border">
-            <Image
-              src={src}
-              alt="preview"
-              fill
-              className="object-cover rounded"
-            />
-          </div>
-        ))}
-      </div>
+      <ImageDropzone
+        files={files}
+        previews={previews}
+        setFiles={setFiles}
+        setPreviews={setPreviews}
+      />
 
       <ActionButton
         label="アップロード"
