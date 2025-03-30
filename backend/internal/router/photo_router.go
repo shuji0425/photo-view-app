@@ -9,10 +9,11 @@ import (
 
 // プロフィール関連のルーター
 func SetupPhotoRoutes(r *gin.Engine, photoHandler *handler.PhotoHandler) {
-	adminGroup := r.Group("/photos")
-	adminGroup.Use(middleware.AuthMiddleware())
+	photoGroup := r.Group("/photos")
+	photoGroup.Use(middleware.AuthMiddleware())
 
 	// ルート
-	adminGroup.POST("/upload/:user_id", photoHandler.UploadPhotos)
-	adminGroup.GET("/ids", photoHandler.GetPhotosByIDs)
+	photoGroup.POST("/upload/:user_id", photoHandler.UploadPhotos)
+	photoGroup.GET("/ids", photoHandler.GetPhotosByIDs)
+	photoGroup.GET("/", photoHandler.GetPaginatedPhotos)
 }

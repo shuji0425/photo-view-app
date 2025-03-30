@@ -51,6 +51,32 @@ func (h *PhotoHandler) GetPhotosByIDs(c *gin.Context) {
 	c.JSON(http.StatusOK, photos)
 }
 
+// ページネーション対応の画像一覧を返す
+func (h *PhotoHandler) GetPaginatedPhotos(c *gin.Context) {
+	pageParam := c.DefaultQuery("page", "1")
+	limitParam := c.DefaultQuery("limit", "30")
+
+	page, err := strconv.Atoi(pageParam)
+	if err != nil || page <= 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "pageは1以上の整数で指定してください"})
+		return
+	}
+
+	limit, err := strconv.Atoi(limitParam)
+	if err != nil || limit <= 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "limitは1以上の整数で指定してください"})
+		return
+	}
+
+	photos, err := h.photoUsecase.GetPaginatedPhotos(page, limit)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "画像一覧の取得に失敗しました"})
+		return
+	}
+
+	c.JSON(http.StatusOK, photos)
+}
+
 // 写真をアップロードしてDBに必須情報を保存
 func (h *PhotoHandler) UploadPhotos(c *gin.Context) {
 	// URLからパラメータを取得

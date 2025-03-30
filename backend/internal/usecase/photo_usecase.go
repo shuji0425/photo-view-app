@@ -10,6 +10,7 @@ import (
 // インターフェース
 type PhotoUsecase interface {
 	GetPhotoByIDs(ids []int64) ([]dto.PhotoDetail, error)
+	GetPaginatedPhotos(page, limit int) (*dto.PaginatedPhotoResponse, error)
 	UploadPhotos(userID int64, files []*multipart.FileHeader) (*dto.PhotoUploadResponse, error)
 }
 
@@ -30,6 +31,21 @@ func (u *photoUsecase) GetPhotoByIDs(ids []int64) ([]dto.PhotoDetail, error) {
 		return nil, err
 	}
 	return converter.ConvertToDetailsResponse(photos), nil
+}
+
+// ページネーション付きの画像一覧を返す
+func (u *photoUsecase) GetPaginatedPhotos(page, limit int) (*dto.PaginatedPhotoResponse, error) {
+	photos, total, err := u.photoService.GetPaginatedPhotos(page, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.PaginatedPhotoResponse{
+		Photos: converter.ConvertToDetailsResponse(photos),
+		Total:  total,
+		Page:   page,
+		Limit:  limit,
+	}, nil
 }
 
 // 複数画像を保存

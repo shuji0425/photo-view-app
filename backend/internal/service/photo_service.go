@@ -17,6 +17,7 @@ import (
 // インターフェース
 type PhotoService interface {
 	GetPhotosByIDs(ids []int64) ([]*domain.Photo, error)
+	GetPaginatedPhotos(page, limit int) ([]*domain.Photo, int64, error)
 	SaveUploadPhotos(userID int64, files []*multipart.FileHeader) ([]int64, error)
 	SavePhotos(photoList []*domain.Photo, savedPaths []string) ([]int64, error)
 }
@@ -35,6 +36,11 @@ func NewPhotoService(photoRepo repository.PhotoRepository, imageSaver infrastruc
 // id配列から写真情報を取得
 func (s *photoService) GetPhotosByIDs(ids []int64) ([]*domain.Photo, error) {
 	return s.photoRepo.GetPhotoByIDs(ids)
+}
+
+// ページネーション付きで画像を取得
+func (s *photoService) GetPaginatedPhotos(page, limit int) ([]*domain.Photo, int64, error) {
+	return s.photoRepo.FindPaginated(page, limit)
 }
 
 // 画像保存（DBとフォルダに）
