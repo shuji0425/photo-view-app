@@ -20,7 +20,7 @@ func NewPhotoHandler(photoUsecase usecase.PhotoUsecase) *PhotoHandler {
 }
 
 // id配列から画像情報を取得
-func (h *PhotoHandler) GetPhotoByIDs(c *gin.Context) {
+func (h *PhotoHandler) GetPhotosByIDs(c *gin.Context) {
 	idsParam := c.Query("ids")
 	if idsParam == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "パラメータが必要です"})
