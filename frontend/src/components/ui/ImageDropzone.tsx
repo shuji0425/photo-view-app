@@ -3,6 +3,7 @@
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
+import { useImageProcessor } from "@/hooks/useImageProcessor";
 import { X } from "lucide-react";
 
 type ImageDropzoneProps = {
@@ -18,14 +19,17 @@ export const ImageDropzone = ({
   setFiles,
   setPreviews,
 }: ImageDropzoneProps) => {
+  const { convertMultiple } = useImageProcessor();
   const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
+    async (acceptedFiles: File[]) => {
       const limitedFiles = acceptedFiles.slice(0, 10);
-      setFiles(limitedFiles);
-      const urls = limitedFiles.map((file) => URL.createObjectURL(file));
+      // リサイズ＆圧縮
+      const processedFiles = await convertMultiple(limitedFiles);
+      setFiles(processedFiles);
+      const urls = processedFiles.map((file) => URL.createObjectURL(file));
       setPreviews(urls);
     },
-    [setFiles, setPreviews]
+    [setFiles, setPreviews, convertMultiple]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

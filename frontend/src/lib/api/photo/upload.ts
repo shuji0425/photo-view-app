@@ -1,3 +1,5 @@
+import axios from "axios";
+
 /**
  * 画像を送信
  * @param formData 画像データ
@@ -5,23 +7,22 @@
  */
 export const postUploadImages = async (
   userId: number,
-  formData: FormData
+  formData: FormData,
+  onProgress?: (percent: number) => void
 ): Promise<number[] | null> => {
-  const res = await fetch(
+  const res = await axios.post(
     `${process.env.NEXT_PUBLIC_API_URL}/photos/upload/${userId}`,
+    formData,
     {
-      method: "POST",
-      body: formData,
-      credentials: "include",
+      withCredentials: true,
+      onUploadProgress: (event) => {
+        if (onProgress && event.total) {
+          const percent = Math.round((event.loaded * 100) / event.total);
+          onProgress(percent);
+        }
+      },
     }
   );
 
-  if (!res.ok) {
-    const error = await res.json();
-    throw new Error(error.message || "画像のアップロードに失敗");
-  }
-
-  const data = await res.json();
-
-  return data.photoIds;
+  return res.data.photoIds;
 };
