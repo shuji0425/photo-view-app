@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const navItems = [
   { name: "ダッシュボード", path: "/admin/dashboard" },
   { name: "写真アップロード", path: "/admin/photos/upload" },
+  { name: "写真一覧", path: "/admin/photos" },
   { name: "プロフィール", path: "/admin/profile" },
 ];
 
