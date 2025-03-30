@@ -8,6 +8,9 @@ import toast from "react-hot-toast";
 import { ActionButton } from "@/components/ui/ActionButton";
 import { PhotoDetail } from "@/types/photo";
 
+/**
+ * 編集画面
+ */
 export default function PhotoEditPage() {
   const searchParams = useSearchParams();
   const ids = useMemo(() => {

@@ -6,6 +6,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { ActionButton } from "../ui/ActionButton";
 import { Check } from "lucide-react";
+import { NavButton } from "../ui/NavButton";
 
 type Props = {
   photos: PhotoDetail[];
@@ -35,11 +36,21 @@ export const PhotoSelectGrid = ({ photos, setPhotos }: Props) => {
     <>
       {/* 削除ボタン */}
       {selectedIds.length > 0 && (
-        <ActionButton
-          label={`選択した画像を削除（${selectedIds.length}件）`}
-          onClick={handleDeleteSelected}
-          color="red"
-        />
+        <div className="mb-2">
+          選択した画像 {selectedIds.length}件
+          <div className="flex justify-between w-full mt-2">
+            <ActionButton
+              label="削除"
+              onClick={handleDeleteSelected}
+              color="red"
+            />
+            <NavButton
+              href={`/admin/photos/edit/?ids=${selectedIds}`}
+              label="編集"
+              color="blue"
+            />
+          </div>
+        </div>
       )}
 
       {/* グリッド表示 */}
