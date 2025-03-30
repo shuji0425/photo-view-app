@@ -8,6 +8,7 @@ import (
 
 // インターフェース
 type PhotoRepository interface {
+	GetPhotoByIDs(ids []int64) ([]*domain.Photo, error)
 	SavePhoto(photo *domain.Photo) (int64, error)
 }
 
@@ -19,6 +20,15 @@ type photoRepository struct {
 // 依存注入用
 func NewPhotoRepository(db *gorm.DB) PhotoRepository {
 	return &photoRepository{db}
+}
+
+// idの配列から画像情報を取得
+func (r *photoRepository) GetPhotoByIDs(ids []int64) ([]*domain.Photo, error) {
+	var photos []*domain.Photo
+	if err := r.db.Where("id IN ?", ids).Find(&photos).Error; err != nil {
+		return nil, err
+	}
+	return photos, nil
 }
 
 // 1枚の写真情報を登録

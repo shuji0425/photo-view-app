@@ -15,6 +15,7 @@ import (
 
 // インターフェース
 type PhotoService interface {
+	GetPhotosByIDs(ids []int64) ([]*domain.Photo, error)
 	SaveUploadPhotos(userID int64, files []*multipart.FileHeader) ([]int64, error)
 	SavePhotos(photoList []*domain.Photo, savedPaths []string) ([]int64, error)
 }
@@ -28,6 +29,11 @@ type photoService struct {
 // 依存注入用
 func NewPhotoService(photoRepo repository.PhotoRepository, imageSaver infrastructure.ImageSaver) PhotoService {
 	return &photoService{photoRepo, imageSaver}
+}
+
+// id配列から写真情報を取得
+func (s *photoService) GetPhotosByIDs(ids []int64) ([]*domain.Photo, error) {
+	return s.photoRepo.GetPhotoByIDs(ids)
 }
 
 // 画像保存（DBとフォルダに）
