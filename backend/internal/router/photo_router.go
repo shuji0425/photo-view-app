@@ -14,5 +14,5 @@ func SetupPhotoRoutes(r *gin.Engine, photoHandler *handler.PhotoHandler) {
 
 	// ルート
 	adminGroup.POST("/upload/:user_id", photoHandler.UploadPhotos)
-	adminGroup.GET("/", photoHandler.GetPhotosByIDs)
+	adminGroup.GET("/ids", photoHandler.GetPhotosByIDs)
 }
