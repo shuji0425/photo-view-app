@@ -4,13 +4,13 @@ import "time"
 
 // Photo は画像投稿のメイン情報（DB用）
 type Photo struct {
-	ID          uint
+	ID          int64
 	ImageURL    string
 	AspectRatio float64
 	Title       *string
 	Description *string
-	CategoryID  *uint
-	UserID      *uint
+	CategoryID  *int64
+	UserID      *int64
 	IsVisible   bool
 	TakenAt     *time.Time
 	CreatedAt   time.Time
@@ -19,7 +19,7 @@ type Photo struct {
 
 // PhotoEXIF はメタデータ（DB用）
 type PhotoEXIF struct {
-	PhotoID      uint
+	PhotoID      int64
 	CameraMake   *string
 	CameraModel  *string
 	LensModel    *string
@@ -36,7 +36,7 @@ type PhotoEXIF struct {
 
 // PhotoGPS は緯度経度情報（DB用）
 type PhotoGPS struct {
-	PhotoID   uint
+	PhotoID   int64
 	Latitude  *float64
 	Longitude *float64
 	IsVisible bool

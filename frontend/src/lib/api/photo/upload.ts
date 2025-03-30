@@ -4,13 +4,17 @@
  * @returns 画像ID
  */
 export const postUploadImages = async (
+  userId: number,
   formData: FormData
 ): Promise<number[] | null> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/photos/upload`, {
-    method: "POST",
-    body: formData,
-    credentials: "include",
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/photos/upload/${userId}`,
+    {
+      method: "POST",
+      body: formData,
+      credentials: "include",
+    }
+  );
 
   if (!res.ok) {
     const error = await res.json();
