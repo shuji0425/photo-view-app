@@ -10,3 +10,8 @@ export type PhotoDetailDTO = {
   is_visible: boolean;
   taken_at: string | null;
 };
+
+// アップロード後の返却配列
+export type UploadResponseDTO = {
+  photo_ids: number[];
+};

@@ -1,4 +1,4 @@
-import { PhotoDetailDTO } from "@/types/dto/photo";
+import { PhotoDetailDTO, UploadResponseDTO } from "@/types/dto/photo";
 import { PhotoDetail } from "@/types/photo";
 
 /**
@@ -24,3 +24,14 @@ export const convertPhotoDetail = (dto: PhotoDetailDTO): PhotoDetail => ({
 export const convertPhotoDetailArray = (
   data: PhotoDetailDTO[]
 ): PhotoDetail[] => data.map(convertPhotoDetail);
+
+/**
+ * アップロード後のid配列変換
+ */
+export const convertUploadResponse = (
+  dto: UploadResponseDTO
+): { photoIds: number[] } => {
+  return {
+    photoIds: dto.photo_ids,
+  };
+};

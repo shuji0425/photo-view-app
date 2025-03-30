@@ -1,4 +1,6 @@
 import axios from "axios";
+import { UploadResponseDTO } from "@/types/dto/photo";
+import { convertUploadResponse } from "@/lib/converters/photo";
 
 /**
  * 画像を送信
@@ -24,5 +26,9 @@ export const postUploadImages = async (
     }
   );
 
-  return res.data.photoIds;
+  // 型変換
+  const rowData: UploadResponseDTO = res.data;
+  const { photoIds } = convertUploadResponse(rowData);
+
+  return photoIds;
 };
