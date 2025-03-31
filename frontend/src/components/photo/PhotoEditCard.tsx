@@ -8,6 +8,7 @@ import { Textarea } from "../ui/Textarea";
 import { Select } from "../ui/Select";
 import { DateTimeInput } from "../ui/DateTimeInput";
 import { Toggle } from "../ui/Toggle";
+import { useCategories } from "@/lib/swr/useCategories";
 
 type Props = {
   idx?: number;
@@ -18,14 +19,17 @@ type Props = {
   ) => void;
 };
 
-// カテゴリ例（仮）
-const categoryOptions = [
-  { label: "風景", value: 1 },
-  { label: "人物", value: 2 },
-  { label: "建物", value: 3 },
-];
-
+/**
+ * 画像編集情報表示
+ */
 export const PhotoEditCard = ({ idx, photo, onChange }: Props) => {
+  const { categories } = useCategories();
+  // カテゴリ
+  const categoryOptions = categories.map((cat) => ({
+    label: cat.name,
+    value: cat.id,
+  }));
+
   return (
     <div className="border rounded p-4 mb-6 shadow-sm bg-white">
       <div className="relative w-full aspect-[4/3] mb-4">
