@@ -12,7 +12,6 @@ import (
 	"mime/multipart"
 	"os"
 	"path/filepath"
-	"strings"
 )
 
 // インターフェース
@@ -62,8 +61,7 @@ func (s *photoService) SaveUploadPhotos(userID int64, files []*multipart.FileHea
 	var savedPaths []string
 
 	for _, url := range urls {
-		relativePath := strings.TrimPrefix(url, "/images/")
-		path := filepath.Join(s.imageSaver.BasePath(), relativePath)
+		path := filepath.Join(s.imageSaver.BasePath(), url)
 
 		// アスペクト比計算
 		aspectRatio := 1.0
