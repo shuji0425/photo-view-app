@@ -8,6 +8,7 @@ import (
 	"backend/pkg/filename"
 	"backend/pkg/imageutil"
 	"fmt"
+	"log"
 	"mime/multipart"
 	"os"
 	"path/filepath"
@@ -20,6 +21,7 @@ type PhotoService interface {
 	GetPaginatedPhotos(page, limit int) ([]*domain.Photo, int64, error)
 	SaveUploadPhotos(userID int64, files []*multipart.FileHeader) ([]int64, error)
 	SavePhotos(photoList []*domain.Photo, savedPaths []string) ([]int64, error)
+	DeletePhotosByIDs(ids []int64) error
 }
 
 // 構造体
@@ -95,4 +97,27 @@ func (s *photoService) SavePhotos(photoList []*domain.Photo, savedPaths []string
 	}
 
 	return ids, nil
+}
+
+// idの配列からDBと画像を削除
+func (s *photoService) DeletePhotosByIDs(ids []int64) error {
+	// 画像URLを取得
+	photos, err := s.photoRepo.GetPhotoByIDs(ids)
+	if err != nil {
+		return err
+	}
+
+	// DBから削除
+	if err := s.photoRepo.DeleteByIDs(ids); err != nil {
+		return err
+	}
+
+	// ファイルを削除
+	for _, photo := range photos {
+		if err := s.imageSaver.Delete(photo.ImageURL); err != nil {
+			log.Printf("画像ファイル削除失敗: %s (%v)", photo.ImageURL, err)
+		}
+	}
+
+	return nil
 }

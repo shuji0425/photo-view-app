@@ -104,3 +104,22 @@ func (h *PhotoHandler) UploadPhotos(c *gin.Context) {
 	// 成功
 	c.JSON(http.StatusOK, res)
 }
+
+// 写真と写真情報を削除
+func (h *PhotoHandler) DeletePhotosByIDs(c *gin.Context) {
+	var req struct {
+		IDs []int64 `json:"ids"`
+	}
+
+	if err := c.ShouldBindJSON(&req); err != nil || len(req.IDs) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "削除対象がありません"})
+		return
+	}
+
+	if err := h.photoUsecase.DeletePhotosByIDs(req.IDs); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "削除に失敗しました"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "削除しました"})
+}

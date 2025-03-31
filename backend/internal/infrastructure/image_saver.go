@@ -12,6 +12,7 @@ type ImageSaver interface {
 	Save(file *multipart.FileHeader, category string, filename string) (string, error)
 	SaveMultiple(files []*multipart.FileHeader, category string, generateFilename func(int) string) ([]string, error)
 	BasePath() string
+	Delete(url string) error
 }
 
 // 構造体
@@ -82,4 +83,11 @@ func saveUploadedFile(file *multipart.FileHeader, dst string) error {
 // ベースパス
 func (s *imageSaver) BasePath() string {
 	return s.baseDir
+}
+
+// ファイル削除
+func (s *imageSaver) Delete(url string) error {
+	// URLからローカルパスを構築
+	path := filepath.Join(s.baseDir, filepath.FromSlash(url))
+	return os.Remove(path)
 }

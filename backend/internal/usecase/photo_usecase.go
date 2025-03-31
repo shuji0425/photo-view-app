@@ -12,6 +12,7 @@ type PhotoUsecase interface {
 	GetPhotoByIDs(ids []int64) ([]dto.PhotoDetail, error)
 	GetPaginatedPhotos(page, limit int) (*dto.PaginatedPhotoResponse, error)
 	UploadPhotos(userID int64, files []*multipart.FileHeader) (*dto.PhotoUploadResponse, error)
+	DeletePhotosByIDs(ids []int64) error
 }
 
 // 構造体
@@ -57,4 +58,9 @@ func (u *photoUsecase) UploadPhotos(userID int64, files []*multipart.FileHeader)
 	return &dto.PhotoUploadResponse{
 		PhotoIDs: ids,
 	}, nil
+}
+
+// idの配列から画像を削除
+func (u *photoUsecase) DeletePhotosByIDs(ids []int64) error {
+	return u.photoService.DeletePhotosByIDs(ids)
 }

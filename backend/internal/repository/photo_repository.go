@@ -11,6 +11,7 @@ type PhotoRepository interface {
 	FindPaginated(page, limit int) ([]*domain.Photo, int64, error)
 	GetPhotoByIDs(ids []int64) ([]*domain.Photo, error)
 	SavePhoto(photo *domain.Photo) (int64, error)
+	DeleteByIDs(ids []int64) error
 }
 
 // 構造体
@@ -63,4 +64,17 @@ func (r *photoRepository) SavePhoto(photo *domain.Photo) (int64, error) {
 		return 0, result.Error
 	}
 	return photo.ID, nil
+}
+
+// id配列による削除
+func (r *photoRepository) DeleteByIDs(ids []int64) error {
+	if len(ids) == 0 {
+		return nil
+	}
+
+	if err := r.db.Where("id IN ?", ids).Delete(&domain.Photo{}).Error; err != nil {
+		return err
+	}
+
+	return nil
 }

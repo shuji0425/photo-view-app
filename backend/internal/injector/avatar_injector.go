@@ -12,7 +12,7 @@ import (
 
 func InjectAvatarHandler(db *gorm.DB) *handler.AvatarHandler {
 	// 画像
-	imageSaver := infrastructure.NewImageSaver("../frontend/public/images")
+	imageSaver := infrastructure.NewImageSaver("../frontend/public")
 	imageService := service.NewImageService(imageSaver)
 
 	// アバター

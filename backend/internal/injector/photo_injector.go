@@ -13,7 +13,7 @@ import (
 // 写真のインジェクター
 func InjectPhotoHandler(db *gorm.DB) *handler.PhotoHandler {
 	// 画像
-	imageSaver := infrastructure.NewImageSaver("../frontend/public/images")
+	imageSaver := infrastructure.NewImageSaver("../frontend/public")
 
 	// 写真
 	photoRepo := repository.NewPhotoRepository(db)

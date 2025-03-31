@@ -16,4 +16,5 @@ func SetupPhotoRoutes(r *gin.Engine, photoHandler *handler.PhotoHandler) {
 	photoGroup.POST("/upload/:user_id", photoHandler.UploadPhotos)
 	photoGroup.GET("/ids", photoHandler.GetPhotosByIDs)
 	photoGroup.GET("/", photoHandler.GetPaginatedPhotos)
+	photoGroup.DELETE("/", photoHandler.DeletePhotosByIDs)
 }

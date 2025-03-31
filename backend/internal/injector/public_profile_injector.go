@@ -13,7 +13,7 @@ import (
 // 公開プロフィールの依存関係
 func InjectPublicProfileHandler(db *gorm.DB) *handler.PublicProfileHandler {
 	// 画像
-	imageSaver := infrastructure.NewImageSaver("../frontend/public/images")
+	imageSaver := infrastructure.NewImageSaver("../frontend/public")
 	imageService := service.NewImageService(imageSaver)
 
 	// プロフィール
