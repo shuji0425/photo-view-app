@@ -99,6 +99,9 @@ func (s *photoService) SavePhotosWithMeta(
 	var ids []int64
 
 	for i, photo := range photos {
+		// 撮影日を挿入
+		photo.TakenAt = exifs[i].TakenAt
+
 		// まとめて登録
 		id, err := s.photoRepo.CreatePhotoWithMeta(ctx, photo, exifs[i], gpsList[i])
 		if err != nil {
