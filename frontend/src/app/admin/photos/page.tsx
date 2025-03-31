@@ -30,6 +30,7 @@ export default function AdminPhotoListPage() {
       setTotal(res.total);
       setHasMore(pageToLoad * limit < res.total);
     } catch {
+      setTotal(0);
       toast.error("画像の取得に失敗しました");
     } finally {
       setIsLoading(false);
