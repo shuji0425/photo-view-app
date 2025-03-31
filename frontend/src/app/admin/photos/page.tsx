@@ -20,7 +20,13 @@ export default function AdminPhotoListPage() {
     try {
       setIsLoading(true);
       const res = await getPaginatedPhotos(pageToLoad, limit);
-      setPhotos((prev) => [...prev, ...res.photos]);
+      setPhotos((prev) => {
+        const existingIds = new Set(prev.map((p) => p.id));
+        const newUniquePhotos = res.photos.filter(
+          (p) => !existingIds.has(p.id)
+        );
+        return [...prev, ...newUniquePhotos];
+      });
       setTotal(res.total);
       setHasMore(pageToLoad * limit < res.total);
     } catch {
