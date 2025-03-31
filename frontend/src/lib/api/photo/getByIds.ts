@@ -1,8 +1,13 @@
 import { PhotoDetailDTO } from "@/types/dto/photo";
+import { PhotoDetail } from "@/types/photo";
+import { convertPhotoDetailArray } from "@/lib/converters/photo";
 
-export const getPhotosByIds = async (
-  ids: number[]
-): Promise<PhotoDetailDTO[]> => {
+/**
+ * id配列から情報を取得
+ * @param ids id配列
+ * @returns 配列
+ */
+export const getPhotosByIds = async (ids: number[]): Promise<PhotoDetail[]> => {
   if (ids.length === 0) return [];
 
   const query = ids.join(",");
@@ -19,6 +24,6 @@ export const getPhotosByIds = async (
     throw new Error(error.message || "画像情報の取得に失敗しました");
   }
 
-  const data: PhotoDetailDTO[] = await res.json();
-  return data;
+  const json: PhotoDetailDTO[] = await res.json();
+  return convertPhotoDetailArray(json);
 };

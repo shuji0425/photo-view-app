@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { getPhotosByIds } from "@/lib/api/photo/getByIds";
-import { convertPhotoDetailArray } from "@/lib/converters/photo";
 import { PhotoDetail } from "@/types/photo";
 import toast from "react-hot-toast";
 
@@ -19,10 +18,9 @@ export const usePhotoEditor = (ids: number[]) => {
     const fetchPhotos = async () => {
       setLoading(true);
       try {
-        // 取得し加工する
-        const dtoArray = await getPhotosByIds(ids);
-        const converted = convertPhotoDetailArray(dtoArray);
-        setPhotos(converted);
+        // 取得
+        const photoData = await getPhotosByIds(ids);
+        setPhotos(photoData);
       } catch {
         toast.error("画像の取得に失敗しました");
       } finally {
