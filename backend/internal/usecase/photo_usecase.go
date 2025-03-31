@@ -4,6 +4,7 @@ import (
 	"backend/internal/dto"
 	"backend/internal/service"
 	"backend/internal/usecase/converter"
+	"context"
 	"mime/multipart"
 )
 
@@ -11,7 +12,7 @@ import (
 type PhotoUsecase interface {
 	GetPhotoByIDs(ids []int64) ([]dto.PhotoDetail, error)
 	GetPaginatedPhotos(page, limit int) (*dto.PaginatedPhotoResponse, error)
-	UploadPhotos(userID int64, files []*multipart.FileHeader) (*dto.PhotoUploadResponse, error)
+	UploadPhotos(ctx context.Context, userID int64, files []*multipart.FileHeader) (*dto.PhotoUploadResponse, error)
 	DeletePhotosByIDs(ids []int64) error
 }
 
@@ -50,8 +51,8 @@ func (u *photoUsecase) GetPaginatedPhotos(page, limit int) (*dto.PaginatedPhotoR
 }
 
 // 複数画像を保存
-func (u *photoUsecase) UploadPhotos(userID int64, files []*multipart.FileHeader) (*dto.PhotoUploadResponse, error) {
-	ids, err := u.photoService.SaveUploadPhotos(userID, files)
+func (u *photoUsecase) UploadPhotos(ctx context.Context, userID int64, files []*multipart.FileHeader) (*dto.PhotoUploadResponse, error) {
+	ids, err := u.photoService.SaveUploadPhotos(ctx, userID, files)
 	if err != nil {
 		return nil, err
 	}

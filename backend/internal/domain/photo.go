@@ -17,8 +17,8 @@ type Photo struct {
 	UpdatedAt   time.Time
 }
 
-// PhotoEXIF はメタデータ（DB用）
-type PhotoEXIF struct {
+// PhotoExif はメタデータ（DB用）
+type PhotoExif struct {
 	PhotoID      int64
 	CameraMake   *string
 	CameraModel  *string
@@ -42,4 +42,9 @@ type PhotoGPS struct {
 	IsVisible bool
 	CreatedAt time.Time
 	UpdatedAt time.Time
+}
+
+// テーブル名を明示的に設定
+func (PhotoExif) TableName() string {
+	return "photo_exif"
 }

@@ -6,11 +6,12 @@ import (
 	"backend/internal/infrastructure"
 	"backend/internal/repository"
 	"backend/pkg/filename"
+	"backend/pkg/fileutil"
 	"backend/pkg/imageutil"
+	"context"
 	"fmt"
 	"log"
 	"mime/multipart"
-	"os"
 	"path/filepath"
 )
 
@@ -18,8 +19,8 @@ import (
 type PhotoService interface {
 	GetPhotosByIDs(ids []int64) ([]*domain.Photo, error)
 	GetPaginatedPhotos(page, limit int) ([]*domain.Photo, int64, error)
-	SaveUploadPhotos(userID int64, files []*multipart.FileHeader) ([]int64, error)
-	SavePhotos(photoList []*domain.Photo, savedPaths []string) ([]int64, error)
+	SaveUploadPhotos(ctx context.Context, userID int64, files []*multipart.FileHeader) ([]int64, error)
+	SavePhotosWithMeta(ctx context.Context, photos []*domain.Photo, exifs []*domain.PhotoExif, gpsList []*domain.PhotoGPS, savedPaths []string) ([]int64, error)
 	DeletePhotosByIDs(ids []int64) error
 }
 
@@ -45,7 +46,7 @@ func (s *photoService) GetPaginatedPhotos(page, limit int) ([]*domain.Photo, int
 }
 
 // 画像保存（DBとフォルダに）
-func (s *photoService) SaveUploadPhotos(userID int64, files []*multipart.FileHeader) ([]int64, error) {
+func (s *photoService) SaveUploadPhotos(ctx context.Context, userID int64, files []*multipart.FileHeader) ([]int64, error) {
 	// ユーザーごとのファイル名生成
 	generateFilename := func(i int) string {
 		return filename.GenerateGalleryImageFilename(userID, i)
@@ -57,8 +58,10 @@ func (s *photoService) SaveUploadPhotos(userID int64, files []*multipart.FileHea
 		return nil, fmt.Errorf("画像の保存に失敗しました: %w", err)
 	}
 
-	var photoList []*domain.Photo
 	var savedPaths []string
+	var photoList []*domain.Photo
+	var exifList []*domain.PhotoExif
+	var gpsList []*domain.PhotoGPS
 
 	for _, url := range urls {
 		path := filepath.Join(s.imageSaver.BasePath(), url)
@@ -69,26 +72,39 @@ func (s *photoService) SaveUploadPhotos(userID int64, files []*multipart.FileHea
 			aspectRatio = ar
 		}
 
+		exif, gps := imageutil.ExtractExifAndGPS(path)
+
 		// domain.Photoを構築
 		photo := builder.BuildPhoto(url, aspectRatio, userID)
-		photoList = append(photoList, photo)
+		exif.PhotoID = 0 // exifとgpsは仮
+		gps.PhotoID = 0
 
+		photoList = append(photoList, photo)
+		exifList = append(exifList, exif)
+		gpsList = append(gpsList, gps)
 		savedPaths = append(savedPaths, filepath.Join("photos", filepath.Base(url)))
 	}
 
-	return s.SavePhotos(photoList, savedPaths)
+	return s.SavePhotosWithMeta(ctx, photoList, exifList, gpsList, savedPaths)
 }
 
 // 複数の画像を保存し、それぞれのIDを返す
-func (s *photoService) SavePhotos(photoList []*domain.Photo, savedPaths []string) ([]int64, error) {
+func (s *photoService) SavePhotosWithMeta(
+	ctx context.Context,
+	photos []*domain.Photo,
+	exifs []*domain.PhotoExif,
+	gpsList []*domain.PhotoGPS,
+	savedPaths []string,
+) ([]int64, error) {
 	var ids []int64
 
-	for i, photo := range photoList {
-		id, err := s.photoRepo.SavePhoto(photo)
+	for i, photo := range photos {
+		// まとめて登録
+		id, err := s.photoRepo.CreatePhotoWithMeta(ctx, photo, exifs[i], gpsList[i])
 		if err != nil {
 			// エラー発生時は画像ファイルも削除
-			absPath := filepath.Join(s.imageSaver.BasePath(), savedPaths[i])
-			_ = os.Remove(absPath)
+			basePath := s.imageSaver.PhotoBasePath()
+			fileutil.DeleteFiles(basePath, savedPaths)
 			return nil, fmt.Errorf("DB保存に失敗しました: %w", err)
 		}
 		ids = append(ids, id)

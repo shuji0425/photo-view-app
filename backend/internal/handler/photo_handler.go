@@ -94,8 +94,11 @@ func (h *PhotoHandler) UploadPhotos(c *gin.Context) {
 	}
 	files := form.File["images"]
 
+	// コンテキストを取得
+	ctx := c.Request.Context()
+
 	// ユースケースの呼び出し
-	res, err := h.photoUsecase.UploadPhotos(userID, files)
+	res, err := h.photoUsecase.UploadPhotos(ctx, userID, files)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

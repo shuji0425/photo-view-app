@@ -2,6 +2,8 @@ package repository
 
 import (
 	"backend/internal/domain"
+	"context"
+	"log"
 
 	"gorm.io/gorm"
 )
@@ -10,7 +12,7 @@ import (
 type PhotoRepository interface {
 	FindPaginated(page, limit int) ([]*domain.Photo, int64, error)
 	GetPhotoByIDs(ids []int64) ([]*domain.Photo, error)
-	SavePhoto(photo *domain.Photo) (int64, error)
+	CreatePhotoWithMeta(ctx context.Context, photo *domain.Photo, exif *domain.PhotoExif, gps *domain.PhotoGPS) (int64, error)
 	DeleteByIDs(ids []int64) error
 }
 
@@ -58,11 +60,40 @@ func (r *photoRepository) GetPhotoByIDs(ids []int64) ([]*domain.Photo, error) {
 }
 
 // 1枚の写真情報を登録
-func (r *photoRepository) SavePhoto(photo *domain.Photo) (int64, error) {
-	result := r.db.Create(photo)
-	if result.Error != nil {
-		return 0, result.Error
+func (r *photoRepository) CreatePhotoWithMeta(
+	ctx context.Context,
+	photo *domain.Photo,
+	exif *domain.PhotoExif,
+	gps *domain.PhotoGPS,
+) (int64, error) {
+	err := r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		// 写真テーブルに登録
+		if err := tx.Create(photo).Error; err != nil {
+			return err
+		}
+
+		// Exifテーブルに登録
+		exif.PhotoID = photo.ID
+		if err := tx.Create(exif).Error; err != nil {
+			log.Println("exifエラー: %w", err)
+			return err
+		}
+
+		// GPSテーブルに登録
+		gps.PhotoID = photo.ID
+		if err := tx.Create(gps).Error; err != nil {
+			log.Println("gpsエラー: %w", err)
+
+			return err
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return 0, err
 	}
+
 	return photo.ID, nil
 }
 
