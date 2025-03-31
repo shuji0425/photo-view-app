@@ -48,6 +48,7 @@ export default function PhotoEditPage() {
       {photos.map((photo, idx) => (
         <PhotoEditCard
           key={photo.id}
+          idx={idx}
           photo={photo}
           onChange={(filed, value) => handleChange(idx, filed, value)}
         />
