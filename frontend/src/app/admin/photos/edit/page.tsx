@@ -7,6 +7,8 @@ import { PhotoEditCard } from "@/components/photo/PhotoEditCard";
 import toast from "react-hot-toast";
 import { ActionButton } from "@/components/ui/ActionButton";
 import { PhotoDetail } from "@/types/photo";
+import { photoBulkUpdateSchema } from "@/lib/schema/photoSchema";
+import { updatePhotos } from "@/lib/api/photo/bulkUpdate";
 
 /**
  * 編集画面
@@ -32,8 +34,14 @@ export default function PhotoEditPage() {
     );
   };
 
-  const handleSave = () => {
-    toast("保存処理");
+  const handleSave = async () => {
+    try {
+      const validated = photoBulkUpdateSchema.parse({ updates: photos });
+      await updatePhotos(validated);
+      toast.success("更新が完了しました");
+    } catch {
+      toast.error("更新に失敗しました");
+    }
   };
 
   return (

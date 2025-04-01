@@ -9,6 +9,7 @@ export type PhotoDetailDTO = {
   user_id: number | null;
   is_visible: boolean;
   taken_at: string | null;
+  tags: string[];
 };
 
 // アップロード後の返却配列

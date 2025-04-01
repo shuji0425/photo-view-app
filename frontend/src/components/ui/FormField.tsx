@@ -12,7 +12,7 @@ type Props = {
  */
 export const FormField = ({ label, htmlFor, children, error }: Props) => {
   return (
-    <div className="mb-4">
+    <div className="mb-3">
       <label
         htmlFor={htmlFor}
         className="block text-sm font-medium text-gray-700 mb-1"

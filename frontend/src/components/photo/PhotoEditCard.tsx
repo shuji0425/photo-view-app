@@ -9,6 +9,8 @@ import { Select } from "../ui/Select";
 import { DateTimeInput } from "../ui/DateTimeInput";
 import { Toggle } from "../ui/Toggle";
 import { useCategories } from "@/lib/swr/useCategories";
+import { TagInput } from "../ui/TagInput";
+import { toLocalISOString } from "@/lib/utils/date";
 
 type Props = {
   idx?: number;
@@ -32,7 +34,7 @@ export const PhotoEditCard = ({ idx, photo, onChange }: Props) => {
 
   return (
     <div className="border rounded p-4 mb-6 shadow-sm bg-white">
-      <div className="relative w-full aspect-[4/3] mb-4">
+      <div className="relative w-full aspect-[4/3]">
         <Image
           src={photo.imageUrl}
           alt={`photo-${photo.id}`}
@@ -71,12 +73,16 @@ export const PhotoEditCard = ({ idx, photo, onChange }: Props) => {
       {/* 撮影日 */}
       <FormField label="撮影日時" htmlFor="taken_at">
         <DateTimeInput
-          value={
-            photo.takenAt
-              ? new Date(photo.takenAt).toISOString().slice(0, 16)
-              : ""
-          }
+          value={photo.takenAt ? toLocalISOString(new Date(photo.takenAt)) : ""}
           onChange={(v) => onChange("takenAt", v)}
+        />
+      </FormField>
+
+      {/* タグ */}
+      <FormField label="タグ" htmlFor={`tags_${idx}`}>
+        <TagInput
+          value={photo.tags ?? []}
+          onChange={(tags) => onChange("tags", tags)}
         />
       </FormField>
 

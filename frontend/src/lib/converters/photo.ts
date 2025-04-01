@@ -16,6 +16,7 @@ export const convertPhotoDetail = (dto: PhotoDetailDTO): PhotoDetail => ({
   userId: dto.user_id,
   isVisible: dto.is_visible,
   takenAt: dto.taken_at,
+  tags: dto.tags,
 });
 
 /**
