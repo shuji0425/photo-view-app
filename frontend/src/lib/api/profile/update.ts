@@ -12,7 +12,7 @@ export const updateProfile = async (
   params: ProfileParams
 ): Promise<Profile> => {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/profiles/${userId}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/profiles/${userId}`,
     {
       method: "PUT",
       headers: { "Content-Type": "application/json" },

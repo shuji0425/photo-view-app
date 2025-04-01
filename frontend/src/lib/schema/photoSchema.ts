@@ -1,5 +1,13 @@
 import { z } from "zod";
 
+const tagSchema = z
+  .string()
+  .trim()
+  .min(1, "タグを入力してください")
+  .refine((val) => !val.includes(" "), {
+    message: "タグに空白は含められません",
+  });
+
 /**
  * バリデーション
  */
@@ -20,19 +28,15 @@ export const photoUpdateSchema = z.object({
   is_visible: z.boolean(),
   taken_at: z
     .string()
-    .datetime({ message: "ISO形式の日時を入力してください" })
     .nullable()
     .optional()
-    .transform((val) => {
-      if (!val || val === "") return null;
-      const date = new Date(val);
-      return isNaN(date.getTime()) ? null : date;
-    }),
-  tags: z
-    .array(z.string())
-    .optional()
-    .nullable()
-    .transform((arr) => (arr ? arr.map((t) => t.trim()).filter(Boolean) : [])),
+    .transform((val) => (val === "" ? null : val))
+    .refine(
+      (val) =>
+        val === null || (typeof val === "string" && !isNaN(Date.parse(val))),
+      "無効な日付です"
+    ),
+  tags: z.array(tagSchema).optional().nullable(),
 });
 
 /** 一括更新用 */

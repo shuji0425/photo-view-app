@@ -26,7 +26,7 @@ export const getPaginatedPhotos = async (
   limit: number;
 }> => {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/photos/?page=${page}&limit=${limit}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/photos/?page=${page}&limit=${limit}`,
     {
       method: "GET",
       credentials: "include",

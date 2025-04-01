@@ -7,7 +7,7 @@ import { Profile } from "@/types/profile";
  * @returns json
  */
 export async function fetchPublicAdminProfile(): Promise<Profile | null> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/profile`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/public/profile`, {
     next: { revalidate: 60 },
   });
 

@@ -7,9 +7,12 @@ import { CategoryDTO } from "@/types/dto/category";
  * @returns json
  */
 export const getCategories = async (): Promise<Category[]> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
-    credentials: "include",
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/categories`,
+    {
+      credentials: "include",
+    }
+  );
 
   if (!res.ok) {
     throw new Error("カテゴリの取得に失敗しました");

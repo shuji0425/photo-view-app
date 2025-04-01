@@ -1,7 +1,7 @@
 import { AuthUser } from "@/types/auth";
 
 export const getMe = async (): Promise<AuthUser> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/me`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/me`, {
     method: "GET",
     credentials: "include", // JWT Cookieも送信
   });

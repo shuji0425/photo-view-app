@@ -12,7 +12,7 @@ export const getPhotosByIds = async (ids: number[]): Promise<PhotoDetail[]> => {
 
   const query = ids.join(",");
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/photos/ids?ids=${query}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/photos/ids?ids=${query}`,
     {
       method: "GET",
       credentials: "include",

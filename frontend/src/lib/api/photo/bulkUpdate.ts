@@ -7,7 +7,7 @@ export const updatePhotos = async (
   params: PhotoBulkUpdateParams
 ): Promise<void> => {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/photos/bulk-update`,
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/photos/bulk-update`,
     {
       method: "POST",
       headers: {

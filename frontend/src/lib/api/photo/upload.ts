@@ -13,7 +13,7 @@ export const postUploadImages = async (
   onProgress?: (percent: number) => void
 ): Promise<number[] | null> => {
   const res = await axios.post(
-    `${process.env.NEXT_PUBLIC_API_URL}/photos/upload/${userId}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/photos/upload/${userId}`,
     formData,
     {
       withCredentials: true,

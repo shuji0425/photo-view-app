@@ -4,7 +4,7 @@
  * @throws エラーは例外
  */
 export const logout = async (): Promise<string> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/logout`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
     method: "POST",
     credentials: "include", // JWT Cookieを送信 HttpOnly Cookie削除のために必要
   });

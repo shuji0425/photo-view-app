@@ -35,11 +35,14 @@ export default function PhotoEditPage() {
   };
 
   const handleSave = async () => {
+    console.log("in save");
     try {
       const validated = photoBulkUpdateSchema.parse({ updates: photos });
+      console.log("バリー", validated);
       await updatePhotos(validated);
       toast.success("更新が完了しました");
-    } catch {
+    } catch (error) {
+      console.error(error);
       toast.error("更新に失敗しました");
     }
   };
@@ -58,7 +61,7 @@ export default function PhotoEditPage() {
           key={photo.id}
           idx={idx}
           photo={photo}
-          onChange={(filed, value) => handleChange(idx, filed, value)}
+          onChange={(field, value) => handleChange(idx, field, value)}
         />
       ))}
 

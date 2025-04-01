@@ -11,7 +11,7 @@ export const uploadProfileImage = async (
   formData.append("file", file);
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/profiles/avatar/${userId}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/profiles/avatar/${userId}`,
     {
       method: "POST",
       credentials: "include",
