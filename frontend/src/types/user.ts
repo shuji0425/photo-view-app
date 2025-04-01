@@ -6,8 +6,10 @@ export type LoginParams = {
 
 /** ログイン中のユーザー */
 export type AuthUser = {
-  id: string;
+  id: number;
   email: string;
   username: string;
   role: "user" | "admin";
+  createdAt: string; // ISO文字列
+  updatedAt: string;
 };

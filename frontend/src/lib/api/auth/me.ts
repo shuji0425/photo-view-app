@@ -1,4 +1,4 @@
-import { AuthUser } from "@/types/auth";
+import { AuthUser } from "@/types/user";
 
 export const getMe = async (): Promise<AuthUser> => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/me`, {

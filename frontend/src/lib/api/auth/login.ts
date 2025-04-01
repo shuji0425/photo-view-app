@@ -1,4 +1,4 @@
-import { LoginParams } from "@/types/auth";
+import { LoginParams } from "@/types/user";
 
 /**
  * ログインAPI

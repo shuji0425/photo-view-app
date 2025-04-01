@@ -1,6 +1,6 @@
 import useSWR, { mutate } from "swr";
 import { getMe, login as apiLogin, logout as apiLogout } from "@/lib/api/auth";
-import { AuthUser, LoginParams } from "@/types/auth";
+import { AuthUser, LoginParams } from "@/types/user";
 
 export const useAuth = () => {
   const { data: user, error } = useSWR<AuthUser>("/me", getMe, {
