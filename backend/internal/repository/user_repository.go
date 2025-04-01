@@ -36,14 +36,17 @@ func (r *userRepository) FindByEmail(email string) (*domain.User, error) {
 		}
 		return nil, err
 	}
-	return converter.ToUserDomain(&user), nil
+	return converter.ToDomainUser(&user), nil
 }
 
 // IDからユーザーを取得
 func (r *userRepository) FindByID(userID int64) (*domain.User, error) {
 	var user model.User
 	if err := r.db.First(&user, userID).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("ユーザーが見つかりません")
+		}
 		return nil, err
 	}
-	return converter.ToUserDomain(&user), nil
+	return converter.ToDomainUser(&user), nil
 }

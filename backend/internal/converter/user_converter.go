@@ -6,8 +6,23 @@ import (
 	"backend/internal/model"
 )
 
-// model -> domain
-func ToUserDomain(m *model.User) *domain.User {
+// domain.User を dto.Userに変換
+func ConvertToUserResponse(user *domain.User) *dto.UserResponse {
+	return &dto.UserResponse{
+		ID:        user.ID,
+		Email:     user.Email,
+		Username:  user.Username,
+		Role:      user.Role,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+	}
+}
+
+// Model -> Domain
+func ToDomainUser(m *model.User) *domain.User {
+	if m == nil {
+		return nil
+	}
 	return &domain.User{
 		ID:       m.ID,
 		Email:    m.Email,
@@ -17,12 +32,16 @@ func ToUserDomain(m *model.User) *domain.User {
 	}
 }
 
-// domain.User を dto.Userに変換
-func ConvertToUserResponse(user *domain.User) *dto.UserResponse {
-	return &dto.UserResponse{
-		ID:       user.ID,
-		Email:    user.Email,
-		Username: user.Username,
-		Role:     user.Role,
+// Domain -> Model
+func ToModelUser(d *domain.User) *model.User {
+	if d == nil {
+		return nil
+	}
+	return &model.User{
+		ID:       d.ID,
+		Email:    d.Email,
+		Username: d.Username,
+		Password: d.Password,
+		Role:     d.Role,
 	}
 }
