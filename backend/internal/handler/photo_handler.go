@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"backend/internal/dto"
 	"backend/internal/usecase"
 	"net/http"
 	"strconv"
@@ -106,6 +107,27 @@ func (h *PhotoHandler) UploadPhotos(c *gin.Context) {
 
 	// 成功
 	c.JSON(http.StatusOK, res)
+}
+
+// 複数枚の写真情報とタグ情報を更新
+func (h *PhotoHandler) BulkUpdatePhotos(c *gin.Context) {
+	var req dto.PhotoBulkUpdateRequest
+	// リクエストのチェック
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "リクエストが間違っています"})
+		return
+	}
+
+	// コンテキストを取得
+	ctx := c.Request.Context()
+
+	// 保存処理
+	if err := h.photoUsecase.BulkUpdatePhotos(ctx, req); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "更新に失敗しました"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "更新に成功しました"})
 }
 
 // 写真と写真情報を削除

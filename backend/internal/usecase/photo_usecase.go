@@ -1,9 +1,9 @@
 package usecase
 
 import (
+	"backend/internal/converter"
 	"backend/internal/dto"
 	"backend/internal/service"
-	"backend/internal/usecase/converter"
 	"context"
 	"mime/multipart"
 )
@@ -13,6 +13,7 @@ type PhotoUsecase interface {
 	GetPhotoByIDs(ids []int64) ([]dto.PhotoDetail, error)
 	GetPaginatedPhotos(page, limit int) (*dto.PaginatedPhotoResponse, error)
 	UploadPhotos(ctx context.Context, userID int64, files []*multipart.FileHeader) (*dto.PhotoUploadResponse, error)
+	BulkUpdatePhotos(ctx context.Context, reqs dto.PhotoBulkUpdateRequest) error
 	DeletePhotosByIDs(ids []int64) error
 }
 
@@ -32,7 +33,7 @@ func (u *photoUsecase) GetPhotoByIDs(ids []int64) ([]dto.PhotoDetail, error) {
 	if err != nil {
 		return nil, err
 	}
-	return converter.ConvertToDetailsResponse(photos), nil
+	return converter.ToDetailsList(photos), nil
 }
 
 // ページネーション付きの画像一覧を返す
@@ -43,7 +44,7 @@ func (u *photoUsecase) GetPaginatedPhotos(page, limit int) (*dto.PaginatedPhotoR
 	}
 
 	return &dto.PaginatedPhotoResponse{
-		Photos: converter.ConvertToDetailsResponse(photos),
+		Photos: converter.ToDetailsList(photos),
 		Total:  total,
 		Page:   page,
 		Limit:  limit,
@@ -59,6 +60,18 @@ func (u *photoUsecase) UploadPhotos(ctx context.Context, userID int64, files []*
 	return &dto.PhotoUploadResponse{
 		PhotoIDs: ids,
 	}, nil
+}
+
+// 複数の画像とタグ情報を更新
+func (u *photoUsecase) BulkUpdatePhotos(ctx context.Context, reqs dto.PhotoBulkUpdateRequest) error {
+	for i := range reqs.Updates {
+		req := reqs.Updates[i]
+		// 1件でもエラーが出たら終了
+		if err := u.photoService.UpdatePhotoWithTags(ctx, &req); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // idの配列から画像を削除

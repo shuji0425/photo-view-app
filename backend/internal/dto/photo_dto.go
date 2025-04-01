@@ -27,3 +27,19 @@ type PaginatedPhotoResponse struct {
 	Page   int           `json:"page"`
 	Limit  int           `json:"limit"`
 }
+
+// 更新用（単体）
+type PhotoUpdateRequest struct {
+	PhotoID     int64      `json:"photo_id"`    // 対象写真ID
+	Title       *string    `json:"title"`       // 任意
+	Description *string    `json:"description"` // 任意
+	CategoryID  *int64     `json:"category_id"` // 任意
+	IsVisible   bool       `json:"is_visible"`  // 公開/非公開
+	TakenAt     *time.Time `json:"taken_at"`    // 撮影日（任意）
+	Tags        []string   `json:"tags"`        // タグ名配列
+}
+
+// 更新用（複数）
+type PhotoBulkUpdateRequest struct {
+	Updates []PhotoUpdateRequest `json: "updates"`
+}

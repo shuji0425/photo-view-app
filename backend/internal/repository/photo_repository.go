@@ -1,7 +1,10 @@
 package repository
 
 import (
+	"backend/internal/converter"
 	"backend/internal/domain"
+	"backend/internal/dto"
+	"backend/internal/model"
 	"context"
 	"log"
 
@@ -13,17 +16,19 @@ type PhotoRepository interface {
 	FindPaginated(page, limit int) ([]*domain.Photo, int64, error)
 	GetPhotoByIDs(ids []int64) ([]*domain.Photo, error)
 	CreatePhotoWithMeta(ctx context.Context, photo *domain.Photo, exif *domain.PhotoExif, gps *domain.PhotoGPS) (int64, error)
+	UpdateWithTags(ctx context.Context, req *dto.PhotoUpdateRequest) error
 	DeleteByIDs(ids []int64) error
 }
 
 // 構造体
 type photoRepository struct {
-	db *gorm.DB
+	db      *gorm.DB
+	tagRepo TagRepository
 }
 
 // 依存注入用
-func NewPhotoRepository(db *gorm.DB) PhotoRepository {
-	return &photoRepository{db}
+func NewPhotoRepository(db *gorm.DB, tagRepo TagRepository) PhotoRepository {
+	return &photoRepository{db, tagRepo}
 }
 
 // ページネーション付きで画像を取得
@@ -95,6 +100,47 @@ func (r *photoRepository) CreatePhotoWithMeta(
 	}
 
 	return photo.ID, nil
+}
+
+// 写真情報とタグ情報を更新
+func (r *photoRepository) UpdateWithTags(ctx context.Context, req *dto.PhotoUpdateRequest) error {
+	return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		// 写真テーブルを更新
+		domainPhoto := converter.ToPhotoFromUpdateDTO(req)
+		photoModel := converter.ToPhotoModel(domainPhoto)
+
+		if err := tx.Model(&model.Photo{}).Where("id = ?", photoModel.ID).Updates(photoModel).Error; err != nil {
+			return err
+		}
+
+		// タグを登録（IDも取得）
+		tagIDs, err := r.tagRepo.FindOrCreateTags(tx, req.Tags)
+		if err != nil {
+			return err
+		}
+
+		// photo_tags 中間テーブルを一括削除
+		if err := tx.Where("photo_id = ?", req.PhotoID).Delete(&model.PhotoTag{}).Error; err != nil {
+			return err
+		}
+
+		// 中間テーブル再登録
+		var relations []model.PhotoTag
+		for _, tagID := range tagIDs {
+			relations = append(relations, model.PhotoTag{
+				PhotoID: req.PhotoID,
+				TagID:   tagID,
+			})
+		}
+		// タグがあれば登録
+		if len(relations) > 0 {
+			if err := tx.Create(&relations).Error; err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
 }
 
 // id配列による削除

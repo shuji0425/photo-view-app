@@ -15,8 +15,11 @@ func InjectPhotoHandler(db *gorm.DB) *handler.PhotoHandler {
 	// 画像
 	imageSaver := infrastructure.NewImageSaver("../frontend/public")
 
+	// レポジトリー
+	tagRepo := repository.NewTagRepository(db)
+	photoRepo := repository.NewPhotoRepository(db, tagRepo)
+
 	// 写真
-	photoRepo := repository.NewPhotoRepository(db)
 	photoService := service.NewPhotoService(photoRepo, imageSaver)
 	photoUsecase := usecase.NewPhotoUsecase(photoService)
 	return handler.NewPhotoHandler(photoUsecase)
