@@ -10,5 +10,5 @@ import (
 func SetupCategoryRoutes(r *gin.Engine, categoryHandler *handler.CategoryHandler) {
 	categoryGroup := r.Group("/categories")
 
-	categoryGroup.GET("/categories", categoryHandler.GetAllCategories)
+	categoryGroup.GET("", categoryHandler.GetAllCategories)
 }
