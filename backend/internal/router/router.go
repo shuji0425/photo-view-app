@@ -22,16 +22,25 @@ func NewRouter(db *gorm.DB) *Router {
 	// ハンドラーを取得
 	handlers := injector.InjectAll(db)
 
-	// 公開用から先に読むこむ
-	SetupPublicRoutes(r, handlers.PublicProfileHandler)
+	// APIバージョン管理
+	api := r.Group("/api/v1")
 
-	// ルーティング設定
-	SetupProfileRoutes(r, handlers.ProfileHandler)
-	SetupAuthRoutes(r, handlers.AuthHandler)
-	SetupUserRoutes(r, handlers.UserHandler)
-	SetupAvatarRoutes(r, handlers.AvatarHandler)
-	SetupPhotoRoutes(r, handlers.PhotoHandler)
-	SetupCategoryRoutes(r, handlers.CategoryHandler)
+	// === 公開用API ===
+	public := api.Group("/public")
+	SetupPublicRoutes(public, handlers.PublicProfileHandler)
+
+	// === 認証API ===
+	auth := api.Group("/auth")
+	SetupAuthRoutes(auth, handlers.AuthHandler)
+
+	// === 管理者専用API ===
+	admin := api.Group("/admin")
+	admin.Use(middleware.AuthMiddleware())
+	SetupProfileRoutes(admin, handlers.ProfileHandler)
+	SetupUserRoutes(admin, handlers.UserHandler)
+	SetupAvatarRoutes(admin, handlers.AvatarHandler)
+	SetupPhotoRoutes(admin, handlers.PhotoHandler)
+	SetupCategoryRoutes(admin, handlers.CategoryHandler)
 
 	return &Router{Engine: r}
 }

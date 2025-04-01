@@ -7,6 +7,6 @@ import (
 )
 
 // アバター関連のルーター
-func SetupAvatarRoutes(r *gin.Engine, h *handler.AvatarHandler) {
+func SetupAvatarRoutes(r *gin.RouterGroup, h *handler.AvatarHandler) {
 	r.POST("/profiles/avatar/:user_id", h.UploadAvatar)
 }

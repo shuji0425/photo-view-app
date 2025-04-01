@@ -7,7 +7,7 @@ import (
 )
 
 // 公開関連のルーター
-func SetupPublicRoutes(r *gin.Engine, publicProfileHandler *handler.PublicProfileHandler) {
+func SetupPublicRoutes(r *gin.RouterGroup, publicProfileHandler *handler.PublicProfileHandler) {
 	// プロフィール
-	r.GET("/api/profile", publicProfileHandler.GetPublicAdminProfile)
+	r.GET("/profile", publicProfileHandler.GetPublicAdminProfile)
 }

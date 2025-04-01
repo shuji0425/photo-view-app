@@ -2,13 +2,11 @@ package router
 
 import (
 	"backend/internal/handler"
-	"backend/internal/middleware"
 
 	"github.com/gin-gonic/gin"
 )
 
 // ユーザー関連のルート
-func SetupUserRoutes(r *gin.Engine, userHandler *handler.UserHandler) {
-	r.Use(middleware.AuthMiddleware())
+func SetupUserRoutes(r *gin.RouterGroup, userHandler *handler.UserHandler) {
 	r.GET("/me", userHandler.GetMe)
 }
