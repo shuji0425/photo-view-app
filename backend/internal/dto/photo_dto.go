@@ -41,5 +41,5 @@ type PhotoUpdateRequest struct {
 
 // 更新用（複数）
 type PhotoBulkUpdateRequest struct {
-	Updates []PhotoUpdateRequest `json: "updates"`
+	Updates []PhotoUpdateRequest `json:"updates"`
 }
