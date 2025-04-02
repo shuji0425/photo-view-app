@@ -2,9 +2,17 @@ import { z } from "zod";
 
 // SNSの定義
 const snsLinksSchema = z.object({
-  platform: z.enum(["twitter", "instagram", "facebook", "other"]),
+  platform: z.enum([
+    "twitter",
+    "instagram",
+    "facebook",
+    "threads",
+    "youtube",
+    "github",
+    "other",
+  ]),
   url: z.string().url("正しいURLを入力してください"),
-  platform_name: z.string().optional(), // otherのみ
+  platformName: z.string().optional(), // otherのみ
 });
 
 export const profileSchema = z.object({

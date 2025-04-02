@@ -1,6 +1,13 @@
 /** SNSリンク構造 */
 export type SNSLink = {
-  platform: "twitter" | "instagram" | "facebook" | "other";
+  platform:
+    | "twitter"
+    | "instagram"
+    | "facebook"
+    | "threads"
+    | "youtube"
+    | "github"
+    | "other";
   platform_name?: string;
   url: string;
 };
