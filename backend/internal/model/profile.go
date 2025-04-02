@@ -17,6 +17,6 @@ type Profile struct {
 	BirthPlace  *string
 	SNSLinks    domain.SNSLinks `gorm:"type:json"` // domain をそのまま利用
 	IsPublic    bool            `gorm:"default:true"`
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
+	CreatedAt   *time.Time      `gorm:"autoCreateTime"`
+	UpdatedAt   *time.Time      `gorm:"autoUpdateTime"`
 }

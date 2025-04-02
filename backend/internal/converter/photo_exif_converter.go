@@ -22,8 +22,6 @@ func ToPhotoExifModel(e *domain.PhotoExif) *model.PhotoExif {
 		WhiteBalance: e.WhiteBalance,
 		Orientation:  e.Orientation,
 		TakenAt:      e.TakenAt,
-		CreatedAt:    e.CreatedAt,
-		UpdatedAt:    e.UpdatedAt,
 	}
 }
 
@@ -44,7 +42,5 @@ func ToPhotoExifDomain(m *model.PhotoExif) *domain.PhotoExif {
 		WhiteBalance: m.WhiteBalance,
 		Orientation:  m.Orientation,
 		TakenAt:      m.TakenAt,
-		CreatedAt:    m.CreatedAt,
-		UpdatedAt:    m.UpdatedAt,
 	}
 }

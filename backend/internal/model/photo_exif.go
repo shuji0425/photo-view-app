@@ -14,8 +14,8 @@ type PhotoExif struct {
 	WhiteBalance *string
 	Orientation  *string
 	TakenAt      *time.Time
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
+	CreatedAt    *time.Time `gorm:"autoCreateTime"`
+	UpdatedAt    *time.Time `gorm:"autoUpdateTime"`
 }
 
 func (PhotoExif) TableName() string {

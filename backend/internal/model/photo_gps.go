@@ -7,6 +7,6 @@ type PhotoGPS struct {
 	Latitude  *float64
 	Longitude *float64
 	IsVisible bool
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	CreatedAt *time.Time `gorm:"autoCreateTime"`
+	UpdatedAt *time.Time `gorm:"autoUpdateTime"`
 }

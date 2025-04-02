@@ -15,8 +15,6 @@ func ToPhotoGPSModel(g *domain.PhotoGPS) *model.PhotoGPS {
 		Latitude:  g.Latitude,
 		Longitude: g.Longitude,
 		IsVisible: g.IsVisible,
-		CreatedAt: g.CreatedAt,
-		UpdatedAt: g.UpdatedAt,
 	}
 }
 
@@ -30,7 +28,5 @@ func ToPhotoGPSDomain(m *model.PhotoGPS) *domain.PhotoGPS {
 		Latitude:  m.Latitude,
 		Longitude: m.Longitude,
 		IsVisible: m.IsVisible,
-		CreatedAt: m.CreatedAt,
-		UpdatedAt: m.UpdatedAt,
 	}
 }

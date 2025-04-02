@@ -30,8 +30,6 @@ func ToCategoryDomain(m *model.Category) *domain.Category {
 		ID:        m.ID,
 		Name:      m.Name,
 		SortOrder: m.SortOrder,
-		CreatedAt: m.CreatedAt,
-		UpdatedAt: m.UpdatedAt,
 	}
 }
 
@@ -44,8 +42,6 @@ func ToCategoryModel(d *domain.Category) *model.Category {
 		ID:        d.ID,
 		Name:      d.Name,
 		SortOrder: d.SortOrder,
-		CreatedAt: d.CreatedAt,
-		UpdatedAt: d.UpdatedAt,
 	}
 }
 
