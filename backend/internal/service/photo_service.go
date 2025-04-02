@@ -3,7 +3,6 @@ package service
 import (
 	"backend/internal/builder"
 	"backend/internal/domain"
-	"backend/internal/dto"
 	"backend/internal/infrastructure"
 	"backend/internal/repository"
 	"backend/pkg/filename"
@@ -22,7 +21,7 @@ type PhotoService interface {
 	GetPaginatedPhotos(page, limit int) ([]*domain.Photo, int64, error)
 	SaveUploadPhotos(ctx context.Context, userID int64, files []*multipart.FileHeader) ([]int64, error)
 	SavePhotosWithMeta(ctx context.Context, photos []*domain.Photo, exifs []*domain.PhotoExif, gpsList []*domain.PhotoGPS, savedPaths []string) ([]int64, error)
-	UpdatePhotoWithTags(ctx context.Context, req *dto.PhotoUpdateRequest) error
+	UpdatePhotoWithTags(ctx context.Context, req *domain.Photo) error
 	DeletePhotosByIDs(ids []int64) error
 }
 
@@ -119,7 +118,7 @@ func (s *photoService) SavePhotosWithMeta(
 }
 
 // 1枚の写真とタグ情報を更新
-func (s *photoService) UpdatePhotoWithTags(ctx context.Context, req *dto.PhotoUpdateRequest) error {
+func (s *photoService) UpdatePhotoWithTags(ctx context.Context, req *domain.Photo) error {
 	return s.photoRepo.UpdateWithTags(ctx, req)
 }
 

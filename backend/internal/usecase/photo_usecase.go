@@ -10,7 +10,7 @@ import (
 
 // インターフェース
 type PhotoUsecase interface {
-	GetPhotoByIDs(ids []int64) ([]dto.PhotoDetail, error)
+	GetPhotoByIDs(ids []int64) ([]*dto.PhotoDetail, error)
 	GetPaginatedPhotos(page, limit int) (*dto.PaginatedPhotoResponse, error)
 	UploadPhotos(ctx context.Context, userID int64, files []*multipart.FileHeader) (*dto.PhotoUploadResponse, error)
 	BulkUpdatePhotos(ctx context.Context, reqs dto.PhotoBulkUpdateRequest) error
@@ -28,7 +28,7 @@ func NewPhotoUsecase(photoService service.PhotoService) PhotoUsecase {
 }
 
 // id配列から写真情報を取得
-func (u *photoUsecase) GetPhotoByIDs(ids []int64) ([]dto.PhotoDetail, error) {
+func (u *photoUsecase) GetPhotoByIDs(ids []int64) ([]*dto.PhotoDetail, error) {
 	photos, err := u.photoService.GetPhotosByIDs(ids)
 	if err != nil {
 		return nil, err
@@ -67,7 +67,8 @@ func (u *photoUsecase) BulkUpdatePhotos(ctx context.Context, reqs dto.PhotoBulkU
 	for i := range reqs.Updates {
 		req := reqs.Updates[i]
 		// 1件でもエラーが出たら終了
-		if err := u.photoService.UpdatePhotoWithTags(ctx, &req); err != nil {
+		domainPhoto := converter.ToPhotoFromUpdateDTO(&req)
+		if err := u.photoService.UpdatePhotoWithTags(ctx, domainPhoto); err != nil {
 			return err
 		}
 	}

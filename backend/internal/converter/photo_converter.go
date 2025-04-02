@@ -38,9 +38,29 @@ func ToPhotoModel(p *domain.Photo) *model.Photo {
 	}
 }
 
+// model -> domain (単体)
+func ToDomainPhoto(m *model.Photo) *domain.Photo {
+	if m == nil {
+		return nil
+	}
+	return &domain.Photo{
+		ID:          m.ID,
+		ImageURL:    m.ImageURL,
+		AspectRatio: m.AspectRatio,
+		Title:       m.Title,
+		Description: m.Description,
+		CategoryID:  m.CategoryID,
+		IsVisible:   m.IsVisible,
+		TakenAt:     m.TakenAt,
+	}
+}
+
 // domain -> dto（単体）
-func ToPhotoDetail(p *domain.Photo) dto.PhotoDetail {
-	return dto.PhotoDetail{
+func ToPhotoDetail(p *domain.Photo) *dto.PhotoDetail {
+	if p == nil {
+		return nil
+	}
+	return &dto.PhotoDetail{
 		ID:          p.ID,
 		ImageURL:    p.ImageURL,
 		AspectRatio: p.AspectRatio,
@@ -50,17 +70,25 @@ func ToPhotoDetail(p *domain.Photo) dto.PhotoDetail {
 		UserID:      p.UserID,
 		IsVisible:   p.IsVisible,
 		TakenAt:     p.TakenAt,
+		Tags:        p.Tags,
 	}
 }
 
 // domain to dto 変換
-func ToDetailsList(photos []*domain.Photo) []dto.PhotoDetail {
-	result := make([]dto.PhotoDetail, 0, len(photos))
-
+func ToDetailsList(photos []*domain.Photo) []*dto.PhotoDetail {
+	result := make([]*dto.PhotoDetail, 0, len(photos))
 	// 変換
 	for _, photo := range photos {
 		result = append(result, ToPhotoDetail(photo))
 	}
-
 	return result
+}
+
+// model -> domain (複数)
+func ToDomainPhotos(models []*model.Photo) []*domain.Photo {
+	domains := make([]*domain.Photo, 0, len(models))
+	for _, m := range models {
+		domains = append(domains, ToDomainPhoto(m))
+	}
+	return domains
 }

@@ -23,10 +23,10 @@ type PhotoDetail struct {
 
 // ページネーション用返却
 type PaginatedPhotoResponse struct {
-	Photos []PhotoDetail `json:"photos"`
-	Total  int64         `json:"total"`
-	Page   int           `json:"page"`
-	Limit  int           `json:"limit"`
+	Photos []*PhotoDetail `json:"photos"`
+	Total  int64          `json:"total"`
+	Page   int            `json:"page"`
+	Limit  int            `json:"limit"`
 }
 
 // 更新用（単体）

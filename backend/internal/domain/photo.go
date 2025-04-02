@@ -2,7 +2,7 @@ package domain
 
 import "time"
 
-// Photo は画像投稿のメイン情報（DB用）
+// Photo は画像投稿のメイン情報
 type Photo struct {
 	ID          int64
 	ImageURL    string
@@ -13,38 +13,7 @@ type Photo struct {
 	UserID      *int64
 	IsVisible   bool
 	TakenAt     *time.Time
+	Tags        []string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
-}
-
-// PhotoExif はメタデータ（DB用）
-type PhotoExif struct {
-	PhotoID      int64
-	CameraMake   *string
-	CameraModel  *string
-	LensModel    *string
-	ISO          *int
-	FNumber      *float64
-	ExposureTime *string
-	FocalLength  *string
-	WhiteBalance *string
-	Orientation  *string
-	TakenAt      *time.Time
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
-}
-
-// PhotoGPS は緯度経度情報（DB用）
-type PhotoGPS struct {
-	PhotoID   int64
-	Latitude  *float64
-	Longitude *float64
-	IsVisible bool
-	CreatedAt time.Time
-	UpdatedAt time.Time
-}
-
-// テーブル名を明示的に設定
-func (PhotoExif) TableName() string {
-	return "photo_exif"
 }
