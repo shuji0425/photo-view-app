@@ -18,6 +18,7 @@ type PhotoDetail struct {
 	UserID      *int64     `json:"user_id"`
 	IsVisible   bool       `json:"is_visible"`
 	TakenAt     *time.Time `json:"taken_at"`
+	Tags        []string   `json:"tags"`
 }
 
 // ページネーション用返却

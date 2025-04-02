@@ -10,7 +10,7 @@ type Photo struct {
 	Description *string
 	CategoryID  *int64
 	UserID      *int64
-	IsVisible   bool
+	IsVisible   bool `gorm:"default:false"`
 	TakenAt     *time.Time
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
