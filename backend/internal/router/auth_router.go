@@ -7,7 +7,7 @@ import (
 )
 
 // 認証関連のルーター
-func SetupAuthRoutes(r *gin.Engine, authHandler *handler.AuthHandler) {
+func SetupAuthRoutes(r *gin.RouterGroup, authHandler *handler.AuthHandler) {
 	// 認証
 	r.POST("/login", authHandler.Login)
 	r.POST("/logout", authHandler.Logout)

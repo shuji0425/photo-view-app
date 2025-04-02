@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import { getMe } from "../api/auth";
-import { AuthUser } from "@/types/auth";
+import { AuthUser } from "@/types/user";
 
 /**
  * ログイン中のユーザー情報を取得

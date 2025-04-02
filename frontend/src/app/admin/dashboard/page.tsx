@@ -21,27 +21,29 @@ export default function AdminDashboardPage() {
 
   // ログイン済みの表示
   return (
-    <div className="min-w-screen min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
-      <h1 className="text-2xl font-bold mb-4">
+    <>
+      <h1 className="text-2xl font-bold mb-4 text-center">
         ようこそ {user?.username} さん！
       </h1>
-      <p className="mb-4 text-gary-600">
+      <p className="mb-4 text-center text-gary-600">
         あなたは {user?.role === "admin" ? "管理者" : "ユーザー"}{" "}
         としてログインしています。
       </p>
 
       {/* ボタン */}
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center gap-4">
         {/* ログアウト */}
         <LogoutButton onLogout={logout} />
 
         {/* プロフィール */}
-        <NavButton
-          href="/admin/profile"
-          label={profile ? "プロフィール編集" : "プロフィール作成"}
-          color={profile ? "green" : "yellow"}
-        />
+        {!profile && (
+          <NavButton
+            href="/admin/profile"
+            label="プロフィール作成"
+            color="yellow"
+          />
+        )}
       </div>
-    </div>
+    </>
   );
 }

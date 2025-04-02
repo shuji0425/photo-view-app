@@ -12,6 +12,8 @@ type ImageSaver interface {
 	Save(file *multipart.FileHeader, category string, filename string) (string, error)
 	SaveMultiple(files []*multipart.FileHeader, category string, generateFilename func(int) string) ([]string, error)
 	BasePath() string
+	PhotoBasePath() string
+	Delete(url string) error
 }
 
 // 構造体
@@ -27,7 +29,7 @@ func NewImageSaver(baseDir string) ImageSaver {
 // 単体画像の保存
 func (s *imageSaver) Save(file *multipart.FileHeader, category string, filename string) (string, error) {
 	// 保存パスの作成
-	savePath := filepath.Join(s.baseDir, category)
+	savePath := filepath.Join(s.PhotoBasePath(), category)
 	if err := os.MkdirAll(savePath, os.ModePerm); err != nil {
 		return "", nil
 	}
@@ -43,7 +45,7 @@ func (s *imageSaver) Save(file *multipart.FileHeader, category string, filename 
 
 // 複数画像の保存
 func (s *imageSaver) SaveMultiple(files []*multipart.FileHeader, category string, generateFilename func(int) string) ([]string, error) {
-	savePath := filepath.Join(s.baseDir, category)
+	savePath := filepath.Join(s.PhotoBasePath(), category)
 	if err := os.MkdirAll(savePath, os.ModePerm); err != nil {
 		return nil, err
 	}
@@ -82,4 +84,16 @@ func saveUploadedFile(file *multipart.FileHeader, dst string) error {
 // ベースパス
 func (s *imageSaver) BasePath() string {
 	return s.baseDir
+}
+
+// 保存する場所 ../frontend/public/images/
+func (s *imageSaver) PhotoBasePath() string {
+	return fmt.Sprintf("%s/images", s.baseDir)
+}
+
+// ファイル削除
+func (s *imageSaver) Delete(url string) error {
+	// URLからローカルパスを構築
+	path := filepath.Join(s.baseDir, filepath.FromSlash(url))
+	return os.Remove(path)
 }

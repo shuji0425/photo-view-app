@@ -1,10 +1,10 @@
 package usecase
 
 import (
+	"backend/internal/converter"
 	"backend/internal/domain"
 	"backend/internal/dto"
 	"backend/internal/service"
-	"backend/internal/usecase/converter"
 	"context"
 	"errors"
 	"mime/multipart"

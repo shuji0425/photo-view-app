@@ -9,7 +9,7 @@ type Props = {
  * フォーム用バリデーションエラー表示
  */
 export const FormError = ({ message, className }: Props) => {
-  if (!message) return null;
+  if (!message || typeof message !== "string") return null;
 
   return (
     <p

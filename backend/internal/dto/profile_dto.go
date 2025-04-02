@@ -7,12 +7,12 @@ type SNSLink = domain.SNSLink
 
 // 新規プロフィール作成のリクエスト
 type CreateProfileRequest struct {
-	DisplayName string     `json:"display_name"`
+	DisplayName string     `json:"display_name" binding:"required"`
 	Avatar      *string    `json:"avatar"`
 	CoverImage  *string    `json:"cover_image"`
 	Bio         *string    `json:"bio"`
 	JobTitle    *string    `json:"job_title"`
-	Website     *string    `json:"website"`
+	Website     *string    `json:"website" binding:"omitempty,url"`
 	Location    *string    `json:"location"`
 	BirthPlace  *string    `json:"birth_place"`
 	SNSLinks    *[]SNSLink `json:"sns_links"`
@@ -26,7 +26,7 @@ type UpdateProfileRequest struct {
 	CoverImage  *string    `json:"cover_image"`
 	Bio         *string    `json:"bio"`
 	JobTitle    *string    `json:"job_title"`
-	Website     *string    `json:"website"`
+	Website     *string    `json:"website" binding:"omitempty,url"`
 	Location    *string    `json:"location"`
 	BirthPlace  *string    `json:"birth_place"`
 	SNSLinks    *[]SNSLink `json:"sns_links"`

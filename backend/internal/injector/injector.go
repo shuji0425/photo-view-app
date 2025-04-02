@@ -13,6 +13,8 @@ type InjectedHandlers struct {
 	UserHandler          *handler.UserHandler
 	AvatarHandler        *handler.AvatarHandler
 	PublicProfileHandler *handler.PublicProfileHandler
+	PhotoHandler         *handler.PhotoHandler
+	CategoryHandler      *handler.CategoryHandler
 }
 
 func InjectAll(db *gorm.DB) *InjectedHandlers {
@@ -22,5 +24,7 @@ func InjectAll(db *gorm.DB) *InjectedHandlers {
 		AuthHandler:          InjectAuthHandler(db),
 		AvatarHandler:        InjectAvatarHandler(db),
 		PublicProfileHandler: InjectPublicProfileHandler(db),
+		PhotoHandler:         InjectPhotoHandler(db),
+		CategoryHandler:      InjectCategoryHandler(db),
 	}
 }

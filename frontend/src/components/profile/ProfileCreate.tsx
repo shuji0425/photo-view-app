@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { createProfile } from "@/lib/api/profile";
-import { ProfileParams } from "@/types/profile";
+import { ProfileParams } from "@/lib/schema/profileSchema";
 import { useRouter } from "next/navigation";
 import ProfileForm from "./ProfileForm";
 import { mutate } from "swr";

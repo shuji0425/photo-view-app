@@ -29,9 +29,9 @@ export const ProfileLocationSection = ({ register, errors }: Props) => {
       <FormField
         label="出身地"
         htmlFor="birth_place"
-        error={errors.birth_place?.message}
+        error={errors.birthPlace?.message}
       >
-        <Input id="birth_place" {...register("birth_place")} />
+        <Input id="birth_place" {...register("birthPlace")} />
       </FormField>
     </section>
   );

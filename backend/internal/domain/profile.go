@@ -1,13 +1,9 @@
 package domain
 
-import (
-	"time"
-)
-
 // プロフィール（DBモデル）
 type Profile struct {
-	UserID      int64  `gorm:"primaryKey"`
-	DisplayName string `gorm:"not null"`
+	UserID      int64
+	DisplayName string
 	Avatar      *string
 	CoverImage  *string
 	Bio         *string
@@ -15,8 +11,6 @@ type Profile struct {
 	Website     *string
 	Location    *string
 	BirthPlace  *string
-	SNSLinks    SNSLinks `gorm:"type:json"`
-	IsPublic    bool     `gorm:"default:true"`
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
+	SNSLinks    SNSLinks
+	IsPublic    bool
 }

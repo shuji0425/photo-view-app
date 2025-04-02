@@ -1,4 +1,5 @@
 import { Profile } from "@/types/profile";
+import { apiFetch } from "../client";
 
 /**
  * プロフィールを取得
@@ -6,18 +7,11 @@ import { Profile } from "@/types/profile";
  * @returns エラーの時は例外処理
  */
 export const getProfile = async (userId: number): Promise<Profile> => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/profiles/${userId}`,
-    {
-      method: "GET",
-      credentials: "include",
-    }
-  );
-
-  if (!res.ok) {
-    const error = await res.json();
-    throw new Error(error.message || "プロフィールの取得に失敗しました");
+  try {
+    return await apiFetch<Profile>(
+      `${process.env.NEXT_PUBLIC_API_URL}/admin/profiles/${userId}`
+    );
+  } catch {
+    throw new Error("プロフィールの取得に失敗しました");
   }
-
-  return res.json();
 };

@@ -1,9 +1,9 @@
 package usecase
 
 import (
+	"backend/internal/converter"
 	"backend/internal/dto"
 	"backend/internal/service"
-	"backend/internal/usecase/converter"
 )
 
 // ユースケースインターフェース

@@ -2,18 +2,16 @@ package router
 
 import (
 	"backend/internal/handler"
-	"backend/internal/middleware"
 
 	"github.com/gin-gonic/gin"
 )
 
 // プロフィール関連のルーター
-func SetupProfileRoutes(r *gin.Engine, profileHandler *handler.ProfileHandler) {
-	adminGroup := r.Group("/profiles")
-	adminGroup.Use(middleware.AuthMiddleware())
+func SetupProfileRoutes(r *gin.RouterGroup, profileHandler *handler.ProfileHandler) {
+	profileGroup := r.Group("/profiles")
 
 	// ルート
-	adminGroup.GET("/:user_id", profileHandler.GetProfileHandler)
-	adminGroup.POST("/:user_id", profileHandler.CreateProfileHandler)
-	adminGroup.PUT("/:user_id", profileHandler.UpdateProfileHandler)
+	profileGroup.GET("/:user_id", profileHandler.GetProfileHandler)
+	profileGroup.POST("/:user_id", profileHandler.CreateProfileHandler)
+	profileGroup.PUT("/:user_id", profileHandler.UpdateProfileHandler)
 }

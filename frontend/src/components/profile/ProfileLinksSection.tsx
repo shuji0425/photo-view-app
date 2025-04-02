@@ -25,11 +25,11 @@ type Props = {
 export const ProfileLinksSection = ({ register, control, errors }: Props) => {
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "sns_links",
+    name: "snsLinks",
   });
   const watchedPlatforms = useWatch({
     control,
-    name: "sns_links",
+    name: "snsLinks",
   });
 
   return (
@@ -42,12 +42,15 @@ export const ProfileLinksSection = ({ register, control, errors }: Props) => {
             <div key={filed.id} className="flex items-center gap-2">
               {/* プラットフォーム選択 */}
               <select
-                {...register(`sns_links.${index}.platform`)}
+                {...register(`snsLinks.${index}.platform`)}
                 className="border rounded px-2 py-1"
               >
                 <option value="twitter">Twitter</option>
                 <option value="instagram">Instagram</option>
                 <option value="facebook">Facebook</option>
+                <option value="threads">Threads</option>
+                <option value="youtube">Youtube</option>
+                <option value="github">Github</option>
                 <option value="other">その他</option>
               </select>
 
@@ -55,15 +58,14 @@ export const ProfileLinksSection = ({ register, control, errors }: Props) => {
               {watchedPlatforms?.[index]?.platform === "other" && (
                 <Input
                   placeholder="プラットフォーム名"
-                  {...register(`sns_links.${index}.platform_name`)}
+                  {...register(`snsLinks.${index}.platformName`)}
                 />
               )}
-
               {/* URL */}
               <Input
                 placeholder="URL"
                 type="url"
-                {...register(`sns_links.${index}.url`)}
+                {...register(`snsLinks.${index}.url`)}
               />
               <ActionButton
                 label="削除"
@@ -82,7 +84,7 @@ export const ProfileLinksSection = ({ register, control, errors }: Props) => {
           className="mt-2"
           onClick={() => append({ platform: "twitter", url: "" })}
         />
-        <FormError message={errors.sns_links?.message} />
+        <FormError message={errors.snsLinks?.message} />
       </div>
 
       {/* ウェブサイト */}

@@ -29,12 +29,14 @@ CREATE TABLE IF NOT EXISTS categories (
 -- ============================================
 CREATE TABLE IF NOT EXISTS photos (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  filename VARCHAR(255) NOT NULL UNIQUE,     -- アップロードされた画像のユニークファイル名
+  image_url VARCHAR(255) NOT NULL UNIQUE,    -- アップロードされた画URL
+  aspect_ratio DECIMAL(5,2),                 -- アスペクト比
   title VARCHAR(255),                        -- タイトル（任意）
   description TEXT,                          -- 説明文（任意）
   category_id INT,                           -- カテゴリ（外部キー）
   user_id INT,                               -- 投稿者（外部キー）
   is_visible BOOLEAN NOT NULL DEFAULT FALSE, -- 表示切り替え
+  taken_at DATETIME,                         -- 撮影日
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL,
@@ -67,9 +69,10 @@ CREATE TABLE IF NOT EXISTS photo_exif (
 -- 緯度・経度を数値で正確に保存
 -- ============================================
 CREATE TABLE IF NOT EXISTS photo_gps (
-  photo_id INT PRIMARY KEY,              -- photos.id と1対1のリレーション
-  latitude DECIMAL(10, 8),               -- 緯度（例：35.689487）
-  longitude DECIMAL(11, 8),              -- 経度（例：139.691706）
+  photo_id INT PRIMARY KEY,                  -- photos.id と1対1のリレーション
+  latitude DECIMAL(10, 8),                   -- 緯度（例：35.689487）
+  longitude DECIMAL(11, 8),                  -- 経度（例：139.691706）
+  is_visible BOOLEAN NOT NULL DEFAULT FALSE, -- 表示/非表示の制御フラグ
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (photo_id) REFERENCES photos(id) ON DELETE CASCADE
@@ -132,6 +135,27 @@ CREATE TABLE IF NOT EXISTS profiles (
   birth_place VARCHAR(100),                     -- 出身地
   sns_links JSON,                               -- SNSリンク（JSON形式）
   is_public BOOLEAN DEFAULT TRUE,               -- 公開/非公開フラグ
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- ============================================
+-- 管理者ごとのメタデータ表示ポリシーを管理
+-- ============================================
+CREATE TABLE IF NOT EXISTS metadata_visibility_policy (
+  user_id INT PRIMARY KEY,                   -- 管理者ID（users.id）と1対1
+  show_camera_make BOOLEAN DEFAULT TRUE,     -- カメラメーカー（例：Canon）
+  show_camera_model BOOLEAN DEFAULT TRUE,    -- カメラ機種（例：EOS R5）
+  show_lens_model BOOLEAN DEFAULT TRUE,      -- 使用レンズ（例：24-70mm f/2.8）
+  show_iso BOOLEAN DEFAULT TRUE,             -- ISO感度（例：100）
+  show_f_number BOOLEAN DEFAULT TRUE,        -- 絞り値（例：2.8）
+  show_exposure_time BOOLEAN DEFAULT TRUE,   -- シャッタースピード（例："1/125"）
+  show_focal_length BOOLEAN DEFAULT FALSE,   -- 焦点距離（例："50mm"）
+  show_white_balance BOOLEAN DEFAULT FALSE,  -- ホワイトバランス（例："Auto"）
+  show_orientation BOOLEAN DEFAULT FALSE,    -- 画像の向き（例："1"）
+  show_taken_at BOOLEAN DEFAULT FALSE,       -- 撮影日時
+  show_gps BOOLEAN DEFAULT FALSE,            -- GPS
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE

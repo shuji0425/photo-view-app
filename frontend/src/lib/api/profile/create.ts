@@ -1,5 +1,6 @@
 import { ProfileParams } from "@/lib/schema/profileSchema";
 import { Profile } from "@/types/profile";
+import { apiFetch } from "../client";
 
 /**
  * プロフィール作成
@@ -7,24 +8,15 @@ import { Profile } from "@/types/profile";
  * @param params 登録内容
  * @returns 作成されたプロフィール
  */
-export const createProfile = async (
+export const createProfile = (
   userId: number,
   params: ProfileParams
 ): Promise<Profile> => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/profiles/${userId}`,
+  return apiFetch<Profile>(
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/profiles/${userId}`,
     {
       method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(params),
+      body: params,
     }
   );
-
-  if (!res.ok) {
-    const error = await res.json();
-    throw new Error(error.message || "プロフィールの作成に失敗しました");
-  }
-
-  return res.json();
 };
