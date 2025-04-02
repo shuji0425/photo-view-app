@@ -3,7 +3,7 @@
 type ToggleProps = {
   id: string;
   checked: boolean;
-  onChange: (value: boolean) => void;
+  onChange: (checked: boolean) => void;
 };
 
 /**
