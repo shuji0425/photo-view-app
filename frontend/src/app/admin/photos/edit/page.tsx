@@ -1,14 +1,16 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { useMemo } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo } from "react";
 import { usePhotoEditor } from "@/hooks/usePhotoEditor";
 import { PhotoEditCard } from "@/components/photo/PhotoEditCard";
 import toast from "react-hot-toast";
 import { ActionButton } from "@/components/ui/ActionButton";
-import { PhotoDetail } from "@/types/photo";
 import { photoBulkUpdateSchema } from "@/lib/schema/photoSchema";
 import { updatePhotos } from "@/lib/api/photo/bulkUpdate";
+import { useFieldArray, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 /**
  * 編集画面
@@ -20,25 +22,31 @@ export default function PhotoEditPage() {
     return idsParam ? idsParam.split(",").map(Number) : [];
   }, [searchParams]);
 
-  const { photos, setPhotos, loading } = usePhotoEditor(ids);
+  const { photos, loading } = usePhotoEditor(ids);
+  const router = useRouter();
 
-  const handleChange = <K extends keyof PhotoDetail>(
-    index: number,
-    field: K,
-    value: PhotoDetail[K]
-  ) => {
-    setPhotos((prev) =>
-      prev.map((photo, i) =>
-        i === index ? { ...photo, [field]: value } : photo
-      )
-    );
-  };
+  const {
+    control,
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<z.infer<typeof photoBulkUpdateSchema>>({
+    resolver: zodResolver(photoBulkUpdateSchema),
+    defaultValues: { updates: photos },
+  });
 
-  const handleSave = async () => {
+  const { fields } = useFieldArray({ control, name: "updates" });
+
+  useEffect(() => {
+    reset({ updates: photos });
+  }, [photos, reset]);
+
+  const onSubmit = async (values: z.infer<typeof photoBulkUpdateSchema>) => {
     try {
-      const validated = photoBulkUpdateSchema.parse({ updates: photos });
-      await updatePhotos(validated);
+      await updatePhotos(values);
       toast.success("更新が完了しました");
+      router.refresh();
     } catch (error) {
       console.error(error);
       toast.error("更新に失敗しました");
@@ -54,17 +62,24 @@ export default function PhotoEditPage() {
         <p className="text-sm text-gray-500">編集対象の画像がありません</p>
       )}
 
-      {photos.map((photo, idx) => (
+      {fields.map((field, idx) => (
         <PhotoEditCard
-          key={photo.id}
-          idx={idx}
-          photo={photo}
-          onChange={(field, value) => handleChange(idx, field, value)}
+          key={field.id}
+          index={idx}
+          register={register}
+          photo={photos[idx]}
+          error={errors.updates?.[idx]}
+          control={control}
         />
       ))}
 
       {photos.length > 0 && (
-        <ActionButton color="green" label="すべて保存" onClick={handleSave} />
+        <ActionButton
+          type="submit"
+          color="green"
+          label="すべて保存"
+          onClick={handleSubmit(onSubmit)}
+        />
       )}
     </>
   );
