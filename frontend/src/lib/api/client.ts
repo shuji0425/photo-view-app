@@ -5,6 +5,7 @@ type RequestOptions<TRequest = unknown> = {
   method?: "GET" | "POST" | "PUT" | "DELETE";
   body?: TRequest;
   headers?: HeadersInit;
+  next?: { revalidate: number };
 };
 
 /**
@@ -17,14 +18,15 @@ export async function apiFetch<TResponse, TRequest = unknown>(
   url: string,
   options: RequestOptions<TRequest> = {}
 ): Promise<TResponse> {
-  const { method = "GET", body, headers } = options;
-  const fetchOptions: RequestInit = {
+  const { method = "GET", body, headers, next } = options;
+  const fetchOptions: RequestInit & { next?: { revalidate: number } } = {
     method,
     headers: {
       "Content-Type": "application/json",
       ...headers,
     },
     credentials: "include",
+    ...(next ? { next } : {}),
   };
 
   if (body) {
