@@ -1,9 +1,5 @@
 package domain
 
-import (
-	"time"
-)
-
 // プロフィール（DBモデル）
 type Profile struct {
 	UserID      int64
@@ -17,6 +13,4 @@ type Profile struct {
 	BirthPlace  *string
 	SNSLinks    SNSLinks
 	IsPublic    bool
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
 }

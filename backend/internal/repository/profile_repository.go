@@ -1,7 +1,9 @@
 package repository
 
 import (
+	"backend/internal/converter"
 	"backend/internal/domain"
+	"backend/internal/model"
 	"context"
 	"errors"
 
@@ -28,21 +30,21 @@ func NewProfileRepository(db *gorm.DB) ProfileRepository {
 
 // プロフィールを取得
 func (r *profileRepository) GetProfileByUserID(userID int64) (*domain.Profile, error) {
-	var profile domain.Profile
+	var profile *model.Profile
 	// 見つからないときはnilを返却
-	if err := r.db.Where("user_id = ?", userID).First(&profile).Error; err != nil {
+	if err := r.db.Model(&model.Profile{}).Where("user_id = ?", userID).First(&profile).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
 		return nil, err
 	}
 
-	return &profile, nil
+	return converter.ToDomainProfile(profile), nil
 }
 
 // 最も若いIDの管理者プロフィールを取得
 func (r *profileRepository) FindFirstAdminProfile(ctx context.Context) (*domain.Profile, error) {
-	var profile domain.Profile
+	var profile model.Profile
 	err := r.db.WithContext(ctx).
 		Joins("JOIN users ON users.id = profiles.user_id").
 		Where("users.role = ?", "admin").
@@ -53,15 +55,15 @@ func (r *profileRepository) FindFirstAdminProfile(ctx context.Context) (*domain.
 		return nil, err
 	}
 
-	return &profile, nil
+	return converter.ToDomainProfile(&profile), nil
 }
 
 // プロフィールを作成
 func (r *profileRepository) CreateProfile(profile *domain.Profile) error {
-	return r.db.Create(profile).Error
+	return r.db.Create(converter.ToModelProfile(profile)).Error
 }
 
 // プロフィールを保存
 func (r *profileRepository) UpdateProfile(profile *domain.Profile) error {
-	return r.db.Save(profile).Error
+	return r.db.Save(converter.ToModelProfile(profile)).Error
 }
