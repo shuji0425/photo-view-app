@@ -1,5 +1,9 @@
 import { z } from "zod";
+import { toJSTMidnightISOString } from "../utils/date";
 
+/**
+ * タグのバリデーション
+ */
 const tagSchema = z
   .string()
   .trim()
@@ -9,10 +13,19 @@ const tagSchema = z
   });
 
 /**
+ * 撮影日時のバリデーション（nullable対応）
+ */
+const nullableDateString = z
+  .string()
+  .nullable()
+  .transform((val) => (val === "" ? null : val))
+  .transform((val) => toJSTMidnightISOString(val));
+
+/**
  * バリデーション
  */
 export const photoUpdateSchema = z.object({
-  photo_id: z.number(),
+  photoId: z.number(),
   title: z
     .string()
     .max(255)
@@ -24,18 +37,9 @@ export const photoUpdateSchema = z.object({
     .optional()
     .nullable()
     .transform((val) => (val === "" ? null : val)),
-  category_id: z.number().optional().nullable(),
-  is_visible: z.boolean(),
-  taken_at: z
-    .string()
-    .nullable()
-    .optional()
-    .transform((val) => (val === "" ? null : val))
-    .refine(
-      (val) =>
-        val === null || (typeof val === "string" && !isNaN(Date.parse(val))),
-      "無効な日付です"
-    ),
+  categoryId: z.number({ message: "数値が必要です" }).optional().nullable(),
+  isVisible: z.boolean(),
+  takenAt: nullableDateString,
   tags: z.array(tagSchema).optional().nullable(),
 });
 
