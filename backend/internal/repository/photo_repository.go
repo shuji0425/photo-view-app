@@ -5,7 +5,6 @@ import (
 	"backend/internal/domain"
 	"backend/internal/model"
 	"context"
-	"log"
 
 	"gorm.io/gorm"
 )
@@ -90,7 +89,6 @@ func (r *photoRepository) GetPhotoByIDs(ids []int64) ([]*domain.Photo, error) {
 
 	// domain.photoにtagsを詰める（ないときはnil）
 	for _, photo := range photos {
-		log.Println(photo.Title)
 		photo.Tags = tagMap[photo.ID]
 	}
 

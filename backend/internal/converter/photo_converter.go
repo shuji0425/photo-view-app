@@ -15,14 +15,15 @@ func safeBool(b *bool) bool {
 }
 
 // dto -> domain（更新）
-func ToPhotoFromUpdateDTO(dto *dto.PhotoUpdateRequest) *domain.Photo {
+func ToPhotoFromUpdateDTO(d *dto.PhotoUpdateRequest) *domain.Photo {
 	return &domain.Photo{
-		ID:          dto.PhotoID,
-		Title:       dto.Title,
-		Description: dto.Description,
-		CategoryID:  dto.CategoryID,
-		IsVisible:   safeBool(dto.IsVisible),
-		TakenAt:     dto.TakenAt,
+		ID:          d.PhotoID,
+		Title:       d.Title,
+		Description: d.Description,
+		CategoryID:  d.CategoryID,
+		IsVisible:   safeBool(d.IsVisible),
+		TakenAt:     d.TakenAt,
+		Tags:        d.Tags,
 	}
 }
 
@@ -30,6 +31,8 @@ func ToPhotoFromUpdateDTO(dto *dto.PhotoUpdateRequest) *domain.Photo {
 func ToPhotoModel(p *domain.Photo) *model.Photo {
 	return &model.Photo{
 		ID:          p.ID,
+		ImageURL:    p.ImageURL,
+		AspectRatio: p.AspectRatio,
 		Title:       p.Title,
 		Description: p.Description,
 		CategoryID:  p.CategoryID,
