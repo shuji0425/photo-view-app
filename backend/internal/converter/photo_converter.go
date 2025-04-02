@@ -6,6 +6,14 @@ import (
 	"backend/internal/model"
 )
 
+// nil なら falseを返す、明示的なfalseも拾える
+func safeBool(b *bool) bool {
+	if b == nil {
+		return false
+	}
+	return *b
+}
+
 // dto -> domain（更新）
 func ToPhotoFromUpdateDTO(dto *dto.PhotoUpdateRequest) *domain.Photo {
 	return &domain.Photo{
@@ -13,7 +21,7 @@ func ToPhotoFromUpdateDTO(dto *dto.PhotoUpdateRequest) *domain.Photo {
 		Title:       dto.Title,
 		Description: dto.Description,
 		CategoryID:  dto.CategoryID,
-		IsVisible:   dto.IsVisible,
+		IsVisible:   safeBool(dto.IsVisible),
 		TakenAt:     dto.TakenAt,
 	}
 }

@@ -109,7 +109,10 @@ func (r *photoRepository) UpdateWithTags(ctx context.Context, req *dto.PhotoUpda
 		domainPhoto := converter.ToPhotoFromUpdateDTO(req)
 		photoModel := converter.ToPhotoModel(domainPhoto)
 
-		if err := tx.Model(&model.Photo{}).Where("id = ?", photoModel.ID).Updates(photoModel).Error; err != nil {
+		if err := tx.Model(&model.Photo{}).
+			Where("id = ?", photoModel.ID).
+			Select("is_visible", "title", "description", "category_id", "taken_at").
+			Updates(photoModel).Error; err != nil {
 			return err
 		}
 
