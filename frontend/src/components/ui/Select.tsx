@@ -2,42 +2,27 @@
 
 import { inputBaseClass } from "@/lib/styles/input";
 import { cn } from "@/lib/utils/cn";
+import { forwardRef, SelectHTMLAttributes } from "react";
 
 type Option = {
   label: string;
   value: string | number;
 };
 
-type SelectProps = {
-  id?: string;
-  value?: string | number | null;
-  onChange: (value: string | number) => void;
+type Props = SelectHTMLAttributes<HTMLSelectElement> & {
   options: Option[];
   placeholder?: string;
-  className?: string;
 };
 
 /**
  * セレクトボックスコンポーネント
  */
-export const Select = ({
-  id,
-  value,
-  onChange,
-  options,
-  placeholder = "選択してください",
-  className,
-}: SelectProps) => {
+export const Select = forwardRef<HTMLSelectElement, Props>(function SelectBase(
+  { className, options, placeholder = "選択してください", ...props },
+  ref
+) {
   return (
-    <select
-      id={id}
-      value={value ?? ""}
-      onChange={(e) => {
-        const val = e.target.value;
-        onChange(isNaN(Number(val)) ? val : Number(val));
-      }}
-      className={cn(inputBaseClass, className)}
-    >
+    <select ref={ref} className={cn(inputBaseClass, className)} {...props}>
       <option value="">{placeholder}</option>
       {options.map((opt) => (
         <option key={opt.value} value={opt.value}>
@@ -46,4 +31,4 @@ export const Select = ({
       ))}
     </select>
   );
-};
+});
