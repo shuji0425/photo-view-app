@@ -12,7 +12,10 @@ export type PhotoDetailDTO = {
   tags: string[];
 };
 
-// アップロード後の返却配列
-export type UploadResponseDTO = {
-  photo_ids: number[];
+// ページネーション用DTO
+export type PaginatedPhotoResponseDTO = {
+  photos: PhotoDetailDTO[];
+  total: number;
+  page: number;
+  limit: number;
 };

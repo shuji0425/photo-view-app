@@ -1,6 +1,5 @@
 import axios from "axios";
-import { UploadResponseDTO } from "@/types/dto/photo";
-import { convertUploadResponse } from "@/lib/converters/photo";
+import camelcaseKeys from "camelcase-keys";
 
 /**
  * 画像を送信
@@ -27,8 +26,6 @@ export const postUploadImages = async (
   );
 
   // 型変換
-  const rowData: UploadResponseDTO = res.data;
-  const { photoIds } = convertUploadResponse(rowData);
-
-  return photoIds;
+  const data = camelcaseKeys(res.data) as { photoIds: number[] };
+  return data.photoIds;
 };

@@ -1,22 +1,15 @@
 import { PhotoBulkUpdateParams } from "@/lib/schema/photoSchema";
+import { apiFetch } from "../client";
 
 /**
  * 一括更新（写真＆タグ）
  */
-export const updatePhotos = async (
-  params: PhotoBulkUpdateParams
-): Promise<void> => {
-  const res = await fetch(
+export const updatePhotos = (data: PhotoBulkUpdateParams): Promise<void> => {
+  return apiFetch<void, PhotoBulkUpdateParams>(
     `${process.env.NEXT_PUBLIC_API_URL}/admin/photos/bulk-update`,
     {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(params),
+      body: data,
     }
   );
-
-  if (!res.ok) throw new Error("更新に失敗しました");
 };

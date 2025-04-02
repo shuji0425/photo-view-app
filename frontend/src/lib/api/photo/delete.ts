@@ -1,11 +1,15 @@
-export const deletePhotosByIds = async (ids: number[]): Promise<void> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/photos/`, {
-    method: "DELETE",
-    credentials: "include",
-    body: JSON.stringify({ ids }),
-  });
+import { apiFetch } from "../client";
 
-  if (!res.ok) {
-    throw new Error("画像の削除に失敗しました");
-  }
+/**
+ * idの配列を元に一括削除
+ * @param ids id配列
+ */
+export const deletePhotosByIds = (ids: number[]) => {
+  return apiFetch<void, { ids: number[] }>(
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/photos`,
+    {
+      method: "DELETE",
+      body: { ids },
+    }
+  );
 };

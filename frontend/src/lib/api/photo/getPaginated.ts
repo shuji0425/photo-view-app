@@ -1,46 +1,17 @@
-import { PhotoDetailDTO } from "@/types/dto/photo";
-import {
-  convertPhotoDetail,
-  convertPhotoDetailArray,
-} from "@/lib/converters/photo";
-
-export type PaginatedPhotosResponse = {
-  photos: PhotoDetailDTO[];
-  total: number;
-  page: number;
-  limit: number;
-};
+import { apiFetch } from "../client";
+import { PaginatedPhotoResponseDTO } from "@/types/dto/photo";
 
 /**
  * ページネーション付きの画像取得
  * @param page ページ番号
  * @param limit 1ページあたりの取得数
  */
-export const getPaginatedPhotos = async (
-  page: number,
-  limit: number
-): Promise<{
-  photos: ReturnType<typeof convertPhotoDetail>[];
-  total: number;
-  page: number;
-  limit: number;
-}> => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/admin/photos?page=${page}&limit=${limit}`,
-    {
-      credentials: "include",
-    }
+export const getPaginatedPhotos = (
+  page = 1,
+  limit = 30
+): Promise<PaginatedPhotoResponseDTO> => {
+  const query = `?page=${page}&limit=${limit}`;
+  return apiFetch<PaginatedPhotoResponseDTO>(
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/photos${query}`
   );
-
-  if (!res.ok) {
-    throw new Error("画像の取得に失敗しました");
-  }
-
-  const data: PaginatedPhotosResponse = await res.json();
-  return {
-    photos: convertPhotoDetailArray(data.photos),
-    total: data.total,
-    page: data.page,
-    limit: data.limit,
-  };
 };
