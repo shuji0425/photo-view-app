@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useProfile } from "@/lib/swr/useProfile";
 import { updateProfile } from "@/lib/api/profile";
-import { ProfileParams } from "@/types/profile";
+import { ProfileParams } from "@/lib/schema/profileSchema";
 import { mutate } from "swr";
 import ProfileForm from "./ProfileForm";
 import toast from "react-hot-toast";
