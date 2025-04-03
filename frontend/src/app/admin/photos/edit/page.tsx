@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import { usePhotoEditor } from "@/hooks/usePhotoEditor";
-import { PhotoEditCard } from "@/components/photo/PhotoEditCard";
+import { PhotoEditCard } from "@/components/photo/editor/PhotoEditCard";
 import toast from "react-hot-toast";
 import { ActionButton } from "@/components/ui/ActionButton";
 import { photoBulkUpdateSchema } from "@/lib/schema/photoSchema";

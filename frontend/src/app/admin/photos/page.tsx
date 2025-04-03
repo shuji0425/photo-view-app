@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { PhotoDetail } from "@/types/photo";
-import { PhotoSelectGrid } from "@/components/photo/PhotoSelectGrid";
+import { PhotoSelectGrid } from "@/components/photo/editor/PhotoSelectGrid";
 import { getPaginatedPhotos } from "@/lib/api/photo/getPaginated";
 import toast from "react-hot-toast";
 import { ActionButton } from "@/components/ui/ActionButton";
+import camelcaseKeys from "camelcase-keys";
 
 export default function AdminPhotoListPage() {
   const [photos, setPhotos] = useState<PhotoDetail[]>([]);
@@ -20,11 +21,13 @@ export default function AdminPhotoListPage() {
     try {
       setIsLoading(true);
       const res = await getPaginatedPhotos(pageToLoad, limit);
+      // 型変換
+      const converted = camelcaseKeys(res.photos, {
+        deep: true,
+      }) as PhotoDetail[];
       setPhotos((prev) => {
         const existingIds = new Set(prev.map((p) => p.id));
-        const newUniquePhotos = res.photos.filter(
-          (p) => !existingIds.has(p.id)
-        );
+        const newUniquePhotos = converted.filter((p) => !existingIds.has(p.id));
         return [...prev, ...newUniquePhotos];
       });
       setTotal(res.total);

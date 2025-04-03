@@ -1,14 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { Input } from "../ui/Input";
-import { FormField } from "../ui/FormField";
-import { Textarea } from "../ui/Textarea";
-import { Select } from "../ui/Select";
-import { DateInput } from "../ui/DateInput";
-import { Toggle } from "../ui/Toggle";
+import { Input } from "../../ui/Input";
+import { FormField } from "../../ui/FormField";
+import { Textarea } from "../../ui/Textarea";
+import { Select } from "../../ui/Select";
+import { DateInput } from "../../ui/DateInput";
+import { Toggle } from "../../ui/Toggle";
 import { useCategories } from "@/lib/swr/useCategories";
-import { TagInput } from "../ui/TagInput";
+import { TagInput } from "../../ui/TagInput";
 import {
   PhotoUpdateParams,
   PhotoBulkUpdateParams,

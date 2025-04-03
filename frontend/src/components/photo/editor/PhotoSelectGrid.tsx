@@ -4,9 +4,9 @@ import { PhotoDetail } from "@/types/photo";
 import Image from "next/image";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { ActionButton } from "../ui/ActionButton";
+import { ActionButton } from "../../ui/ActionButton";
 import { Check } from "lucide-react";
-import { NavButton } from "../ui/NavButton";
+import { NavButton } from "../../ui/NavButton";
 import { deletePhotosByIds } from "@/lib/api/photo/delete";
 
 type Props = {
