@@ -11,13 +11,13 @@ import { deletePhotosByIds } from "@/lib/api/photo/delete";
 
 type Props = {
   photos: PhotoDetail[];
-  setPhotos: (photos: PhotoDetail[]) => void;
+  reload: () => void;
 };
 
 /**
  * 画像一覧グリッド
  */
-export const PhotoSelectGrid = ({ photos, setPhotos }: Props) => {
+export const PhotoSelectGrid = ({ photos, reload }: Props) => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
   const toggleSelect = (id: number) => {
@@ -34,12 +34,10 @@ export const PhotoSelectGrid = ({ photos, setPhotos }: Props) => {
     try {
       await deletePhotosByIds(selectedIds);
       const count = selectedIds.length;
-      const newPhotos = photos.filter(
-        (photo) => !selectedIds.includes(photo.id)
-      );
-      setPhotos(newPhotos);
       setSelectedIds([]);
       toast.success(`${count}枚の画像を削除しました`);
+
+      reload();
     } catch {
       toast.error("削除に失敗しました");
     }
