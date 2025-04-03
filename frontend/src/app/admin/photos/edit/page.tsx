@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo } from "react";
-import { usePhotoEditor } from "@/hooks/usePhotoEditor";
+import { usePhotoEditor } from "@/hooks/photo/usePhotoEditor";
 import { PhotoEditCard } from "@/components/photo/editor/PhotoEditCard";
 import toast from "react-hot-toast";
 import { ActionButton } from "@/components/ui/ActionButton";
@@ -10,7 +10,7 @@ import { photoBulkUpdateSchema } from "@/lib/schema/photoSchema";
 import { updatePhotos } from "@/lib/api/photo/bulkUpdate";
 import { useFieldArray } from "react-hook-form";
 import { z } from "zod";
-import { usePhotoEditForm } from "@/hooks/usePhotoEditForm";
+import { usePhotoEditForm } from "@/hooks/photo/usePhotoEditForm";
 
 /**
  * 編集画面

@@ -9,7 +9,7 @@ import { ProfileBasicSection } from "./ProfileBasicSection";
 import { ProfileImageSection } from "./ProfileImageSection";
 import { ProfileLocationSection } from "./ProfileLocationSection";
 import { ProfileLinksSection } from "./ProfileLinksSection";
-import { useProfileForm } from "@/hooks/useProfileForm";
+import { useProfileForm } from "@/hooks/profile/useProfileForm";
 
 type ProfileFormProps = {
   defaultValues?: ProfileParams;
