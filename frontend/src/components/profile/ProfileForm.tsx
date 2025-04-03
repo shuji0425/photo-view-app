@@ -1,9 +1,7 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ProfileParams, profileSchema } from "@/lib/schema/profileSchema";
-import { useEffect, useState } from "react";
+import { ProfileParams } from "@/lib/schema/profileSchema";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useAvatarUploader } from "@/hooks/useAvatarUploader";
 import { ActionButton } from "../ui/ActionButton";
@@ -11,6 +9,7 @@ import { ProfileBasicSection } from "./ProfileBasicSection";
 import { ProfileImageSection } from "./ProfileImageSection";
 import { ProfileLocationSection } from "./ProfileLocationSection";
 import { ProfileLinksSection } from "./ProfileLinksSection";
+import { useProfileForm } from "@/hooks/useProfileForm";
 
 type ProfileFormProps = {
   defaultValues?: ProfileParams;
@@ -32,24 +31,11 @@ const ProfileForm = ({
 }: ProfileFormProps) => {
   const [avatarBlob, setAvatarBlob] = useState<Blob | null>(null);
   const { uploadAvatar } = useAvatarUploader();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    control,
-  } = useForm<ProfileParams>({
-    resolver: zodResolver(profileSchema),
+  const { register, handleSubmit, control, errors } = useProfileForm({
     defaultValues,
   });
 
-  useEffect(() => {
-    if (defaultValues) {
-      reset(defaultValues);
-    }
-  }, [defaultValues, reset]);
-
-  // ボタン押下の処理
+  // ボタン押下の処理(画像アップロード)
   const handleFormSubmit = async (formData: ProfileParams) => {
     let avatarUrl = formData.avatar;
 
