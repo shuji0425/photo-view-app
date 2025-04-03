@@ -35,11 +35,11 @@ export const ProfileImageSection = ({
       {/* カバー画像 */}
       <FormField
         label="カバー画像URL"
-        htmlFor="cover_image"
+        htmlFor="cover-image"
         error={errors.coverImage?.message}
       >
         <Input
-          id="cover_image"
+          id="cover-image"
           type="url"
           placeholder="https://example.com/cover.jpg"
           {...register("coverImage")}

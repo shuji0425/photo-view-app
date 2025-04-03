@@ -20,20 +20,20 @@ export const ProfileBasicSection = ({ register, errors }: Props) => {
       {/* 表示名（必須） */}
       <FormField
         label="表示名（作家名など）"
-        htmlFor="display_name"
+        htmlFor="display-name"
         error={errors.displayName?.message}
       >
-        <Input id="display_name" {...register("displayName")} />
+        <Input id="display-name" {...register("displayName")} />
       </FormField>
 
       {/* 肩書き */}
       <FormField
         label="肩書き・職種"
-        htmlFor="job_title"
+        htmlFor="job-title"
         error={errors.jobTitle?.message}
       >
         <Input
-          id="job_title"
+          id="job-title"
           placeholder="例: 風景写真家 / デザイナー"
           {...register("jobTitle")}
         />

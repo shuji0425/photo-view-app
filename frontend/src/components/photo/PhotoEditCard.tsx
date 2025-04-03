@@ -96,7 +96,7 @@ export const PhotoEditCard = ({
           name={`updates.${index}.categoryId`}
           render={({ field }) => (
             <Select
-              id={`category_id-${index}`}
+              id={`category-id-${index}`}
               onChange={(e) => field.onChange(Number(e.target.value))}
               value={field.value ?? ""}
               options={categoryOptions}
@@ -108,7 +108,7 @@ export const PhotoEditCard = ({
       {/* 撮影日 */}
       <FormField
         label="撮影日時"
-        htmlFor={`taken_at-${index}`}
+        htmlFor={`taken-at-${index}`}
         error={error?.takenAt?.message}
       >
         <Controller
@@ -116,7 +116,7 @@ export const PhotoEditCard = ({
           name={`updates.${index}.takenAt`}
           render={({ field }) => (
             <DateInput
-              id={`taken_at-${index}`}
+              id={`taken-at-${index}`}
               value={formatToDateJST(field.value)}
               onChange={(e) => field.onChange(e.target.value || null)}
             />
@@ -143,7 +143,7 @@ export const PhotoEditCard = ({
       {/* 表示フラグ */}
       <FormField
         label="公開する"
-        htmlFor={`is_visible-${index}`}
+        htmlFor={`is-visible-${index}`}
         error={error?.isVisible?.message}
       >
         <Controller
@@ -151,7 +151,7 @@ export const PhotoEditCard = ({
           name={`updates.${index}.isVisible`}
           render={({ field }) => (
             <Toggle
-              id={`is_visible-${index}`}
+              id={`is-visible-${index}`}
               checked={field.value}
               onChange={(checked: boolean) => field.onChange(checked)}
             />
