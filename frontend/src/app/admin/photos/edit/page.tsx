@@ -8,9 +8,9 @@ import toast from "react-hot-toast";
 import { ActionButton } from "@/components/ui/ActionButton";
 import { photoBulkUpdateSchema } from "@/lib/schema/photoSchema";
 import { updatePhotos } from "@/lib/api/photo/bulkUpdate";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { usePhotoEditForm } from "@/hooks/usePhotoEditForm";
 
 /**
  * 編集画面
@@ -25,16 +25,9 @@ export default function PhotoEditPage() {
   const { photos, loading } = usePhotoEditor(ids);
   const router = useRouter();
 
-  const {
-    control,
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<z.infer<typeof photoBulkUpdateSchema>>({
-    resolver: zodResolver(photoBulkUpdateSchema),
-    defaultValues: { updates: photos },
-  });
+  const { control, register, handleSubmit, errors, reset } = usePhotoEditForm(
+    {}
+  );
 
   const { fields } = useFieldArray({ control, name: "updates" });
 
