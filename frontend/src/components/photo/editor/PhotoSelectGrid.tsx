@@ -20,6 +20,11 @@ type Props = {
 export const PhotoSelectGrid = ({ photos, reload }: Props) => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
+  // 初回にフィルターをかける（重複制御）
+  const filteredPhotos = photos.filter(
+    (photo, index, self) => self.findIndex((p) => p.id === photo.id) === index
+  );
+
   const toggleSelect = (id: number) => {
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
@@ -66,7 +71,7 @@ export const PhotoSelectGrid = ({ photos, reload }: Props) => {
 
       {/* グリッド表示 */}
       <div className="grid grid-cols-3 gap-2">
-        {photos.map((photo) => (
+        {filteredPhotos.map((photo) => (
           <div
             key={photo.id}
             className="relative aspect-square cursor-pointer border rounded overflow-hidden"
