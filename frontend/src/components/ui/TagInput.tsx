@@ -5,8 +5,8 @@ import { X } from "lucide-react";
 import { inputBaseClass } from "@/lib/styles/input";
 import { useCombinedRef } from "@/hooks/useCombinedRef";
 import { getTagsByQuery } from "@/lib/api/tag/getTags";
-import { useTagInput } from "@/hooks/useTagInput";
-import { useTagInputKeyEvents } from "@/hooks/useTagInputKeyEvents";
+import { useTagInput } from "@/hooks/tag/useTagInput";
+import { useTagInputKeyEvents } from "@/hooks/tag/useTagInputKeyEvents";
 
 type Props = {
   value: string[];
