@@ -1,9 +1,10 @@
 "use client";
 
-import React, { forwardRef, useState } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { inputBaseClass } from "@/lib/styles/input";
 import { useCombinedRef } from "@/hooks/useCombinedRef";
+import { getTagsByQuery } from "@/lib/api/tag/getTags";
 
 type Props = {
   value: string[];
@@ -18,6 +19,9 @@ export const TagInput = forwardRef<HTMLInputElement, Props>(
     const [input, setInput] = useState("");
     const internalRef = React.useRef<HTMLInputElement>(null);
     const combinedRef = useCombinedRef(ref, internalRef);
+    const [suggestions, setSuggestions] = useState<string[]>([]);
+    const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+
     // タグ追加処理
     const handleAddTag = (tag: string) => {
       const trimmed = tag.trim();
@@ -33,8 +37,33 @@ export const TagInput = forwardRef<HTMLInputElement, Props>(
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       const isComposing = e.nativeEvent.isComposing;
       if (isComposing) return;
-
       const key = e.key;
+
+      // 候補があるときの処理
+      if (suggestions.length > 0) {
+        // 上下矢印で候補を移動
+        if (key == "ArrowDown") {
+          e.preventDefault();
+          setSelectedIndex((prev) => (prev + 1) % suggestions.length);
+          return;
+        }
+        if (key === "ArrowUp") {
+          e.preventDefault();
+          setSelectedIndex((prev) =>
+            prev <= 0 ? suggestions.length - 1 : prev - 1
+          );
+        }
+        // EnterとTabで確定
+        if (key === "Enter" || key === "Tab") {
+          if (selectedIndex >= 0) {
+            e.preventDefault();
+            handleAddTag(suggestions[selectedIndex]);
+            return;
+          }
+        }
+      }
+
+      // 直接入力したとき
       const keys = ["Enter", ",", " ", "　"];
       if (keys.includes(key)) {
         e.preventDefault();
@@ -47,8 +76,30 @@ export const TagInput = forwardRef<HTMLInputElement, Props>(
       onChange(value.filter((t) => t !== tag));
     };
 
+    // 入力が変わるたびに予測候補を取得
+    useEffect(() => {
+      const fetchSuggestions = async () => {
+        if (!input.trim()) {
+          setSuggestions([]);
+          setSelectedIndex(-1);
+          return;
+        }
+
+        try {
+          const res = await getTagsByQuery(input);
+          setSuggestions(res.filter((s) => !value.includes(s)));
+          setSelectedIndex(-1);
+        } catch (err) {
+          console.error("予測候補の取得に失敗", err);
+        }
+      };
+
+      fetchSuggestions();
+    }, [input, value]);
+
     return (
       <div className="space-2">
+        {/* 選択済みタグ */}
         <div className="flex flex-wrap gap-2">
           {value.map((tag) => (
             <span
@@ -67,6 +118,7 @@ export const TagInput = forwardRef<HTMLInputElement, Props>(
           ))}
         </div>
 
+        {/* 入力欄 */}
         <input
           type="text"
           ref={combinedRef}
@@ -76,6 +128,23 @@ export const TagInput = forwardRef<HTMLInputElement, Props>(
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
         />
+
+        {/* サジェスト候補 */}
+        {suggestions.length > 0 && (
+          <ul className="mt-1 bg-white border border-gray-200 rounded shadow-md max-h-40 overflow-y-auto">
+            {suggestions.map((s, i) => (
+              <li
+                key={s}
+                className={`px-4 py-2 hover:bg-blue-100 cursor-pointer ${
+                  i === selectedIndex ? "bg-blue-200" : ""
+                }`}
+                onClick={() => handleAddTag(s)}
+              >
+                {s}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     );
   }
