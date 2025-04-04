@@ -15,4 +15,4 @@ export const loginSchema = z.object({
 });
 
 /** フォーム入力データの型 */
-export type LoginFormSchema = z.infer<typeof loginSchema>;
+export type LoginParams = z.infer<typeof loginSchema>;
