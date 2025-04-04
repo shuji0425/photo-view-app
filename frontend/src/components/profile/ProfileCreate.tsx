@@ -1,12 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { createProfile } from "@/lib/api/profile";
-import { ProfileParams } from "@/lib/schema/profileSchema";
-import { useRouter } from "next/navigation";
 import ProfileForm from "./ProfileForm";
-import { mutate } from "swr";
-import toast from "react-hot-toast";
+import { useProfileCreate } from "@/hooks/profile/useProfileCreate";
 
 type ProfileCreateProps = {
   userId: number;
@@ -18,27 +13,13 @@ type ProfileCreateProps = {
  * @returns JSX.Element
  */
 export default function ProfileCreate({ userId }: ProfileCreateProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const router = useRouter();
-
-  const handleCreate = async (data: ProfileParams) => {
-    try {
-      setIsSubmitting(true);
-      await createProfile(userId, data);
-      await mutate(`/profiles/${userId}`);
-      router.push("/admin/dashboard");
-    } catch {
-      toast.error("プロフィールの登録に失敗しました");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const { handleSubmit, isSubmitting, submitLabel } = useProfileCreate(userId);
 
   return (
     <ProfileForm
-      onSubmit={handleCreate}
+      onSubmit={handleSubmit}
       isSubmitting={isSubmitting}
-      submitLabel="作成"
+      submitLabel={submitLabel}
       userId={userId}
     />
   );

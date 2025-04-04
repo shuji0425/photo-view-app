@@ -2,20 +2,28 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo } from "react";
-import { usePhotoEditor } from "@/hooks/usePhotoEditor";
-import { PhotoEditCard } from "@/components/photo/PhotoEditCard";
+import { usePhotoEditor } from "@/hooks/photo/usePhotoEditor";
+import { PhotoEditCard } from "@/components/photo/editor/PhotoEditCard";
 import toast from "react-hot-toast";
 import { ActionButton } from "@/components/ui/ActionButton";
 import { photoBulkUpdateSchema } from "@/lib/schema/photoSchema";
 import { updatePhotos } from "@/lib/api/photo/bulkUpdate";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { usePhotoEditForm } from "@/hooks/photo/usePhotoEditForm";
+import { useCategories } from "@/lib/swr/useCategories";
 
 /**
  * 編集画面
  */
 export default function PhotoEditPage() {
+  // カテゴリ取得と整形
+  const { categories } = useCategories();
+  const categoryOptions = categories.map((cat) => ({
+    label: cat.name,
+    value: cat.id,
+  }));
+
   const searchParams = useSearchParams();
   const ids = useMemo(() => {
     const idsParam = searchParams.get("ids");
@@ -25,16 +33,9 @@ export default function PhotoEditPage() {
   const { photos, loading } = usePhotoEditor(ids);
   const router = useRouter();
 
-  const {
-    control,
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<z.infer<typeof photoBulkUpdateSchema>>({
-    resolver: zodResolver(photoBulkUpdateSchema),
-    defaultValues: { updates: photos },
-  });
+  const { control, register, handleSubmit, errors, reset } = usePhotoEditForm(
+    {}
+  );
 
   const { fields } = useFieldArray({ control, name: "updates" });
 
@@ -70,6 +71,7 @@ export default function PhotoEditPage() {
           photo={photos[idx]}
           error={errors.updates?.[idx]}
           control={control}
+          categories={categoryOptions}
         />
       ))}
 

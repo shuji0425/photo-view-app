@@ -9,7 +9,7 @@ import (
 )
 
 // JWTのシークレットキー
-var jwtSecret = []byte(os.Getenv("JSW_SECRET"))
+var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
 
 // 有効期限
 var tokenExpiry = time.Hour * 24

@@ -4,21 +4,26 @@ import { PhotoDetail } from "@/types/photo";
 import Image from "next/image";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { ActionButton } from "../ui/ActionButton";
+import { ActionButton } from "../../ui/ActionButton";
 import { Check } from "lucide-react";
-import { NavButton } from "../ui/NavButton";
+import { NavButton } from "../../ui/NavButton";
 import { deletePhotosByIds } from "@/lib/api/photo/delete";
 
 type Props = {
   photos: PhotoDetail[];
-  setPhotos: (photos: PhotoDetail[]) => void;
+  reload: () => void;
 };
 
 /**
  * 画像一覧グリッド
  */
-export const PhotoSelectGrid = ({ photos, setPhotos }: Props) => {
+export const PhotoSelectGrid = ({ photos, reload }: Props) => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
+
+  // 初回にフィルターをかける（重複制御）
+  const filteredPhotos = photos.filter(
+    (photo, index, self) => self.findIndex((p) => p.id === photo.id) === index
+  );
 
   const toggleSelect = (id: number) => {
     setSelectedIds((prev) =>
@@ -34,12 +39,10 @@ export const PhotoSelectGrid = ({ photos, setPhotos }: Props) => {
     try {
       await deletePhotosByIds(selectedIds);
       const count = selectedIds.length;
-      const newPhotos = photos.filter(
-        (photo) => !selectedIds.includes(photo.id)
-      );
-      setPhotos(newPhotos);
       setSelectedIds([]);
       toast.success(`${count}枚の画像を削除しました`);
+
+      reload();
     } catch {
       toast.error("削除に失敗しました");
     }
@@ -68,7 +71,7 @@ export const PhotoSelectGrid = ({ photos, setPhotos }: Props) => {
 
       {/* グリッド表示 */}
       <div className="grid grid-cols-3 gap-2">
-        {photos.map((photo) => (
+        {filteredPhotos.map((photo) => (
           <div
             key={photo.id}
             className="relative aspect-square cursor-pointer border rounded overflow-hidden"
