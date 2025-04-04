@@ -2,7 +2,6 @@
 
 import { ProfileParams } from "@/lib/schema/profileSchema";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { useAvatarUploaderMutation } from "@/hooks/useAvatarUploaderMutation";
 import { ActionButton } from "../ui/ActionButton";
 import { ProfileBasicSection } from "./ProfileBasicSection";
@@ -20,7 +19,7 @@ type ProfileFormProps = {
 };
 
 /**
- * プロフィールフォーム
+ * プロフィール編集・作成に共通で使用されるフォーム
  */
 const ProfileForm = ({
   defaultValues,
@@ -39,24 +38,30 @@ const ProfileForm = ({
   const handleFormSubmit = async (formData: ProfileParams) => {
     let avatarUrl = formData.avatar;
 
+    // 画像アップロードが先
     const uploadedUrl = await uploadAvatar(userId, avatarBlob);
     if (uploadedUrl) avatarUrl = uploadedUrl;
 
     await onSubmit({ ...formData, avatar: avatarUrl });
-    toast.success("プロフィールを保存しました！");
   };
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
       {/* 自己紹介入力欄 */}
       <ProfileBasicSection register={register} errors={errors} />
+
+      {/* プロフィール画像 */}
       <ProfileImageSection
         register={register}
         errors={errors}
         onAvatarSelect={(blob) => setAvatarBlob(blob)}
         initialAvatarUrl={defaultValues?.avatar}
       />
+
+      {/* 住所・地域 */}
       <ProfileLocationSection register={register} errors={errors} />
+
+      {/* SNSリンク */}
       <ProfileLinksSection
         register={register}
         errors={errors}
