@@ -41,6 +41,7 @@ func NewRouter(db *gorm.DB) *Router {
 	SetupAvatarRoutes(admin, handlers.AvatarHandler)
 	SetupPhotoRoutes(admin, handlers.PhotoHandler)
 	SetupCategoryRoutes(admin, handlers.CategoryHandler)
+	SetupTagRoutes(admin, handlers.TagHandler)
 
 	return &Router{Engine: r}
 }

@@ -1,21 +1,4 @@
-const allTags = [
-  "桜",
-  "サクラ",
-  "櫻",
-  "風景",
-  "夜景",
-  "自然",
-  "ポートレート",
-  "旅行",
-  "猫",
-  "人物",
-  "街",
-  "花",
-  "秋",
-  "夏",
-  "冬",
-  "春",
-];
+import { apiFetch } from "../client";
 
 /**
  * クエリに一致するタグ候補を取得
@@ -25,5 +8,7 @@ const allTags = [
 export const getTagsByQuery = async (query: string): Promise<string[]> => {
   if (!query.trim()) return [];
 
-  return allTags.filter((tag) => tag.includes(query));
+  return await apiFetch<string[]>(
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/tags?query=${query}`
+  );
 };
