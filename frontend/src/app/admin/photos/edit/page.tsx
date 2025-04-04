@@ -11,11 +11,19 @@ import { updatePhotos } from "@/lib/api/photo/bulkUpdate";
 import { useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { usePhotoEditForm } from "@/hooks/photo/usePhotoEditForm";
+import { useCategories } from "@/lib/swr/useCategories";
 
 /**
  * 編集画面
  */
 export default function PhotoEditPage() {
+  // カテゴリ取得と整形
+  const { categories } = useCategories();
+  const categoryOptions = categories.map((cat) => ({
+    label: cat.name,
+    value: cat.id,
+  }));
+
   const searchParams = useSearchParams();
   const ids = useMemo(() => {
     const idsParam = searchParams.get("ids");
@@ -63,6 +71,7 @@ export default function PhotoEditPage() {
           photo={photos[idx]}
           error={errors.updates?.[idx]}
           control={control}
+          categories={categoryOptions}
         />
       ))}
 
