@@ -13,6 +13,7 @@ import { PhotoDetail } from "@/types/photo";
 import { CategoryOption } from "@/types/category";
 import { PhotoEditMetaFields } from "./PhotoEditMetaFields";
 
+// 引数
 type Props = {
   index: number;
   photo: PhotoDetail;
@@ -34,14 +35,16 @@ export const PhotoEditCard = ({
   categories,
 }: Props) => {
   return (
-    <div className="border rounded p-4 mb-6 shadow-sm bg-white">
-      <div className="relative w-full aspect-[4/3]">
+    <section className="border rounded p-4 mb-6 shadow-sm bg-white">
+      <div className="relative w-full aspect-[4/3] overflow-hidden rounded">
+        {/* 画像 */}
         <Image
           src={photo.imageUrl}
           alt={`photo-${photo.id}`}
           fill
           className="object-contain rounded"
         />
+        {/* 非表示の photoId フィールド */}
         <input
           type="hidden"
           defaultValue={photo.id}
@@ -71,7 +74,7 @@ export const PhotoEditCard = ({
       >
         <Textarea
           id={`description-${index}`}
-          rows={3}
+          rows={2}
           {...register(`updates.${index}.description`)}
         />
       </FormField>
@@ -83,6 +86,6 @@ export const PhotoEditCard = ({
         categories={categories}
         error={error}
       />
-    </div>
+    </section>
   );
 };
