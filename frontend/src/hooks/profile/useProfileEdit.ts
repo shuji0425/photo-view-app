@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
  * @param userId ログインID
  * @returns object
  */
-export const useProfileSubmit = (userId: number) => {
+export const useProfileEdit = (userId: number) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (data: ProfileParams) => {

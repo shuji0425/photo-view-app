@@ -2,7 +2,7 @@
 
 import { useProfile } from "@/lib/swr/useProfile";
 import ProfileForm from "./ProfileForm";
-import { useProfileSubmit } from "@/hooks/profile/useProfileSubmit";
+import { useProfileEdit } from "@/hooks/profile/useProfileEdit";
 
 type Props = { userId: number };
 
@@ -11,7 +11,7 @@ type Props = { userId: number };
  */
 export default function ProfileEdit({ userId }: Props) {
   const { profile, isLoading, isError } = useProfile(userId);
-  const { handleSubmit, isSubmitting, submitLabel } = useProfileSubmit(userId);
+  const { handleSubmit, isSubmitting, submitLabel } = useProfileEdit(userId);
 
   if (isLoading) return <p>読み込み中...</p>;
   if (isError || !profile) return <p>プロフィールが見つかりません</p>;
