@@ -1,35 +1,17 @@
 "use client";
 
-import { useState } from "react";
 import { useProfile } from "@/lib/swr/useProfile";
-import { updateProfile } from "@/lib/api/profile";
-import { ProfileParams } from "@/lib/schema/profileSchema";
-import { mutate } from "swr";
 import ProfileForm from "./ProfileForm";
-import toast from "react-hot-toast";
+import { useProfileSubmit } from "@/hooks/profile/useProfileSubmit";
 
-type ProfileEditProps = {
-  userId: number;
-};
+type Props = { userId: number };
 
 /**
  * 編集用プロフィール
  */
-export default function ProfileEdit({ userId }: ProfileEditProps) {
+export default function ProfileEdit({ userId }: Props) {
   const { profile, isLoading, isError } = useProfile(userId);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleUpdate = async (data: ProfileParams) => {
-    try {
-      setIsSubmitting(true);
-      await updateProfile(userId, data);
-      await mutate(`/profiles/${userId}`);
-    } catch {
-      toast.error("プロフィールの更新に失敗しました");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const { handleSubmit, isSubmitting, submitLabel } = useProfileSubmit(userId);
 
   if (isLoading) return <p>読み込み中...</p>;
   if (isError || !profile) return <p>プロフィールが見つかりません</p>;
@@ -37,9 +19,9 @@ export default function ProfileEdit({ userId }: ProfileEditProps) {
   return (
     <ProfileForm
       defaultValues={profile}
-      onSubmit={handleUpdate}
+      onSubmit={handleSubmit}
       isSubmitting={isSubmitting}
-      submitLabel="更新"
+      submitLabel={submitLabel}
       userId={userId}
     />
   );
