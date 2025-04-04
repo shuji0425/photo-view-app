@@ -3,7 +3,7 @@
 import { ProfileParams } from "@/lib/schema/profileSchema";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useAvatarUploader } from "@/hooks/useAvatarUploader";
+import { useAvatarUploaderMutation } from "@/hooks/useAvatarUploaderMutation";
 import { ActionButton } from "../ui/ActionButton";
 import { ProfileBasicSection } from "./ProfileBasicSection";
 import { ProfileImageSection } from "./ProfileImageSection";
@@ -30,7 +30,7 @@ const ProfileForm = ({
   userId,
 }: ProfileFormProps) => {
   const [avatarBlob, setAvatarBlob] = useState<Blob | null>(null);
-  const { uploadAvatar } = useAvatarUploader();
+  const { uploadAvatar } = useAvatarUploaderMutation();
   const { register, handleSubmit, control, errors } = useProfileForm({
     defaultValues,
   });

@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
  * アバター画像アップロード用
  * @returns url | null
  */
-export const useAvatarUploader = () => {
+export const useAvatarUploaderMutation = () => {
   const uploadAvatar = useCallback(
     async (userId: number, blob: Blob | null): Promise<string | null> => {
       if (!blob) return null;
