@@ -27,6 +27,6 @@ func InjectAll(db *gorm.DB) *InjectedHandlers {
 		PublicProfileHandler: InjectPublicProfileHandler(db),
 		PhotoHandler:         InjectPhotoHandler(db),
 		CategoryHandler:      InjectCategoryHandler(db),
-		TagHandler:           InjectTagHandler(),
+		TagHandler:           InjectTagHandler(db),
 	}
 }

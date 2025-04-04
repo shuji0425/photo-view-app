@@ -1,7 +1,10 @@
 package repository
 
 import (
+	"backend/internal/converter"
+	"backend/internal/domain"
 	"backend/internal/model"
+	"context"
 
 	"gorm.io/gorm"
 )
@@ -9,6 +12,7 @@ import (
 // インターフェース
 type TagRepository interface {
 	FindOrCreateTags(tx *gorm.DB, names []string) ([]int64, error)
+	FindByQuery(ctx context.Context, query string) ([]*domain.Tag, error)
 }
 
 // 構造体
@@ -67,4 +71,25 @@ func (r *tagRepository) FindOrCreateTags(tx *gorm.DB, names []string) ([]int64, 
 	}
 
 	return ids, nil
+}
+
+// 名前に部分一致するタグを取得する
+func (r *tagRepository) FindByQuery(ctx context.Context, query string) ([]*domain.Tag, error) {
+	var models []*model.Tag
+
+	// クエリが空なら空配列を返却
+	if query == "" {
+		return []*domain.Tag{}, nil
+	}
+
+	// name に部分一致するタグを取得
+	if err := r.db.WithContext(ctx).
+		Where("name LIKE ?", "%"+query+"%").
+		Order("sort_order ASC").
+		Limit(10).
+		Find(&models).Error; err != nil {
+		return nil, err
+	}
+
+	return converter.ToDomainTags(models), nil
 }

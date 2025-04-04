@@ -1,28 +1,28 @@
 package converter
 
 import (
-	"backend/internal/dto"
+	"backend/internal/domain"
 	"backend/internal/model"
 )
 
-// []string -> []model
-func ToTagModelsFromNames(names []string) []model.Tag {
-	var tags []model.Tag
-	for _, name := range names {
-		tags = append(tags, model.Tag{Name: name})
+// model -> domain
+func ToDomainTag(m *model.Tag) *domain.Tag {
+	if m == nil {
+		return nil
 	}
-	return tags
+	return &domain.Tag{
+		ID:         m.ID,
+		Name:       m.Name,
+		CategoryID: m.CategoryID,
+		SortOrder:  m.SortOrder,
+	}
 }
 
-// []model.Tag -> []dto.TagResponse
-func ToTagDTOList(models []model.Tag) []dto.TagResponse {
-	var tags []dto.TagResponse
+// model -> domain (複数)
+func ToDomainTags(models []*model.Tag) []*domain.Tag {
+	domains := make([]*domain.Tag, 0, len(models))
 	for _, m := range models {
-		tags = append(tags, dto.TagResponse{
-			ID:        m.ID,
-			Name:      m.Name,
-			SortOrder: m.SortOrder,
-		})
+		domains = append(domains, ToDomainTag(m))
 	}
-	return tags
+	return domains
 }

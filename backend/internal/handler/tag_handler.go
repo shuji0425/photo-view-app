@@ -20,7 +20,20 @@ func NewTagHandler(tagUsecase usecase.TagUsecase) *TagHandler {
 // クエリからタグの予測候補を取得
 func (h *TagHandler) GetSuggestions(c *gin.Context) {
 	query := c.Query("query")
-	suggestions := h.tagUsecase.GetSuggestions(query)
+	ctx := c.Request.Context()
+
+	// queryがない時は空の配列を返す
+	if query == "" {
+		c.JSON(http.StatusOK, []string{})
+		return
+	}
+
+	// タグ候補取得
+	suggestions, err := h.tagUsecase.GetSuggestions(ctx, query)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "タグ候補の取得に失敗しました"})
+		return
+	}
 
 	// 返却
 	c.JSON(http.StatusOK, suggestions)
