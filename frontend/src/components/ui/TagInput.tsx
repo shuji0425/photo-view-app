@@ -1,10 +1,11 @@
 "use client";
 
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { forwardRef } from "react";
 import { X } from "lucide-react";
 import { inputBaseClass } from "@/lib/styles/input";
 import { useCombinedRef } from "@/hooks/useCombinedRef";
 import { getTagsByQuery } from "@/lib/api/tag/getTags";
+import { useTagInput } from "@/hooks/useTagInput";
 
 type Props = {
   value: string[];
@@ -16,22 +17,18 @@ type Props = {
  */
 export const TagInput = forwardRef<HTMLInputElement, Props>(
   ({ value, onChange }, ref) => {
-    const [input, setInput] = useState("");
     const internalRef = React.useRef<HTMLInputElement>(null);
     const combinedRef = useCombinedRef(ref, internalRef);
-    const [suggestions, setSuggestions] = useState<string[]>([]);
-    const [selectedIndex, setSelectedIndex] = useState<number>(-1);
 
-    // タグ追加処理
-    const handleAddTag = (tag: string) => {
-      const trimmed = tag.trim();
-
-      // 空・重複・空白含みタグを無効化（全角含む）
-      if (!trimmed || /[\s　]/.test(trimmed) || value.includes(trimmed)) return;
-
-      onChange([...value, trimmed]);
-      setInput("");
-    };
+    const {
+      input,
+      setInput,
+      suggestions,
+      selectedIndex,
+      setSelectedIndex,
+      addTag,
+      removeTag,
+    } = useTagInput({ value, onChange, api: getTagsByQuery });
 
     // タグ確定（全角スペースも対応）
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -57,7 +54,7 @@ export const TagInput = forwardRef<HTMLInputElement, Props>(
         if (key === "Enter" || key === "Tab") {
           if (selectedIndex >= 0) {
             e.preventDefault();
-            handleAddTag(suggestions[selectedIndex]);
+            addTag(suggestions[selectedIndex]);
             return;
           }
         }
@@ -67,35 +64,9 @@ export const TagInput = forwardRef<HTMLInputElement, Props>(
       const keys = ["Enter", ",", " ", "　"];
       if (keys.includes(key)) {
         e.preventDefault();
-        handleAddTag(input);
+        addTag(input);
       }
     };
-
-    // タグ削除
-    const removeTag = (tag: string) => {
-      onChange(value.filter((t) => t !== tag));
-    };
-
-    // 入力が変わるたびに予測候補を取得
-    useEffect(() => {
-      const fetchSuggestions = async () => {
-        if (!input.trim()) {
-          setSuggestions([]);
-          setSelectedIndex(-1);
-          return;
-        }
-
-        try {
-          const res = await getTagsByQuery(input);
-          setSuggestions(res.filter((s) => !value.includes(s)));
-          setSelectedIndex(-1);
-        } catch (err) {
-          console.error("予測候補の取得に失敗", err);
-        }
-      };
-
-      fetchSuggestions();
-    }, [input, value]);
 
     return (
       <div className="space-2">
@@ -138,7 +109,7 @@ export const TagInput = forwardRef<HTMLInputElement, Props>(
                 className={`px-4 py-2 hover:bg-blue-100 cursor-pointer ${
                   i === selectedIndex ? "bg-blue-200" : ""
                 }`}
-                onClick={() => handleAddTag(s)}
+                onClick={() => addTag(s)}
               >
                 {s}
               </li>
