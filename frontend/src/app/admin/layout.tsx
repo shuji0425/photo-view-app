@@ -28,11 +28,11 @@ export default function AdminLayout({
 
   // 通常管理画面レイアウト
   return (
-    <div className="min-w-[99%] min-h-screen grid grid-cols-12 bg-gray-50 text-gray-900">
+    <div className="h-screen grid grid-cols-12 bg-gray-50 text-gray-900 overflow-y-auto">
       <aside className="col-span-3 border-r">
         <AdminSidebar />
       </aside>
-      <main className="col-span-9 p-6">{children}</main>
+      <main className="col-span-9 p-6 mb-10 max-h-full">{children}</main>
     </div>
   );
 }

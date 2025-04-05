@@ -16,6 +16,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { Tag } from "@/types/tag";
 import { GripVertical, X } from "lucide-react";
+import Link from "next/link";
 
 type Props = {
   tags: Tag[];
@@ -83,6 +84,16 @@ const SortableItem = ({
     >
       <span className="truncate">{tag.name}</span>
       <div className="flex items-center gap-2">
+        {/* 遷移用 */}
+        <Link href={`/admin/tags/${tag.id}/photos`}>
+          <button
+            type="button"
+            className="text-blue-500 hover:text-blue-700 text-sm"
+          >
+            写真並び替え
+          </button>
+        </Link>
+
         {/* 削除用 */}
         <button
           type="button"

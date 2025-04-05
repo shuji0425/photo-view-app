@@ -3,5 +3,5 @@ export type Tag = {
   id: number;
   name: string;
   categoryId?: number | null;
-  sortOrder?: number;
+  sortOrder: number;
 };

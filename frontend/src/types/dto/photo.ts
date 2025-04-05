@@ -19,3 +19,11 @@ export type PaginatedPhotoResponseDTO = {
   page: number;
   limit: number;
 };
+
+// タグに紐づく写真を取得
+export type PhotoWithSortOrder = {
+  id: number;
+  photoId: number;
+  url: string;
+  sortOrder: number;
+};
