@@ -17,6 +17,16 @@ func NewTagHandler(tagUsecase usecase.TagUsecase) *TagHandler {
 	return &TagHandler{tagUsecase}
 }
 
+// タグを全件取得
+func (h *TagHandler) GetAllTags(c *gin.Context) {
+	tags, err := h.tagUsecase.GetAllTags(c.Request.Context())
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "タグの取得に失敗しました"})
+		return
+	}
+	c.JSON(http.StatusOK, tags)
+}
+
 // クエリからタグの予測候補を取得
 func (h *TagHandler) GetSuggestions(c *gin.Context) {
 	query := c.Query("query")

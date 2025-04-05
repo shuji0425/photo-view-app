@@ -11,6 +11,7 @@ import (
 
 // インターフェース
 type TagRepository interface {
+	GetAll(ctx context.Context) ([]*domain.Tag, error)
 	FindOrCreateTags(tx *gorm.DB, names []string) ([]int64, error)
 	FindByQuery(ctx context.Context, query string) ([]*domain.Tag, error)
 }
@@ -23,6 +24,17 @@ type tagRepository struct {
 // 依存注入用
 func NewTagRepository(db *gorm.DB) TagRepository {
 	return &tagRepository{db}
+}
+
+// タグを全件取得
+func (r *tagRepository) GetAll(ctx context.Context) ([]*domain.Tag, error) {
+	var tags []*model.Tag
+	if err := r.db.WithContext(ctx).
+		Order("sort_order ASC").
+		Find(&tags).Error; err != nil {
+		return nil, err
+	}
+	return converter.ToDomainTags(tags), nil
 }
 
 // タグ名のリストを受け取り既存と新規のID配列を返却

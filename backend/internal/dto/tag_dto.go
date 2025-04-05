@@ -4,6 +4,6 @@ package dto
 type TagResponse struct {
 	ID         int64  `json:"id"`
 	Name       string `json:"name"`
-	CategoryID *uint  `json:"category_id"`
+	CategoryID *int64 `json:"category_id"`
 	SortOrder  int    `json:"sort_order"`
 }

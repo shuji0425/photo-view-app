@@ -8,6 +8,7 @@ import (
 
 // インターフェース
 type TagService interface {
+	GetAllTags(ctx context.Context) ([]*domain.Tag, error)
 	SuggestTags(ctx context.Context, query string) ([]*domain.Tag, error)
 }
 
@@ -24,6 +25,10 @@ func NewTagService(tagRepo repository.TagRepository) TagService {
 // 仮データ
 var dummyTags = []string{
 	"桜", "サクラ", "櫻", "風景", "夜景", "自然", "旅行", "猫", "人物", "街",
+}
+
+func (s *tagService) GetAllTags(ctx context.Context) ([]*domain.Tag, error) {
+	return s.tagRepo.GetAll(ctx)
 }
 
 // タグ候補を取得

@@ -2,6 +2,7 @@ package converter
 
 import (
 	"backend/internal/domain"
+	"backend/internal/dto"
 	"backend/internal/model"
 )
 
@@ -25,4 +26,26 @@ func ToDomainTags(models []*model.Tag) []*domain.Tag {
 		domains = append(domains, ToDomainTag(m))
 	}
 	return domains
+}
+
+// domain -> DTO
+func ToDtoTag(t *domain.Tag) *dto.TagResponse {
+	if t == nil {
+		return nil
+	}
+	return &dto.TagResponse{
+		ID:         t.ID,
+		Name:       t.Name,
+		CategoryID: t.CategoryID,
+		SortOrder:  t.SortOrder,
+	}
+}
+
+// domain -> dto
+func ToDtoTags(domains []*domain.Tag) []*dto.TagResponse {
+	result := make([]*dto.TagResponse, 0, len(domains))
+	for _, d := range domains {
+		result = append(result, ToDtoTag(d))
+	}
+	return result
 }

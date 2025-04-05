@@ -11,4 +11,5 @@ func SetupTagRoutes(r *gin.RouterGroup, h *handler.TagHandler) {
 	tagGroup := r.Group("/tags")
 
 	tagGroup.GET("", h.GetSuggestions)
+	tagGroup.GET("/all", h.GetAllTags)
 }
