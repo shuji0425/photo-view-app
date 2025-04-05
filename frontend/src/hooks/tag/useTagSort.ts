@@ -12,10 +12,10 @@ export const useTagSort = () => {
   useEffect(() => {
     const fetchTags = async () => {
       const tags = await getAllTags();
+      const sorted = [...tags]
+        .filter((tag) => tag.sortOrder && tag.sortOrder >= 1)
+        .sort((a, b) => a.sortOrder! - b.sortOrder!);
       setAllTags(tags);
-      const sorted = [...tags].sort(
-        (a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0)
-      );
       setSelectedTags(sorted);
     };
     fetchTags();

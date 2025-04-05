@@ -15,8 +15,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Tag } from "@/types/tag";
-import { X } from "lucide-react";
-import { useState } from "react";
+import { GripVertical, X } from "lucide-react";
 
 type Props = {
   tags: Tag[];
@@ -28,7 +27,7 @@ type Props = {
  * 選択中タグ一覧
  */
 export const SortableList = ({ tags, onReorder, onRemove }: Props) => {
-  const [items, setItems] = useState(tags.map((t) => t.id));
+  const items = tags.map((t) => t.id);
   // マウスタッチ対応
   const sensors = useSensors(useSensor(PointerSensor));
 
@@ -44,10 +43,10 @@ export const SortableList = ({ tags, onReorder, onRemove }: Props) => {
     const [moved] = newIds.splice(oldIndex, 1);
     newIds.splice(newIndex, 0, moved);
 
-    setItems(newIds);
-
     // 並び替え後の新しい配列
-    const newOrder = newIds.map((id) => tags.find((t) => t.id === id)!);
+    const newOrder = newIds
+      .map((id) => tags.find((t) => t.id === id))
+      .filter((t): t is Tag => t !== undefined);
     onReorder(newOrder);
   };
 
@@ -92,18 +91,31 @@ const SortableItem = ({
     <li
       ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...listeners}
-      className="flex items-center justify-between border p-2 rounded bg-white shadow-sm cursor-grab"
+      className="flex items-center justify-between border p-2 rounded bg-white shadow-sm"
     >
       <span className="truncate">{tag.name}</span>
-      <button
-        className="text-gray-500 hover:text-red-500"
-        onClick={() => onRemove(tag.id)}
-        aria-label="削除"
-      >
-        <X className="w-4 h-4" />
-      </button>
+      <div className="flex items-center gap-2">
+        {/* 削除用 */}
+        <button
+          type="button"
+          className="text-gray-500 hover:text-red-500"
+          onClick={() => onRemove(tag.id)}
+        >
+          <X className="w-4 h-4" />
+        </button>
+
+        {/* 移動用 */}
+        <button
+          type="button"
+          {...attributes}
+          {...listeners}
+          className="cursor-grab text-gray-400 hover:text-gray-600"
+          onClick={() => onRemove(tag.id)}
+          aria-label="並び替えハンドル"
+        >
+          <GripVertical className="w-4 h-4" />
+        </button>
+      </div>
     </li>
   );
 };

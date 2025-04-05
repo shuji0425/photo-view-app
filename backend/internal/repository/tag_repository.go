@@ -30,7 +30,13 @@ func NewTagRepository(db *gorm.DB) TagRepository {
 func (r *tagRepository) GetAll(ctx context.Context) ([]*domain.Tag, error) {
 	var tags []*model.Tag
 	if err := r.db.WithContext(ctx).
-		Order("sort_order ASC").
+		Order(`
+			CASE
+				WHEN sort_order IS NULL OR sort_order = 0 THEN 1
+				ELSE 0
+			END,
+			sort_order ASC
+		`).
 		Find(&tags).Error; err != nil {
 		return nil, err
 	}
