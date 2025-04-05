@@ -19,7 +19,7 @@ import { GripVertical, X } from "lucide-react";
 
 type Props = {
   tags: Tag[];
-  onReorder: (reordered: Tag[]) => void;
+  onReorder: (activeId: number, overId: number) => void;
   onRemove: (id: number) => void;
 };
 
@@ -35,19 +35,7 @@ export const SortableList = ({ tags, onReorder, onRemove }: Props) => {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
-
-    const oldIndex = items.indexOf(Number(active.id));
-    const newIndex = items.indexOf(Number(over.id));
-
-    const newIds = [...items];
-    const [moved] = newIds.splice(oldIndex, 1);
-    newIds.splice(newIndex, 0, moved);
-
-    // 並び替え後の新しい配列
-    const newOrder = newIds
-      .map((id) => tags.find((t) => t.id === id))
-      .filter((t): t is Tag => t !== undefined);
-    onReorder(newOrder);
+    onReorder(Number(active.id), Number(over.id));
   };
 
   return (

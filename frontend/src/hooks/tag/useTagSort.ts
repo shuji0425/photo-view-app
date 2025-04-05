@@ -3,10 +3,17 @@ import { Tag } from "@/types/tag";
 import { getAllTags } from "@/lib/api/tag/fetch";
 import { updateTagSortOrder } from "@/lib/api/tag/sortUpdate";
 import toast from "react-hot-toast";
+import { useSortableItems } from "../useSortableItems";
 
 export const useTagSort = () => {
   const [allTags, setAllTags] = useState<Tag[]>([]);
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+
+  // 初期データ取得しソート済みだけを渡す
+  const {
+    items: selectedTags,
+    setItems: setSelectedTags,
+    handleReorder,
+  } = useSortableItems<Tag>([]);
 
   // タグ一覧を取得
   useEffect(() => {
@@ -19,23 +26,24 @@ export const useTagSort = () => {
       setSelectedTags(sorted);
     };
     fetchTags();
-  }, []);
+  }, [setSelectedTags]);
 
   // 並び順追加
   const handleAdd = (tag: Tag) => {
     if (!selectedTags.find((t) => t.id === tag.id)) {
-      setSelectedTags((prev) => [...prev, tag]);
+      setSelectedTags((prev) => [
+        ...prev,
+        { ...tag, sortOrder: prev.length + 1 },
+      ]);
     }
   };
 
   // 並び順解除
   const handleRemove = (id: number) => {
-    setSelectedTags((prev) => prev.filter((t) => t.id !== id));
-  };
-
-  // 並び更新
-  const handleReorder = (newOrder: Tag[]) => {
-    setSelectedTags(newOrder);
+    const filtered = selectedTags
+      .filter((t) => t.id !== id)
+      .map((t, i) => ({ ...t, sortOrder: i + 1 }));
+    setSelectedTags(filtered);
   };
 
   // 保存処理
