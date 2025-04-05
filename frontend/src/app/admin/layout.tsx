@@ -28,7 +28,7 @@ export default function AdminLayout({
 
   // 通常管理画面レイアウト
   return (
-    <div className="grid grid-cols-12 min-h-screen bg-gray-50 text-gray-900">
+    <div className="min-w-[99%] grid grid-cols-12 min-h-screen bg-gray-50 text-gray-900">
       <aside className="col-span-3 min-h-screen border-r">
         <AdminSidebar />
       </aside>
