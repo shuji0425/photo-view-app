@@ -7,10 +7,11 @@ import (
 )
 
 // タグ関連のルート
-func SetupTagRoutes(r *gin.RouterGroup, h *handler.TagHandler) {
+func SetupTagRoutes(r *gin.RouterGroup, h *handler.TagHandler, pth *handler.PhotoTagHandler) {
 	tagGroup := r.Group("/tags")
 
 	tagGroup.GET("", h.GetSuggestions)
 	tagGroup.GET("/all", h.GetAllTags)
+	tagGroup.GET("/:tag_id/photos", pth.GetPhotosByTagID)
 	tagGroup.PUT("/sort", h.UpdateSortOrders)
 }

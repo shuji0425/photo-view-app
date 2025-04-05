@@ -16,6 +16,7 @@ type InjectedHandlers struct {
 	PhotoHandler         *handler.PhotoHandler
 	CategoryHandler      *handler.CategoryHandler
 	TagHandler           *handler.TagHandler
+	PhotoTagHandler      *handler.PhotoTagHandler
 }
 
 func InjectAll(db *gorm.DB) *InjectedHandlers {
@@ -28,5 +29,6 @@ func InjectAll(db *gorm.DB) *InjectedHandlers {
 		PhotoHandler:         InjectPhotoHandler(db),
 		CategoryHandler:      InjectCategoryHandler(db),
 		TagHandler:           InjectTagHandler(db),
+		PhotoTagHandler:      InjectPhotoTagHandler(db),
 	}
 }
