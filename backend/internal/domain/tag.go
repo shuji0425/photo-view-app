@@ -7,3 +7,9 @@ type Tag struct {
 	CategoryID *int64
 	SortOrder  int
 }
+
+// 並び順更新用
+type TagSortUpdate struct {
+	ID        int64
+	SortOrder int
+}

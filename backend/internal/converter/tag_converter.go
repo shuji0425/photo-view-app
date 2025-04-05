@@ -49,3 +49,15 @@ func ToDtoTags(domains []*domain.Tag) []*dto.TagResponse {
 	}
 	return result
 }
+
+// タグ並び順更新用
+func ToDomainTagSort(dtoList []dto.TagSortRequest) []domain.TagSortUpdate {
+	domains := make([]domain.TagSortUpdate, 0, len(dtoList))
+	for _, d := range dtoList {
+		domains = append(domains, domain.TagSortUpdate{
+			ID:        d.ID,
+			SortOrder: d.SortOrder,
+		})
+	}
+	return domains
+}

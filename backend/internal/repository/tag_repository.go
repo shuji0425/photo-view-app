@@ -14,6 +14,7 @@ type TagRepository interface {
 	GetAll(ctx context.Context) ([]*domain.Tag, error)
 	FindOrCreateTags(tx *gorm.DB, names []string) ([]int64, error)
 	FindByQuery(ctx context.Context, query string) ([]*domain.Tag, error)
+	UpdateSortOrders(ctx context.Context, updates []domain.TagSortUpdate) error
 }
 
 // 構造体
@@ -110,4 +111,35 @@ func (r *tagRepository) FindByQuery(ctx context.Context, query string) ([]*domai
 	}
 
 	return converter.ToDomainTags(models), nil
+}
+
+// 並び順を更新する
+func (r *tagRepository) UpdateSortOrders(ctx context.Context, updates []domain.TagSortUpdate) error {
+	// 更新するための配列を作成
+	updateMap := make(map[int64]int)
+	for _, u := range updates {
+		updateMap[u.ID] = u.SortOrder
+	}
+
+	// トランザクション
+	return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		var models []model.Tag
+		if err := tx.Find(&models).Error; err != nil {
+			return err
+		}
+
+		for _, m := range models {
+			order := 0
+			// 型チェック
+			if v, ok := updateMap[int64(m.ID)]; ok {
+				order = v
+			}
+
+			// 更新
+			if err := tx.Model(&m).Update("sort_order", order).Error; err != nil {
+				return err
+			}
+		}
+		return nil
+	})
 }

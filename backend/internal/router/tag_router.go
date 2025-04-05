@@ -12,4 +12,5 @@ func SetupTagRoutes(r *gin.RouterGroup, h *handler.TagHandler) {
 
 	tagGroup.GET("", h.GetSuggestions)
 	tagGroup.GET("/all", h.GetAllTags)
+	tagGroup.PUT("/sort", h.UpdateSortOrders)
 }

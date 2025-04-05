@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"backend/internal/converter"
+	"backend/internal/domain"
 	"backend/internal/dto"
 	"backend/internal/service"
 	"context"
@@ -11,6 +12,7 @@ import (
 type TagUsecase interface {
 	GetAllTags(ctx context.Context) ([]*dto.TagResponse, error)
 	GetSuggestions(ctx context.Context, query string) ([]string, error)
+	UpdateSortOrders(ctx context.Context, tags []domain.TagSortUpdate) error
 }
 
 // 構造体
@@ -42,4 +44,9 @@ func (u *tagUsecase) GetSuggestions(ctx context.Context, query string) ([]string
 	}
 
 	return names, nil
+}
+
+// タグの並び順を更新
+func (u *tagUsecase) UpdateSortOrders(ctx context.Context, tags []domain.TagSortUpdate) error {
+	return u.tagService.UpdateSortOrders(ctx, tags)
 }
