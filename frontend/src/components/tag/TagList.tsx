@@ -1,7 +1,9 @@
 "use client";
 
 import { Tag } from "@/types/tag";
-import { Plus } from "lucide-react";
+import { Plus, Search } from "lucide-react";
+import { Input } from "../ui/Input";
+import { useMemo, useState } from "react";
 
 type Props = {
   tags: Tag[];
@@ -13,12 +15,33 @@ type Props = {
  * タグ一覧（追加可能なタグのみ表示）
  */
 export const TagList = ({ tags, onAdd, selectedIds }: Props) => {
+  const [search, setSearch] = useState("");
   // 未選択のタグのみ表示する
-  const unselectedTags = tags.filter((tag) => !selectedIds.includes(tag.id));
+  const unselectedTags = useMemo(
+    () =>
+      tags.filter(
+        (tag) =>
+          !selectedIds.includes(tag.id) &&
+          tag.name.toLowerCase().includes(search.toLowerCase())
+      ),
+    [tags, selectedIds, search]
+  );
 
   return (
     <div className="w-full md:w-1/2 border rounded-md p-4 max-h-[80vh] overflow-y-auto">
-      <h2 className="text-lg font-semibold mb-2">全タグ一覧</h2>
+      <div className="flex mb-2 gap-2">
+        <h2 className="w-[40%] text-lg font-semibold">全タグ一覧</h2>
+
+        <div className="relative flex w-[60%]">
+          <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="タグ名で検索..."
+            className="pl-8"
+          />
+        </div>
+      </div>
 
       {unselectedTags.length === 0 ? (
         <p className="text-gray-500 text-sm">追加可能なタグはありません</p>
