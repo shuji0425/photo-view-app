@@ -6,3 +6,8 @@ type PhotoWithSortOrder struct {
 	URL       string `json:"url"`
 	SortOrder int    `json:"sort_order"`
 }
+
+type PhotoTagSortUpdate struct {
+	PhotoID   int64 `json:"photo_id"`
+	SortOrder int   `json:"sort_order"`
+}

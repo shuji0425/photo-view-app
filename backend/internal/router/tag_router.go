@@ -13,5 +13,6 @@ func SetupTagRoutes(r *gin.RouterGroup, h *handler.TagHandler, pth *handler.Phot
 	tagGroup.GET("", h.GetSuggestions)
 	tagGroup.GET("/all", h.GetAllTags)
 	tagGroup.GET("/:tag_id/photos", pth.GetPhotosByTagID)
+	tagGroup.PUT("/:tag_id/photos/sort", pth.UpdateSortOrders)
 	tagGroup.PUT("/sort", h.UpdateSortOrders)
 }

@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"backend/internal/converter"
+	"backend/internal/domain"
 	"backend/internal/dto"
 	"backend/internal/service"
 	"context"
@@ -10,6 +11,7 @@ import (
 // インターフェース
 type PhotoTagUsecase interface {
 	GetPhotosByTagID(ctx context.Context, tagID int64) ([]*dto.PhotoWithSortOrder, error)
+	UpdateSortOrders(ctx context.Context, tagID int64, updates []domain.PhotoTagSortUpdate) error
 }
 
 // 構造体
@@ -30,4 +32,9 @@ func (u *photoTagUsecase) GetPhotosByTagID(ctx context.Context, tagID int64) ([]
 	}
 
 	return converter.ToDtoPhotoWithSortOrders(photos), nil
+}
+
+// 並び順を更新
+func (u *photoTagUsecase) UpdateSortOrders(ctx context.Context, tagID int64, updates []domain.PhotoTagSortUpdate) error {
+	return u.photoTagService.UpdateSortOrders(ctx, tagID, updates)
 }

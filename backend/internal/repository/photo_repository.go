@@ -151,6 +151,16 @@ func (r *photoRepository) UpdateWithTags(ctx context.Context, req *domain.Photo)
 			return err
 		}
 
+		// 既存の photo_tags を取得して、sort_order を保持
+		var existingRelations []model.PhotoTag
+		if err := tx.Where("photo_id = ?", photoModel.ID).Find(&existingRelations).Error; err != nil {
+			return err
+		}
+		sortMap := make(map[int64]int)
+		for _, rel := range existingRelations {
+			sortMap[rel.TagID] = rel.SortOrder
+		}
+
 		// タグを登録（IDも取得）
 		tagIDs, err := r.tagRepo.FindOrCreateTags(tx, req.Tags)
 		if err != nil {
@@ -166,8 +176,9 @@ func (r *photoRepository) UpdateWithTags(ctx context.Context, req *domain.Photo)
 		var relations []model.PhotoTag
 		for _, tagID := range tagIDs {
 			relations = append(relations, model.PhotoTag{
-				PhotoID: photoModel.ID,
-				TagID:   tagID,
+				PhotoID:   photoModel.ID,
+				TagID:     tagID,
+				SortOrder: sortMap[tagID],
 			})
 		}
 		// タグがあれば登録

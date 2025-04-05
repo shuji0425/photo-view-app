@@ -2,6 +2,7 @@ package repository
 
 import (
 	"backend/internal/domain"
+	"backend/internal/model"
 	"context"
 
 	"gorm.io/gorm"
@@ -10,6 +11,7 @@ import (
 // インターフェース
 type PhotoTagRepository interface {
 	FindPhotosByTagID(ctx context.Context, tagID int64) ([]*domain.PhotoWithSortOrder, error)
+	UpdateSortOrders(ctx context.Context, tagID int64, updates []domain.PhotoTagSortUpdate) error
 }
 
 // 構造体
@@ -56,4 +58,32 @@ func (r *photoTagRepository) FindPhotosByTagID(ctx context.Context, tagID int64)
 	}
 
 	return photos, nil
+}
+
+// 並び順を更新
+func (r *photoTagRepository) UpdateSortOrders(ctx context.Context, tagID int64, updates []domain.PhotoTagSortUpdate) error {
+	updateMap := make(map[int64]int)
+	for _, u := range updates {
+		updateMap[u.PhotoID] = u.SortOrder
+	}
+
+	// 更新処理
+	return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		var photoTags []model.PhotoTag
+		if err := tx.Where("tag_id = ?", tagID).Find(&photoTags).Error; err != nil {
+			return err
+		}
+
+		for _, pt := range photoTags {
+			order := 0
+			if v, ok := updateMap[pt.PhotoID]; ok {
+				order = v
+			}
+			if err := tx.Model(&pt).Update("sort_order", order).Error; err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
 }

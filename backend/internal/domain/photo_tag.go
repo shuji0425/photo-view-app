@@ -6,3 +6,9 @@ type PhotoWithSortOrder struct {
 	URL       string
 	SortOrder int
 }
+
+// 並び順更新用
+type PhotoTagSortUpdate struct {
+	PhotoID   int64
+	SortOrder int
+}
