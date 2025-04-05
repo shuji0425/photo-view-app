@@ -22,7 +22,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body className={`${inter.className} bg-white text-gray-900`}>
+      <body
+        className={`${inter.className} bg-white text-gray-900 overflow-hidden`}
+      >
         {/* ヘッダー */}
         <Header />
 

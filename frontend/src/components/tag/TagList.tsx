@@ -28,9 +28,9 @@ export const TagList = ({ tags, onAdd, selectedIds }: Props) => {
   );
 
   return (
-    <div className="w-full md:w-1/2 border rounded-md p-4 max-h-[80vh] overflow-y-auto">
-      <div className="flex mb-2 gap-2">
-        <h2 className="w-[40%] text-lg font-semibold">全タグ一覧</h2>
+    <div className="w-full bg-white md:w-1/2 border rounded-md pb-4 px-4 pt-0 max-h-[80vh] overflow-y-auto">
+      <div className="sticky top-0 bg-white z-10 flex gap-2 py-2">
+        <h2 className="w-[40%] pt-2 text-lg font-semibold">全タグ一覧</h2>
 
         <div className="relative flex w-[60%]">
           <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
