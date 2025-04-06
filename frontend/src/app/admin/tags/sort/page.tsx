@@ -15,7 +15,7 @@ export default function TagSortPage() {
   } = useTagSort();
 
   return (
-    <div className="relative h-screen flex flex-col">
+    <div className="relative flex flex-col  w-full">
       {/* メインエリア */}
       <div className="flex flex col md:flex-row gap-4 flex-1 overflow-hidden p-4">
         <TagList

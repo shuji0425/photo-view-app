@@ -18,7 +18,7 @@ export default function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <nav className="space-y-2">
+    <nav className="space-y-2 h-full">
       {navItems.map(({ name, path }) => (
         <Link
           key={path}

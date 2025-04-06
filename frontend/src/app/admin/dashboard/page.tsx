@@ -4,6 +4,7 @@ import LogoutButton from "@/components/auth/LogoutButton";
 import { useAuth } from "@/hooks/useAuth";
 import { useProfile } from "@/lib/swr/useProfile";
 import { NavButton } from "@/components/ui/NavButton";
+import AdminMainWrapper from "@/components/layout/AdminMainWrapper";
 
 /**
  * 管理者ダッシュボード画面
@@ -21,17 +22,17 @@ export default function AdminDashboardPage() {
 
   // ログイン済みの表示
   return (
-    <>
-      <h1 className="text-2xl font-bold mb-4 text-center">
+    <AdminMainWrapper>
+      <h1 className="text-2xl font-bold mb-4 text-left">
         ようこそ {user?.username} さん！
       </h1>
-      <p className="mb-4 text-center text-gary-600">
+      <p className="mb-4 text-left text-gray-600">
         あなたは {user?.role === "admin" ? "管理者" : "ユーザー"}{" "}
         としてログインしています。
       </p>
 
       {/* ボタン */}
-      <div className="flex flex-col items-center gap-4">
+      <div className="mt-4">
         {/* ログアウト */}
         <LogoutButton onLogout={logout} />
 
@@ -44,6 +45,6 @@ export default function AdminDashboardPage() {
           />
         )}
       </div>
-    </>
+    </AdminMainWrapper>
   );
 }

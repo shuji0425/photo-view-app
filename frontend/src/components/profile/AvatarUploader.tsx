@@ -7,6 +7,7 @@ import { useAvatarUploader } from "@/hooks/profile/useAvatarUploader";
 type AvatarUploaderProps = {
   initialUrl?: string | null;
   onImageSelected: (blob: Blob | null) => void;
+  onAvatarDelete?: () => void;
 };
 
 /**
@@ -16,6 +17,7 @@ type AvatarUploaderProps = {
 export default function AvatarUploader({
   initialUrl,
   onImageSelected,
+  onAvatarDelete,
 }: AvatarUploaderProps) {
   const {
     previewUrl,
@@ -30,7 +32,7 @@ export default function AvatarUploader({
     handleRetrim,
     handleCancelCrop,
     handleResetImage,
-  } = useAvatarUploader({ onImageSelected, initialUrl });
+  } = useAvatarUploader({ onImageSelected, initialUrl, onAvatarDelete });
 
   return (
     <div className="w-full flex flex-col justify-center mt-1">
