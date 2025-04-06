@@ -48,7 +48,6 @@ export const SortableItemActions = ({
         {...dragHandleProps.attributes}
         {...dragHandleProps.listeners}
         className="cursor-grab text-gray-400 hover:text-gray-600"
-        onClick={() => onRemove(tagId)}
         aria-label="並び替えハンドル"
       >
         <GripVertical className="w-4 h-4" />
