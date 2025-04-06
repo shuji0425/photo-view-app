@@ -25,7 +25,7 @@ export default function AdminDashboardPage() {
       <h1 className="text-2xl font-bold mb-4 text-center">
         ようこそ {user?.username} さん！
       </h1>
-      <p className="mb-4 text-center text-gary-600">
+      <p className="mb-4 text-center text-gray-600">
         あなたは {user?.role === "admin" ? "管理者" : "ユーザー"}{" "}
         としてログインしています。
       </p>
