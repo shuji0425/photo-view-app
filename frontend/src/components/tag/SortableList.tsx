@@ -88,7 +88,7 @@ const SortableItem = ({
         <Link href={`/admin/tags/${tag.id}/photos`}>
           <button
             type="button"
-            className="text-blue-500 hover:text-blue-700 text-sm"
+            className="text-blue-500 hover:text-blue-700 text-sm cursor-pointer"
           >
             写真並び替え
           </button>
@@ -97,7 +97,7 @@ const SortableItem = ({
         {/* 削除用 */}
         <button
           type="button"
-          className="text-gray-500 hover:text-red-500"
+          className="text-gray-500 hover:text-red-500 cursor-pointer"
           onClick={() => onRemove(tag.id)}
         >
           <X className="w-4 h-4" />

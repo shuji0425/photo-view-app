@@ -54,7 +54,7 @@ export const TagList = ({ tags, onAdd, selectedIds }: Props) => {
             >
               <span className="truncate">{tag.name}</span>
               <button
-                className="flex items-center gap-1 text-sm text-blue-600 hover:underline"
+                className="flex items-center gap-1 text-sm text-blue-600 hover:underline cursor-pointer"
                 onClick={() => onAdd(tag)}
               >
                 <Plus className="w-4 h-4" />
