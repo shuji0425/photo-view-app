@@ -11,6 +11,7 @@ type Props = {
   errors: FieldErrors<ProfileParams>;
   onAvatarSelect: (blob: Blob | null) => void;
   initialAvatarUrl?: string | null;
+  onAvatarDelete?: () => void;
 };
 
 /**
@@ -21,6 +22,7 @@ export const ProfileImageSection = ({
   errors,
   onAvatarSelect,
   initialAvatarUrl,
+  onAvatarDelete,
 }: Props) => {
   return (
     <section className="space-y-6">
@@ -29,6 +31,7 @@ export const ProfileImageSection = ({
         <AvatarUploader
           onImageSelected={onAvatarSelect}
           initialUrl={initialAvatarUrl ?? undefined}
+          onAvatarDelete={onAvatarDelete}
         />
       </FormField>
 

@@ -29,6 +29,9 @@ const ProfileForm = ({
   userId,
 }: ProfileFormProps) => {
   const [avatarBlob, setAvatarBlob] = useState<Blob | null>(null);
+  const [initialAvatarUrl, setInitialAvatarUrl] = useState(
+    defaultValues?.avatar ?? null
+  );
   const { uploadAvatar } = useAvatarUploaderMutation();
   const { register, handleSubmit, control, errors } = useProfileForm({
     defaultValues,
@@ -55,7 +58,11 @@ const ProfileForm = ({
         register={register}
         errors={errors}
         onAvatarSelect={(blob) => setAvatarBlob(blob)}
-        initialAvatarUrl={defaultValues?.avatar}
+        initialAvatarUrl={initialAvatarUrl}
+        onAvatarDelete={() => {
+          setAvatarBlob(null);
+          setInitialAvatarUrl(null);
+        }}
       />
 
       {/* 住所・地域 */}

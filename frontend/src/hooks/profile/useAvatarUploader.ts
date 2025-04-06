@@ -9,6 +9,7 @@ export type Crop = { x: number; y: number };
 export type UseAvatarUploaderArgs = {
   initialUrl?: string | null;
   onImageSelected: (blob: Blob | null) => void;
+  onAvatarDelete?: () => void;
 };
 
 // 戻り値
@@ -37,6 +38,7 @@ export type UseAvatarUploaderReturn = {
 export const useAvatarUploader = ({
   onImageSelected,
   initialUrl,
+  onAvatarDelete,
 }: UseAvatarUploaderArgs): UseAvatarUploaderReturn => {
   const [blob, setBlob] = useState<Blob | null>(null);
   const previewManager = usePreviewManager(blob);
@@ -95,7 +97,8 @@ export const useAvatarUploader = ({
     setCropImageUrl(null);
     onImageSelected(null);
     resetCropState();
-  }, [onImageSelected, setCropImageUrl, resetCropState]);
+    if (onAvatarDelete) onAvatarDelete();
+  }, [onImageSelected, setCropImageUrl, resetCropState, onAvatarDelete]);
 
   return {
     previewUrl: previewUrl ?? initialUrl ?? null,
