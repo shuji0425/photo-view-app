@@ -8,6 +8,7 @@ const navItems = [
   { name: "写真アップロード", path: "/admin/photos/upload" },
   { name: "写真一覧", path: "/admin/photos" },
   { name: "プロフィール", path: "/admin/profile" },
+  { name: "タグ並び順", path: "/admin/tags/sort" },
 ];
 
 /**
