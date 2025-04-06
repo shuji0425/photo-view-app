@@ -23,12 +23,12 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body
-        className={`${inter.className} bg-white text-gray-900 overflow-hidden`}
+        className={`${inter.className} bg-white text-gray-900 min-h-screen flex flex-col`}
       >
         {/* ヘッダー */}
         <Header />
 
-        <main className="min-h-screen flex flex-col items-center">
+        <main className="flex-1 w-full overflow-auto">
           {children}
           <Toaster position="top-center" />
         </main>
