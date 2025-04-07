@@ -9,4 +9,5 @@ import (
 // ユーザー関連のルート
 func SetupUserRoutes(r *gin.RouterGroup, userHandler *handler.UserHandler) {
 	r.GET("/me", userHandler.GetMe)
+	r.PATCH("/me/basic", userHandler.UpdateBasicInfo)
 }
