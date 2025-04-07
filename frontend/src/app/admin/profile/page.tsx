@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useProfile } from "@/lib/swr/useProfile";
 import ProfileCreate from "@/components/profile/ProfileCreate";
 import ProfileEdit from "@/components/profile/ProfileEdit";
-import { NavButton } from "@/components/ui/NavButton";
+import { BackButton } from "@/components/ui/BackButton";
 
 /**
  * 管理者用プロフィールページ
@@ -26,9 +26,7 @@ export default function AdminProfilePage() {
       )}
 
       {/* 戻るボタン */}
-      <div className="mt-6">
-        <NavButton href="/admin/dashboard" label="戻る" color="blue" />
-      </div>
+      <BackButton />
     </>
   );
 }

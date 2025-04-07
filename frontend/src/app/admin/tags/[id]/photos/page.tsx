@@ -7,7 +7,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { SortablePhotoList } from "@/components/tag/SortablePhotoList";
 import { updateTagPhotoSortOrder } from "@/lib/api/tag/photoSortUpdate";
-import { NavButton } from "@/components/ui/NavButton";
+import { BackButton } from "@/components/ui/BackButton";
 
 export default function TagPhotoSortPage() {
   const params = useParams();
@@ -38,10 +38,11 @@ export default function TagPhotoSortPage() {
 
       <SortablePhotoList photos={photos} onReorder={handleReorder} />
 
+      {/* ボタンエリア(戻る、保存する) */}
       <div className="mt-6 text-right flex justify-between">
-        <NavButton label="戻る" color="blue" href="/admin/tags/sort" />
+        <BackButton />
         <ActionButton
-          label="保存"
+          label="保存する"
           color="green"
           onClick={handleSave}
           disabled={isSaving}

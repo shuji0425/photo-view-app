@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"backend/pkg/jwt"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -14,6 +15,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		// トークンが空ならエラー
 		if err != nil {
+			log.Println("トークン", err)
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "トークンが見つかりません"})
 			return
 		}

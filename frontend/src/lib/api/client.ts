@@ -2,7 +2,7 @@ import camelcaseKeys from "camelcase-keys";
 import snakecaseKeys from "snakecase-keys";
 
 type RequestOptions<TRequest = unknown> = {
-  method?: "GET" | "POST" | "PUT" | "DELETE";
+  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   body?: TRequest;
   headers?: HeadersInit;
   next?: { revalidate: number };

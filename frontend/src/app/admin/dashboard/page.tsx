@@ -44,6 +44,33 @@ export default function AdminDashboardPage() {
             color="yellow"
           />
         )}
+
+        {/* アカウント情報変更 */}
+        <div>
+          <NavButton
+            href="/admin/settings/basic"
+            label="アカウント情報変更"
+            color="blue"
+          />
+        </div>
+
+        {/* パスワード変更 */}
+        <div className="mt-2">
+          <NavButton
+            href="/admin/settings/password"
+            label="パスワード変更"
+            color="blue"
+          />
+        </div>
+
+        {/* 表示ポリシー変更 */}
+        <div className="mt-2">
+          <NavButton
+            href="/admin/settings/metadata-policy"
+            label="表示ポリシー変更"
+            color="blue"
+          />
+        </div>
       </div>
     </AdminMainWrapper>
   );

@@ -42,6 +42,7 @@ func NewRouter(db *gorm.DB) *Router {
 	SetupPhotoRoutes(admin, handlers.PhotoHandler)
 	SetupCategoryRoutes(admin, handlers.CategoryHandler)
 	SetupTagRoutes(admin, handlers.TagHandler, handlers.PhotoTagHandler)
+	SetupMetadataPolicyRoutes(admin, handlers.MetadataPolicyHandler)
 
 	return &Router{Engine: r}
 }

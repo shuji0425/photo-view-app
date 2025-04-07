@@ -45,3 +45,21 @@ func ToModelUser(d *domain.User) *model.User {
 		Role:     d.Role,
 	}
 }
+
+// ユーザー更新用
+func ToUserFormUpdate(dto *dto.UpdateAccountRequest, userID int64) *domain.User {
+	return &domain.User{
+		ID:       userID,
+		Username: dto.Username,
+		Email:    dto.Email,
+	}
+}
+
+// パスワード更新用
+func ToUserPasswordUpdate(dto *dto.UpdatePasswordRequest) *domain.PasswordUpdate {
+	return &domain.PasswordUpdate{
+		CurrentPassword:    dto.CurrentPassword,
+		NewPassword:        dto.NewPassword,
+		ConfirmNewPassword: dto.ConfirmNewPassword,
+	}
+}

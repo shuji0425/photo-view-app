@@ -1,6 +1,6 @@
+import { BackButton } from "@/components/ui/BackButton";
 import { mockPhotos } from "@/data/photo";
 import Image from "next/image";
-import Link from "next/link";
 
 type Params = {
   params: { id: string };
@@ -16,9 +16,7 @@ export default async function PhotoDetailPage({ params }: Params) {
 
   return (
     <div className="p-4 space-y-4">
-      <Link href="/" className="text-blue-500 underline">
-        ← 戻る
-      </Link>
+      <BackButton />
 
       <Image
         src={photo.url}
