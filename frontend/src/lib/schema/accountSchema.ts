@@ -13,4 +13,24 @@ export const basicAccountSchema = z.object({
   currentPassword: z.string().min(6, "現在のパスワードを入力してください"),
 });
 
+// 型定義
 export type BasicAccountParams = z.infer<typeof basicAccountSchema>;
+
+/**
+ * パスワードバリデーション
+ */
+export const passwordUpdateSchema = z
+  .object({
+    currentPassword: z.string().min(6, "現在のパスワードを入力してください"),
+    newPassword: z
+      .string()
+      .min(8, "新しいパスワードは8文字以上で入力してください"),
+    confirmNewPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmNewPassword, {
+    message: "新しいパスワードが一致しません",
+    path: ["confirmNewPassword"],
+  });
+
+// 型定義
+export type PasswordUpdateSchema = z.infer<typeof passwordUpdateSchema>;

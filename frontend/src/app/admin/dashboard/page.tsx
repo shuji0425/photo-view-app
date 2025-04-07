@@ -46,11 +46,22 @@ export default function AdminDashboardPage() {
         )}
 
         {/* アカウント情報変更 */}
-        <NavButton
-          href="/admin/settings/basic"
-          label="アカウント情報変更"
-          color="blue"
-        />
+        <div>
+          <NavButton
+            href="/admin/settings/basic"
+            label="アカウント情報変更"
+            color="blue"
+          />
+        </div>
+
+        {/* パスワード変更 */}
+        <div className="mt-2">
+          <NavButton
+            href="/admin/settings/password"
+            label="パスワード変更"
+            color="blue"
+          />
+        </div>
       </div>
     </AdminMainWrapper>
   );
