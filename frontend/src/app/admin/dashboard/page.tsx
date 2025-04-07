@@ -62,6 +62,15 @@ export default function AdminDashboardPage() {
             color="blue"
           />
         </div>
+
+        {/* 表示ポリシー変更 */}
+        <div className="mt-2">
+          <NavButton
+            href="/admin/settings/metadata-policy"
+            label="表示ポリシー変更"
+            color="blue"
+          />
+        </div>
       </div>
     </AdminMainWrapper>
   );
