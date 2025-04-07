@@ -1,7 +1,7 @@
 package router
 
 import (
-	"backend/internal/handler"
+	handler "backend/internal/handler/public"
 
 	"github.com/gin-gonic/gin"
 )

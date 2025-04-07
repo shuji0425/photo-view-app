@@ -21,13 +21,14 @@ func NewRouter(db *gorm.DB) *Router {
 
 	// ハンドラーを取得
 	handlers := injector.InjectAll(db)
+	publicHandlers := injector.PublicInjectAll(db)
 
 	// APIバージョン管理
 	api := r.Group("/api/v1")
 
 	// === 公開用API ===
 	public := api.Group("/public")
-	SetupPublicRoutes(public, handlers.PublicProfileHandler)
+	SetupPublicRoutes(public, publicHandlers.PublicProfileHandler)
 
 	// === 認証API ===
 	auth := api.Group("/auth")

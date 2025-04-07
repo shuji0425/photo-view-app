@@ -1,7 +1,7 @@
 package injector
 
 import (
-	"backend/internal/handler"
+	handler "backend/internal/handler/admin"
 
 	"gorm.io/gorm"
 )
@@ -12,7 +12,6 @@ type InjectedHandlers struct {
 	AuthHandler           *handler.AuthHandler
 	UserHandler           *handler.UserHandler
 	AvatarHandler         *handler.AvatarHandler
-	PublicProfileHandler  *handler.PublicProfileHandler
 	PhotoHandler          *handler.PhotoHandler
 	CategoryHandler       *handler.CategoryHandler
 	TagHandler            *handler.TagHandler
@@ -26,7 +25,6 @@ func InjectAll(db *gorm.DB) *InjectedHandlers {
 		UserHandler:           InjectUserHandler(db),
 		AuthHandler:           InjectAuthHandler(db),
 		AvatarHandler:         InjectAvatarHandler(db),
-		PublicProfileHandler:  InjectPublicProfileHandler(db),
 		PhotoHandler:          InjectPhotoHandler(db),
 		CategoryHandler:       InjectCategoryHandler(db),
 		TagHandler:            InjectTagHandler(db),

@@ -1,7 +1,7 @@
 package injector
 
 import (
-	"backend/internal/handler"
+	handler "backend/internal/handler/public"
 	"backend/internal/infrastructure"
 	"backend/internal/repository"
 	"backend/internal/service"
