@@ -44,6 +44,13 @@ export default function AdminDashboardPage() {
             color="yellow"
           />
         )}
+
+        {/* アカウント情報変更 */}
+        <NavButton
+          href="/admin/settings/basic"
+          label="アカウント情報変更"
+          color="blue"
+        />
       </div>
     </AdminMainWrapper>
   );
