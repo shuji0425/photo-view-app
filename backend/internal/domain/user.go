@@ -12,3 +12,10 @@ type User struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
+
+// パスワード更新用
+type PasswordUpdate struct {
+	CurrentPassword    string
+	NewPassword        string
+	ConfirmNewPassword string
+}

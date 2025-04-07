@@ -54,3 +54,12 @@ func ToUserFormUpdate(dto *dto.UpdateAccountRequest, userID int64) *domain.User 
 		Email:    dto.Email,
 	}
 }
+
+// パスワード更新用
+func ToUserPasswordUpdate(dto *dto.UpdatePasswordRequest) *domain.PasswordUpdate {
+	return &domain.PasswordUpdate{
+		CurrentPassword:    dto.CurrentPassword,
+		NewPassword:        dto.NewPassword,
+		ConfirmNewPassword: dto.ConfirmNewPassword,
+	}
+}

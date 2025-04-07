@@ -10,4 +10,5 @@ import (
 func SetupUserRoutes(r *gin.RouterGroup, userHandler *handler.UserHandler) {
 	r.GET("/me", userHandler.GetMe)
 	r.PATCH("/me/basic", userHandler.UpdateBasicInfo)
+	r.PATCH("/me/password", userHandler.UpdatePassword)
 }

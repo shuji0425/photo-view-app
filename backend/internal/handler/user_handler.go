@@ -49,7 +49,11 @@ func (h *UserHandler) UpdateBasicInfo(c *gin.Context) {
 		return
 	}
 
-	userID := userIDRaw.(int64)
+	userID, ok := userIDRaw.(int64)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "ユーザーIDの型が不正です"})
+		return
+	}
 
 	var req dto.UpdateAccountRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -67,4 +71,36 @@ func (h *UserHandler) UpdateBasicInfo(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, updatedUser)
+}
+
+// パスワード更新
+func (h *UserHandler) UpdatePassword(c *gin.Context) {
+	// userIDを取得
+	userIDRaw, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "ユーザーIDが見つかりません"})
+		return
+	}
+	userID, ok := userIDRaw.(int64)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "ユーザーIDの型が不正です"})
+		return
+	}
+
+	// リクエストのボディ取得
+	var req dto.UpdatePasswordRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "無効なリクエストです"})
+		return
+	}
+
+	// domainへ変換
+	domainPassword := converter.ToUserPasswordUpdate(&req)
+
+	// 更新処理
+	if err := h.usecase.UpdatePassword(c.Request.Context(), userID, domainPassword); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "パスワードを更新しました"})
 }

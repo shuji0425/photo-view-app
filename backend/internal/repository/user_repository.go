@@ -15,6 +15,7 @@ type UserRepository interface {
 	FindByEmail(email string) (*domain.User, error)
 	FindByID(userID int64) (*domain.User, error)
 	UpdateBasicInfo(ctx context.Context, user *domain.User) error
+	UpdatePassword(ctx context.Context, userID int64, hashedPassword string) error
 }
 
 // GORMを使ったユーザーレポジトリーの実装構造体
@@ -63,4 +64,13 @@ func (r *userRepository) UpdateBasicInfo(ctx context.Context, user *domain.User)
 			"username": modelUser.Username,
 			"email":    modelUser.Email,
 		}).Error
+}
+
+// パスワードを更新
+func (r *userRepository) UpdatePassword(ctx context.Context, userID int64, hashedPassword string) error {
+	return r.db.WithContext(ctx).
+		Model(&model.User{}).
+		Where("id = ?", userID).
+		Update("password_hash", hashedPassword).
+		Error
 }

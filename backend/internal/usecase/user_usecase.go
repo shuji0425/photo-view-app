@@ -6,12 +6,14 @@ import (
 	"backend/internal/dto"
 	"backend/internal/service"
 	"context"
+	"errors"
 )
 
 // ユースケースインターフェース
 type UserUsecase interface {
 	GetMe(userID int64) (*dto.UserResponse, error)
 	UpdateBasicInfo(ctx context.Context, user *domain.User, currentPassword string) (*dto.UserResponse, error)
+	UpdatePassword(ctx context.Context, userID int64, password *domain.PasswordUpdate) error
 }
 
 type userUsecase struct {
@@ -41,4 +43,14 @@ func (u *userUsecase) UpdateBasicInfo(ctx context.Context, user *domain.User, cu
 	}
 	// dtoに変換して返却
 	return converter.ConvertToUserResponse(updatedUser), nil
+}
+
+// パスワード更新
+func (u *userUsecase) UpdatePassword(ctx context.Context, userID int64, password *domain.PasswordUpdate) error {
+	// 一致チェック
+	if password.NewPassword != password.ConfirmNewPassword {
+		return errors.New("新しいパスワードが一致しません")
+	}
+
+	return u.userService.UpdatePassword(ctx, userID, password.CurrentPassword, password.NewPassword)
 }

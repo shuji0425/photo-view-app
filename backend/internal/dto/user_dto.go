@@ -18,3 +18,10 @@ type UpdateAccountRequest struct {
 	Email           string `json:"email"`
 	CurrentPassword string `json:"current_password"`
 }
+
+// パスワード更新
+type UpdatePasswordRequest struct {
+	CurrentPassword    string `json:"current_password"`
+	NewPassword        string `json:"new_password"`
+	ConfirmNewPassword string `json:"confirm_new_password"`
+}
