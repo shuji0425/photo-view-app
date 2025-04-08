@@ -12,7 +12,7 @@ func ToDtoPhotoWithSortOrder(d *domain.PhotoWithSortOrder) *dto.PhotoWithSortOrd
 	}
 	return &dto.PhotoWithSortOrder{
 		PhotoID:   d.PhotoID,
-		URL:       d.URL,
+		URL:       d.ImageURL,
 		SortOrder: d.SortOrder,
 	}
 }
@@ -36,4 +36,28 @@ func ToDomainPhotoTagSort(dtoList []dto.PhotoTagSortUpdate) []domain.PhotoTagSor
 		})
 	}
 	return domains
+}
+
+// Public用
+func ToDtoPhotoPublic(d *domain.PhotoWithSortOrder) *dto.PhotoPublicDTO {
+	if d == nil {
+		return nil
+	}
+	return &dto.PhotoPublicDTO{
+		ID:          d.PhotoID,
+		URL:         d.ImageURL,
+		Title:       d.Title,
+		Description: d.Description,
+		TakenAt:     d.TakenAt,
+		SortOrder:   d.SortOrder,
+	}
+}
+
+// domain -> dto (複数)
+func ToDtoPhotosPublic(domains []*domain.PhotoWithSortOrder) []*dto.PhotoPublicDTO {
+	result := make([]*dto.PhotoPublicDTO, 0, len(domains))
+	for _, d := range domains {
+		result = append(result, ToDtoPhotoPublic(d))
+	}
+	return result
 }

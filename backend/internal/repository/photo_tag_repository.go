@@ -26,35 +26,26 @@ func NewPhotoTagRepository(db *gorm.DB) PhotoTagRepository {
 
 // 指定したタグに紐づく写真一覧を取得する
 func (r *photoTagRepository) FindPhotosByTagID(ctx context.Context, tagID int64) ([]*domain.PhotoWithSortOrder, error) {
-	type result struct {
-		PhotoID   int64
-		ImageURL  string
-		SortOrder int
-	}
-
-	var rows []result
+	var photos []*domain.PhotoWithSortOrder
 
 	// DBからデータを取得
 	err := r.db.WithContext(ctx).
 		Table("photo_tags").
-		Select("photo_tags.photo_id, photos.image_url, photo_tags.sort_order").
+		Select(`
+			photo_tags.photo_id,
+			photos.image_url,
+			photos.title,
+			photos.description,
+			photos.taken_at,
+			photo_tags.sort_order
+		`).
 		Joins("JOIN photos ON photos.id = photo_tags.photo_id").
 		Where("photo_tags.tag_id = ?", tagID).
 		Order("photo_tags.sort_order ASC").
-		Scan(&rows).Error
+		Scan(&photos).Error
 
 	if err != nil {
 		return nil, err
-	}
-
-	// domainに変換
-	photos := make([]*domain.PhotoWithSortOrder, 0, len(rows))
-	for _, row := range rows {
-		photos = append(photos, &domain.PhotoWithSortOrder{
-			PhotoID:   row.PhotoID,
-			URL:       row.ImageURL,
-			SortOrder: row.SortOrder,
-		})
 	}
 
 	return photos, nil

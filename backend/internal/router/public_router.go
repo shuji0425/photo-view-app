@@ -11,10 +11,13 @@ func SetupPublicRoutes(
 	r *gin.RouterGroup,
 	profile *handler.PublicProfileHandler,
 	tag *handler.PublicTagHandler,
+	photo *handler.PublicPhotoHandler,
 ) {
 	// プロフィール
 	r.GET("/profile", profile.GetPublicAdminProfile)
 
+	tagGroup := r.Group("/tags")
 	// メイン画面
-	r.GET("/tags/default", tag.GetDefaultTag)
+	tagGroup.GET("/default", tag.GetDefaultTag)
+	tagGroup.GET("/:tag_id/photos", photo.GetPhotosByTag)
 }
