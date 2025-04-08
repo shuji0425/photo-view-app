@@ -35,7 +35,7 @@ export default function HomePage() {
   // タグ変更時の写真取得
   useEffect(() => {
     const fetchPhotos = async () => {
-      if (selectedTagId === null) return;
+      if (!selectedTagId) return;
       try {
         const photosByTag = await getPublicPhotosByTagId(selectedTagId);
         setPhotos(photosByTag);
@@ -46,7 +46,7 @@ export default function HomePage() {
       }
     };
     fetchPhotos();
-  }, [selectedTagId]);
+  }, [selectedTagId, mainSwiper]);
 
   return (
     <div className="h-full flex flex-col">
