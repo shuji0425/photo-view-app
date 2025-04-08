@@ -28,7 +28,7 @@ func NewRouter(db *gorm.DB) *Router {
 
 	// === 公開用API ===
 	public := api.Group("/public")
-	SetupPublicRoutes(public, publicHandlers.PublicProfileHandler)
+	SetupPublicRoutes(public, publicHandlers.PublicProfileHandler, publicHandlers.PublicTagHandler)
 
 	// === 認証API ===
 	auth := api.Group("/auth")

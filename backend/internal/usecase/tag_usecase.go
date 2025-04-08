@@ -12,6 +12,7 @@ import (
 type TagUsecase interface {
 	GetAllTags(ctx context.Context) ([]*dto.TagResponse, error)
 	GetSuggestions(ctx context.Context, query string) ([]string, error)
+	GetDefaultTag(ctx context.Context) (*dto.TagResponse, error)
 	UpdateSortOrders(ctx context.Context, tags []domain.TagSortUpdate) error
 }
 
@@ -44,6 +45,12 @@ func (u *tagUsecase) GetSuggestions(ctx context.Context, query string) ([]string
 	}
 
 	return names, nil
+}
+
+// デフォルトタグを1件取得
+func (u *tagUsecase) GetDefaultTag(ctx context.Context) (*dto.TagResponse, error) {
+	tag, err := u.tagService.GetDefaultTag(ctx)
+	return converter.ToDtoTag(tag), err
 }
 
 // タグの並び順を更新

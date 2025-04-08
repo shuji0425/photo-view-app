@@ -5,6 +5,7 @@ import (
 	"backend/internal/domain"
 	"backend/internal/model"
 	"context"
+	"errors"
 
 	"gorm.io/gorm"
 )
@@ -12,8 +13,9 @@ import (
 // インターフェース
 type TagRepository interface {
 	GetAll(ctx context.Context) ([]*domain.Tag, error)
-	FindOrCreateTags(tx *gorm.DB, names []string) ([]int64, error)
 	FindByQuery(ctx context.Context, query string) ([]*domain.Tag, error)
+	FindDefaultTag(ctx context.Context) (*domain.Tag, error)
+	FindOrCreateTags(tx *gorm.DB, names []string) ([]int64, error)
 	UpdateSortOrders(ctx context.Context, updates []domain.TagSortUpdate) error
 }
 
@@ -63,6 +65,24 @@ func (r *tagRepository) FindByQuery(ctx context.Context, query string) ([]*domai
 	}
 
 	return converter.ToDomainTags(models), nil
+}
+
+// デフォルトでタグ1件を取得
+func (r *tagRepository) FindDefaultTag(ctx context.Context) (*domain.Tag, error) {
+	var tag model.Tag
+
+	// 並び順が1番若いタグを取得（0は最後）
+	err := r.db.WithContext(ctx).
+		Joins("JOIN photo_tags pt ON pt.tag_id = tags.id").
+		Order("CASE WHEN tags.sort_order = 0 THEN 999999 ELSE tags.sort_order END ASC").
+		Limit(1).
+		Find(&tag).Error
+
+	if err != nil || tag.ID == 0 {
+		return nil, errors.New("タグがありません")
+	}
+
+	return converter.ToDomainTag(&tag), nil
 }
 
 // タグ名のリストを受け取り既存と新規のID配列を返却

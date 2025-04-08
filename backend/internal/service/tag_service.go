@@ -10,6 +10,7 @@ import (
 type TagService interface {
 	GetAllTags(ctx context.Context) ([]*domain.Tag, error)
 	SuggestTags(ctx context.Context, query string) ([]*domain.Tag, error)
+	GetDefaultTag(ctx context.Context) (*domain.Tag, error)
 	UpdateSortOrders(ctx context.Context, tags []domain.TagSortUpdate) error
 }
 
@@ -23,6 +24,7 @@ func NewTagService(tagRepo repository.TagRepository) TagService {
 	return &tagService{tagRepo}
 }
 
+// タグを全件取得
 func (s *tagService) GetAllTags(ctx context.Context) ([]*domain.Tag, error) {
 	return s.tagRepo.GetAll(ctx)
 }
@@ -30,6 +32,11 @@ func (s *tagService) GetAllTags(ctx context.Context) ([]*domain.Tag, error) {
 // タグ候補を取得
 func (s *tagService) SuggestTags(ctx context.Context, query string) ([]*domain.Tag, error) {
 	return s.tagRepo.FindByQuery(ctx, query)
+}
+
+// デフォルトタグを1件取得
+func (s *tagService) GetDefaultTag(ctx context.Context) (*domain.Tag, error) {
+	return s.tagRepo.FindDefaultTag(ctx)
 }
 
 // タグ並び順を更新

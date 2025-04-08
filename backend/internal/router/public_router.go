@@ -7,7 +7,14 @@ import (
 )
 
 // 公開関連のルーター
-func SetupPublicRoutes(r *gin.RouterGroup, publicProfileHandler *handler.PublicProfileHandler) {
+func SetupPublicRoutes(
+	r *gin.RouterGroup,
+	profile *handler.PublicProfileHandler,
+	tag *handler.PublicTagHandler,
+) {
 	// プロフィール
-	r.GET("/profile", publicProfileHandler.GetPublicAdminProfile)
+	r.GET("/profile", profile.GetPublicAdminProfile)
+
+	// メイン画面
+	r.GET("/tags/default", tag.GetDefaultTag)
 }
