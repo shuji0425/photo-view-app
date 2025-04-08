@@ -94,6 +94,8 @@ func (r *tagRepository) FindTagsHavingPhotos(ctx context.Context) ([]*domain.Tag
 		Table("tags").
 		Select("tags.id, tags.name, tags.sort_order").
 		Joins("JOIN photo_tags ON tags.id = photo_tags.tag_id").
+		Joins("JOIN photos ON photos.id = photo_tags.photo_id").
+		Where("photos.is_visible = TRUE").
 		Group("tags.id").
 		Having("COUNT(photo_tags.photo_id) > 0").
 		Order("CASE WHEN tags.sort_order = 0 THEN 999999 ELSE tags.sort_order END ASC").Scan(&tags).Error
