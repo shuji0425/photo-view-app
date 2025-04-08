@@ -16,14 +16,15 @@ export default function HomePage() {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   const [photos, setPhotos] = useState<PublicPhoto[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [selectedTagId, setSelectedTagId] = useState<number | null>(null);
+  const [mainSwiper, setMainSwiper] = useState<SwiperType | null>(null);
 
   // 初期の取得
   useEffect(() => {
     const fetchData = async () => {
       try {
         const defaultTag = await getTagDefault();
-        const photosByTag = await getPublicPhotosByTagId(defaultTag.id);
-        setPhotos(photosByTag);
+        setSelectedTagId(defaultTag.id);
       } catch (err) {
         console.error("取得に失敗しました", err);
       }
@@ -31,11 +32,27 @@ export default function HomePage() {
     fetchData();
   }, []);
 
+  // タグ変更時の写真取得
+  useEffect(() => {
+    const fetchPhotos = async () => {
+      if (selectedTagId === null) return;
+      try {
+        const photosByTag = await getPublicPhotosByTagId(selectedTagId);
+        setPhotos(photosByTag);
+        setActiveIndex(0);
+        mainSwiper?.slideTo(0);
+      } catch (err) {
+        console.error("取得に失敗しました", err);
+      }
+    };
+    fetchPhotos();
+  }, [selectedTagId]);
+
   return (
     <div className="h-full flex flex-col">
       {/* タグリスト */}
       <div className="shrink-0">
-        <TagList />
+        <TagList selectedTagId={selectedTagId} onSelect={setSelectedTagId} />
       </div>
 
       {/* メイン画面 */}
@@ -44,6 +61,7 @@ export default function HomePage() {
           photos={photos}
           thumbsSwiper={thumbsSwiper}
           onSlideChange={setActiveIndex}
+          onInit={setMainSwiper}
         />
       </div>
 

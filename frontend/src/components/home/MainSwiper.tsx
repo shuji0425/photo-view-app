@@ -14,16 +14,23 @@ type Props = {
   photos: PublicPhoto[];
   thumbsSwiper: SwiperType | null;
   onSlideChange: (index: number) => void;
+  onInit?: (swiper: SwiperType) => void;
 };
 
 /**
  * メイン画像スワイパー
  */
-export const MainSwiper = ({ photos, thumbsSwiper, onSlideChange }: Props) => {
+export const MainSwiper = ({
+  photos,
+  thumbsSwiper,
+  onSlideChange,
+  onInit,
+}: Props) => {
   return (
     <Swiper
       onSlideChange={(swiper) => {
         onSlideChange(swiper.realIndex);
+        onInit?.(swiper);
       }}
       modules={[Thumbs]}
       thumbs={{ swiper: thumbsSwiper }}

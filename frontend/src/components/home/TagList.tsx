@@ -3,11 +3,17 @@
 import { useEffect, useState } from "react";
 import { Tag } from "@/types/tag";
 import { getTagsWithPhotos } from "@/lib/api/tag/getWithPhotos";
+import { cn } from "@/lib/utils/cn";
+
+type Props = {
+  selectedTagId: number | null;
+  onSelect: (tagId: number) => void;
+};
 
 /**
  * タグリスト表示用
  */
-export const TagList = () => {
+export const TagList = ({ selectedTagId, onSelect }: Props) => {
   const [tags, setTags] = useState<Tag[]>([]);
 
   // タグ取得
@@ -29,7 +35,13 @@ export const TagList = () => {
         {tags.map((tag) => (
           <button
             key={tag.id}
-            className="px-4 py-1 rounded-full bg-gray-700 hover:bg-gray-800 text-sm whitespace-nowrap cursor-pointer"
+            onClick={() => onSelect(tag.id)}
+            className={cn(
+              "px-4 py-1 rounded-full text-sm whitespace-nowrap cursor-pointer",
+              selectedTagId === tag.id
+                ? "bg-white text-gray-700"
+                : "bg-gray-700 hover:bg-gray-800"
+            )}
           >
             #{tag.name}
           </button>
