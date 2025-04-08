@@ -19,5 +19,6 @@ func SetupPublicRoutes(
 	tagGroup := r.Group("/tags")
 	// メイン画面
 	tagGroup.GET("/default", tag.GetDefaultTag)
+	tagGroup.GET("/with-photos", tag.GetTagsWithPhotos)
 	tagGroup.GET("/:tag_id/photos", photo.GetPhotosByTag)
 }

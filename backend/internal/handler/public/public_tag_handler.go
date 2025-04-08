@@ -32,3 +32,13 @@ func (h *PublicTagHandler) GetDefaultTag(c *gin.Context) {
 
 	c.JSON(http.StatusOK, tag)
 }
+
+// タグ一覧を取得（写真のないタグは除外）
+func (h *PublicTagHandler) GetTagsWithPhotos(c *gin.Context) {
+	tags, err := h.tagUsecase.GetTagsWithPhotos(c.Request.Context())
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "取得に失敗しました"})
+		return
+	}
+	c.JSON(http.StatusOK, tags)
+}

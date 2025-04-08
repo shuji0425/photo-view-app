@@ -15,6 +15,7 @@ type TagRepository interface {
 	GetAll(ctx context.Context) ([]*domain.Tag, error)
 	FindByQuery(ctx context.Context, query string) ([]*domain.Tag, error)
 	FindDefaultTag(ctx context.Context) (*domain.Tag, error)
+	FindTagsHavingPhotos(ctx context.Context) ([]*domain.Tag, error)
 	FindOrCreateTags(tx *gorm.DB, names []string) ([]int64, error)
 	UpdateSortOrders(ctx context.Context, updates []domain.TagSortUpdate) error
 }
@@ -83,6 +84,25 @@ func (r *tagRepository) FindDefaultTag(ctx context.Context) (*domain.Tag, error)
 	}
 
 	return converter.ToDomainTag(&tag), nil
+}
+
+// タグ一覧を取得(写真に紐づいてないタグは除外)
+func (r *tagRepository) FindTagsHavingPhotos(ctx context.Context) ([]*domain.Tag, error) {
+	var tags []*model.Tag
+
+	err := r.db.WithContext(ctx).
+		Table("tags").
+		Select("tags.id, tags.name, tags.sort_order").
+		Joins("JOIN photo_tags ON tags.id = photo_tags.tag_id").
+		Group("tags.id").
+		Having("COUNT(photo_tags.photo_id) > 0").
+		Order("tags.sort_order ASC").Scan(&tags).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return converter.ToDomainTags(tags), nil
 }
 
 // タグ名のリストを受け取り既存と新規のID配列を返却

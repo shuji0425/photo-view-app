@@ -2,9 +2,7 @@ import { apiFetch } from "../client";
 import { Tag } from "@/types/tag";
 
 /**
- * クエリに一致するタグ候補を取得
- * @param query 検索文字
- * @returns 文字配列
+ * タグ順が1番若いタグを取得（0は除外）
  */
 export const getTagDefault = (): Promise<Tag> => {
   return apiFetch<Tag>(

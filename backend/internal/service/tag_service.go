@@ -11,6 +11,7 @@ type TagService interface {
 	GetAllTags(ctx context.Context) ([]*domain.Tag, error)
 	SuggestTags(ctx context.Context, query string) ([]*domain.Tag, error)
 	GetDefaultTag(ctx context.Context) (*domain.Tag, error)
+	GetTagsWithPhotos(ctx context.Context) ([]*domain.Tag, error)
 	UpdateSortOrders(ctx context.Context, tags []domain.TagSortUpdate) error
 }
 
@@ -37,6 +38,11 @@ func (s *tagService) SuggestTags(ctx context.Context, query string) ([]*domain.T
 // デフォルトタグを1件取得
 func (s *tagService) GetDefaultTag(ctx context.Context) (*domain.Tag, error) {
 	return s.tagRepo.FindDefaultTag(ctx)
+}
+
+// タグ一覧を取得(写真に紐づいてないタグは除外)
+func (s *tagService) GetTagsWithPhotos(ctx context.Context) ([]*domain.Tag, error) {
+	return s.tagRepo.FindTagsHavingPhotos(ctx)
 }
 
 // タグ並び順を更新
