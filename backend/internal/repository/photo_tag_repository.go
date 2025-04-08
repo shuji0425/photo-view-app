@@ -41,7 +41,7 @@ func (r *photoTagRepository) FindPhotosByTagID(ctx context.Context, tagID int64)
 			photo_tags.sort_order
 		`).
 		Joins("JOIN photos ON photos.id = photo_tags.photo_id").
-		Where("photo_tags.tag_id = ?", tagID).
+		Where("photo_tags.tag_id = ? AND photos.is_visible = TRUE", tagID).
 		Order("photo_tags.sort_order ASC").
 		Scan(&photos).Error
 
