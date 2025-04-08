@@ -34,6 +34,7 @@ func (r *photoTagRepository) FindPhotosByTagID(ctx context.Context, tagID int64)
 		Select(`
 			photo_tags.photo_id,
 			photos.image_url,
+			photos.aspect_ratio,
 			photos.title,
 			photos.description,
 			photos.taken_at,

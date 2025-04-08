@@ -49,6 +49,7 @@ type PhotoBulkUpdateRequest struct {
 type PhotoPublicDTO struct {
 	ID          int64      `json:"id"`
 	URL         string     `json:"url"`
+	AspectRatio float64    `json:"aspect_ratio"`
 	Title       *string    `json:"title,omitempty"`
 	Description *string    `json:"description,omitempty"`
 	TakenAt     *time.Time `json:"taken_at,omitempty"`

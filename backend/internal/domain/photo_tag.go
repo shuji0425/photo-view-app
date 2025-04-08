@@ -6,6 +6,7 @@ import "time"
 type PhotoWithSortOrder struct {
 	PhotoID     int64
 	ImageURL    string
+	AspectRatio float64
 	Title       *string
 	Description *string
 	TakenAt     *time.Time

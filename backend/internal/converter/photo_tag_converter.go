@@ -46,6 +46,7 @@ func ToDtoPhotoPublic(d *domain.PhotoWithSortOrder) *dto.PhotoPublicDTO {
 	return &dto.PhotoPublicDTO{
 		ID:          d.PhotoID,
 		URL:         d.ImageURL,
+		AspectRatio: d.AspectRatio,
 		Title:       d.Title,
 		Description: d.Description,
 		TakenAt:     d.TakenAt,

@@ -1,7 +1,7 @@
-import type { Photo } from "@/types/photo";
+import { PublicPhoto } from "@/types/public/photo";
 
 type Props = {
-  photo: Photo;
+  photo: PublicPhoto;
 };
 
 // 説明表示
