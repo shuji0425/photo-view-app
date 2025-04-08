@@ -44,6 +44,27 @@ func (r *tagRepository) GetAll(ctx context.Context) ([]*domain.Tag, error) {
 	return converter.ToDomainTags(tags), nil
 }
 
+// 名前に部分一致するタグを取得する
+func (r *tagRepository) FindByQuery(ctx context.Context, query string) ([]*domain.Tag, error) {
+	var models []*model.Tag
+
+	// クエリが空なら空配列を返却
+	if query == "" {
+		return []*domain.Tag{}, nil
+	}
+
+	// name に部分一致するタグを取得
+	if err := r.db.WithContext(ctx).
+		Where("name LIKE ?", "%"+query+"%").
+		Order("sort_order ASC").
+		Limit(10).
+		Find(&models).Error; err != nil {
+		return nil, err
+	}
+
+	return converter.ToDomainTags(models), nil
+}
+
 // タグ名のリストを受け取り既存と新規のID配列を返却
 func (r *tagRepository) FindOrCreateTags(tx *gorm.DB, names []string) ([]int64, error) {
 	// タグがないときは空を返却
@@ -90,27 +111,6 @@ func (r *tagRepository) FindOrCreateTags(tx *gorm.DB, names []string) ([]int64, 
 	}
 
 	return ids, nil
-}
-
-// 名前に部分一致するタグを取得する
-func (r *tagRepository) FindByQuery(ctx context.Context, query string) ([]*domain.Tag, error) {
-	var models []*model.Tag
-
-	// クエリが空なら空配列を返却
-	if query == "" {
-		return []*domain.Tag{}, nil
-	}
-
-	// name に部分一致するタグを取得
-	if err := r.db.WithContext(ctx).
-		Where("name LIKE ?", "%"+query+"%").
-		Order("sort_order ASC").
-		Limit(10).
-		Find(&models).Error; err != nil {
-		return nil, err
-	}
-
-	return converter.ToDomainTags(models), nil
 }
 
 // 並び順を更新する
