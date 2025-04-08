@@ -1,49 +1,35 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Thumbs } from "swiper/modules";
+import { Thumbs } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import { PublicPhoto } from "@/types/public/photo";
-import { getPublicPhotosByTagId } from "@/lib/api/tag/getPublicPhotosByTagId";
-import { getTagDefault } from "@/lib/api/tag/getDefault";
 import Image from "next/image";
-import { useGallerySwiper } from "@/hooks/home/useGallerySwiper";
+import type { Swiper as SwiperType } from "swiper";
 
 type Props = {
-  gallery: ReturnType<typeof useGallerySwiper>;
+  photos: PublicPhoto[];
+  thumbsSwiper: SwiperType | null;
+  onSlideChange: (index: number) => void;
 };
 
 /**
  * メイン画像スワイパー
  */
-export const MainSwiper = ({ gallery }: Props) => {
-  const [photos, setPhotos] = useState<PublicPhoto[]>([]);
-  const { thumbSwiper } = gallery;
-
-  // 初期データ取得
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const defaultTag = await getTagDefault();
-        const photosByTag = await getPublicPhotosByTagId(defaultTag.id);
-        setPhotos(photosByTag);
-      } catch (err) {
-        console.error("画像の取得に失敗", err);
-      }
-    };
-    fetchData();
-  }, []);
-
+export const MainSwiper = ({ photos, thumbsSwiper, onSlideChange }: Props) => {
   return (
     <Swiper
-      modules={[Navigation, Pagination, Thumbs]}
-      navigation
-      pagination={{ clickable: true }}
-      thumbs={{ swiper: thumbSwiper }}
+      onSlideChange={(swiper) => {
+        onSlideChange(swiper.realIndex);
+      }}
+      modules={[Thumbs]}
+      thumbs={{ swiper: thumbsSwiper }}
+      touchRatio={1.5}
+      resistanceRatio={0.85}
+      speed={450}
       className="w-full h-full"
     >
       {photos.map((photo) => (
@@ -54,7 +40,7 @@ export const MainSwiper = ({ gallery }: Props) => {
               alt={photo.title ?? "photo"}
               fill
               sizes="100vw"
-              className="object-contain"
+              className="object-contain p-1"
             />
           </div>
         </SwiperSlide>

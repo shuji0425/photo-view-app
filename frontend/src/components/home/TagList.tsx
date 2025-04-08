@@ -29,7 +29,7 @@ export const TagList = () => {
         {tags.map((tag) => (
           <button
             key={tag.id}
-            className="px-4 py-1 rounded-full bg-gray-100 hover:bg-gray-200 text-sm whitespace-nowrap"
+            className="px-4 py-1 rounded-full bg-gray-700 hover:bg-gray-800 text-sm whitespace-nowrap cursor-pointer"
           >
             #{tag.name}
           </button>
