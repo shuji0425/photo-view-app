@@ -43,3 +43,14 @@ func ToGPSDTO(gps *domain.PhotoGPS) *dto.PhotoGPSResponse {
 		Longitude: gps.Longitude,
 	}
 }
+
+// MetadataVisibilityPolicy に従って、GPS情報をマスキングしつつ domain 変換
+func ToDomainGPSWithPolicy(gps *model.PhotoGPS, policy *model.MetadataVisibilityPolicy) *domain.PhotoGPS {
+	if gps == nil || policy == nil || !policy.ShowGPS {
+		return nil
+	}
+	return &domain.PhotoGPS{
+		Latitude:  gps.Latitude,
+		Longitude: gps.Longitude,
+	}
+}

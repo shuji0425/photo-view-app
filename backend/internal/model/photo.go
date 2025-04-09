@@ -17,4 +17,5 @@ type Photo struct {
 	User        *User      `gorm:"foreignKey:UserID"`
 	GPS         *PhotoGPS  `gorm:"foreignKey:PhotoID"`
 	Exif        *PhotoExif `gorm:"foreignKey:PhotoID"`
+	Tags        []*Tag     `gorm:"many2many:photo_tags;"`
 }
