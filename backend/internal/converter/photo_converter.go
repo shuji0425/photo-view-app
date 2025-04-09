@@ -95,3 +95,18 @@ func ToDomainPhotos(models []*model.Photo) []*domain.Photo {
 	}
 	return domains
 }
+
+// 写真詳細dto変換
+func ToPublicPhotoDetailResponse(detail *domain.PublicPhotoDetail) *dto.PublicPhotoDetailDTO {
+	return &dto.PublicPhotoDetailDTO{
+		ID:          detail.Photo.ID,
+		ImageURL:    detail.Photo.ImageURL,
+		AspectRatio: detail.Photo.AspectRatio,
+		Title:       detail.Photo.Title,
+		Description: detail.Photo.Description,
+		TakenAt:     detail.Photo.TakenAt,
+		Exif:        ToExifDTO(detail.Exif),
+		GPS:         ToGPSDTO(detail.GPS),
+		Tags:        ToDtoTags(detail.Tags),
+	}
+}

@@ -2,6 +2,7 @@ package converter
 
 import (
 	"backend/internal/domain"
+	"backend/internal/dto"
 	"backend/internal/model"
 )
 
@@ -28,5 +29,17 @@ func ToPhotoGPSDomain(m *model.PhotoGPS) *domain.PhotoGPS {
 		Latitude:  m.Latitude,
 		Longitude: m.Longitude,
 		IsVisible: m.IsVisible,
+	}
+}
+
+// domain -> dto
+func ToGPSDTO(gps *domain.PhotoGPS) *dto.PhotoGPSResponse {
+	if gps == nil {
+		return nil
+	}
+
+	return &dto.PhotoGPSResponse{
+		Latitude:  gps.Latitude,
+		Longitude: gps.Longitude,
 	}
 }

@@ -55,3 +55,16 @@ type PhotoPublicDTO struct {
 	TakenAt     *time.Time `json:"taken_at,omitempty"`
 	SortOrder   int        `json:"sort_order"`
 }
+
+// 詳細画面返却用
+type PublicPhotoDetailDTO struct {
+	ID          int64              `json:"id"`
+	ImageURL    string             `json:"image_url"`
+	AspectRatio float64            `json:"aspect_ratio"`
+	Title       *string            `json:"title,omitempty"`
+	Description *string            `json:"description,omitempty"`
+	TakenAt     *time.Time         `json:"taken_at,omitempty"`
+	Exif        *PhotoExifResponse `json:"exif,omitempty"`
+	GPS         *PhotoGPSResponse  `json:"gps,omitempty"`
+	Tags        []*TagResponse     `json:"tags"`
+}

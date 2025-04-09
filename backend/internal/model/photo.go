@@ -14,4 +14,7 @@ type Photo struct {
 	TakenAt     *time.Time
 	CreatedAt   *time.Time `gorm:"autoCreateTime"`
 	UpdatedAt   *time.Time `gorm:"autoUpdateTime"`
+	User        *User      `gorm:"foreignKey:UserID"`
+	GPS         *PhotoGPS  `gorm:"foreignKey:PhotoID"`
+	Exif        *PhotoExif `gorm:"foreignKey:PhotoID"`
 }

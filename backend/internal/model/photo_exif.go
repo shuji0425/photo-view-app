@@ -16,6 +16,7 @@ type PhotoExif struct {
 	TakenAt      *time.Time
 	CreatedAt    *time.Time `gorm:"autoCreateTime"`
 	UpdatedAt    *time.Time `gorm:"autoUpdateTime"`
+	Photo        *Photo     `gorm:"foreignKey:PhotoID"`
 }
 
 func (PhotoExif) TableName() string {
