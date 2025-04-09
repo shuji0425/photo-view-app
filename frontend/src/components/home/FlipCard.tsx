@@ -69,17 +69,17 @@ export const FlipCard = ({ photo }: Props) => {
           >
             <div>
               {photo.title && (
-                <h2 className="text-base font-bold mb-1 line-clamp-1">
+                <h2 className="text-lg font-bold mb-1 line-clamp-1">
                   {photo.title}
                 </h2>
               )}
               {photo.takenAt && (
-                <p className="text-xs mb-2">
+                <p className="text-sm mb-2">
                   撮影日: {new Date(photo.takenAt).toLocaleString()}
                 </p>
               )}
               {photo.description && (
-                <p className="text-sm mb-2 line-clamp-3 whitespace-pre-wrap">
+                <p className="text-base mb-2 line-clamp-3 whitespace-pre-wrap">
                   {photo.description}
                 </p>
               )}
