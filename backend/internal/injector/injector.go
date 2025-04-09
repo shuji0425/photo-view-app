@@ -1,34 +1,33 @@
 package injector
 
 import (
-	handler "backend/internal/handler/admin"
+	"backend/internal/infrastructure"
+	"backend/internal/usecase"
 
 	"gorm.io/gorm"
 )
 
 // 構造体
-type InjectedHandlers struct {
-	ProfileHandler        *handler.ProfileHandler
-	AuthHandler           *handler.AuthHandler
-	UserHandler           *handler.UserHandler
-	AvatarHandler         *handler.AvatarHandler
-	PhotoHandler          *handler.PhotoHandler
-	CategoryHandler       *handler.CategoryHandler
-	TagHandler            *handler.TagHandler
-	PhotoTagHandler       *handler.PhotoTagHandler
-	MetadataPolicyHandler *handler.MetadataPolicyHandler
+type Usecases struct {
+	Auth           usecase.AuthUsecase
+	Category       usecase.CategoryUsecase
+	MetadataPolicy usecase.MetadataPolicyUsecase
+	Photo          usecase.PhotoUsecase
+	PhotoTag       usecase.PhotoTagUsecase
+	Profile        usecase.ProfileUsecase
+	Tag            usecase.TagUsecase
+	User           usecase.UserUsecase
 }
 
-func InjectAll(db *gorm.DB) *InjectedHandlers {
-	return &InjectedHandlers{
-		ProfileHandler:        InjectProfileHandler(db),
-		UserHandler:           InjectUserHandler(db),
-		AuthHandler:           InjectAuthHandler(db),
-		AvatarHandler:         InjectAvatarHandler(db),
-		PhotoHandler:          InjectPhotoHandler(db),
-		CategoryHandler:       InjectCategoryHandler(db),
-		TagHandler:            InjectTagHandler(db),
-		PhotoTagHandler:       InjectPhotoTagHandler(db),
-		MetadataPolicyHandler: InjectMetadataPolicyHandler(db),
+func InjectAll(db *gorm.DB, imageSaver infrastructure.ImageSaver) *Usecases {
+	return &Usecases{
+		Auth:           InjectAuthUsecase(db),
+		Category:       InjectCategoryUsecase(db),
+		MetadataPolicy: InjectMetadataPolicyUsecase(db),
+		Photo:          InjectPhotoUsecase(db, imageSaver),
+		PhotoTag:       InjectPhotoTagUsecase(db),
+		Profile:        InjectProfileUsecase(db, imageSaver),
+		Tag:            InjectTagUsecase(db),
+		User:           InjectUserUsecase(db),
 	}
 }

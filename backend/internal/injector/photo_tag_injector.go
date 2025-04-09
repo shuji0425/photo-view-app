@@ -1,7 +1,6 @@
 package injector
 
 import (
-	handler "backend/internal/handler/admin"
 	"backend/internal/repository"
 	"backend/internal/service"
 	"backend/internal/usecase"
@@ -10,10 +9,8 @@ import (
 )
 
 // 写真タグのインジェクター
-func InjectPhotoTagHandler(db *gorm.DB) *handler.PhotoTagHandler {
+func InjectPhotoTagUsecase(db *gorm.DB) usecase.PhotoTagUsecase {
 	photoTagRepo := repository.NewPhotoTagRepository(db)
 	photoTagService := service.NewPhotoTagService(photoTagRepo)
-	photoTagUsecase := usecase.NewPhotoTagUsecase(photoTagService)
-	return handler.NewPhotoTagHandler(photoTagUsecase)
-
+	return usecase.NewPhotoTagUsecase(photoTagService)
 }

@@ -1,7 +1,6 @@
 package injector
 
 import (
-	handler "backend/internal/handler/admin"
 	"backend/internal/repository"
 	"backend/internal/service"
 	"backend/internal/usecase"
@@ -9,10 +8,9 @@ import (
 	"gorm.io/gorm"
 )
 
-func InjectUserHandler(db *gorm.DB) *handler.UserHandler {
+func InjectUserUsecase(db *gorm.DB) usecase.UserUsecase {
 	// ユーザー
 	userRepo := repository.NewUserRepository(db)
 	userService := service.NewUserService(userRepo)
-	userUsecase := usecase.NewUserUsecase(userService)
-	return handler.NewUserHandler(userUsecase)
+	return usecase.NewUserUsecase(userService)
 }

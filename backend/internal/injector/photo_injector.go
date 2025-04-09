@@ -1,7 +1,6 @@
 package injector
 
 import (
-	handler "backend/internal/handler/admin"
 	"backend/internal/infrastructure"
 	"backend/internal/repository"
 	"backend/internal/service"
@@ -11,17 +10,13 @@ import (
 )
 
 // 写真のインジェクター
-func InjectPhotoHandler(db *gorm.DB) *handler.PhotoHandler {
-	// 画像
-	imageSaver := infrastructure.NewImageSaver("../frontend/public")
-
+func InjectPhotoUsecase(db *gorm.DB, imageSaver infrastructure.ImageSaver) usecase.PhotoUsecase {
 	// レポジトリー
 	tagRepo := repository.NewTagRepository(db)
 	photoRepo := repository.NewPhotoRepository(db, tagRepo)
 
 	// 写真
 	photoService := service.NewPhotoService(photoRepo, imageSaver)
-	photoUsecase := usecase.NewPhotoUsecase(photoService)
-	return handler.NewPhotoHandler(photoUsecase)
+	return usecase.NewPhotoUsecase(photoService)
 
 }

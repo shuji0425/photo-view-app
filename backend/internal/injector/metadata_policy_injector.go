@@ -1,7 +1,6 @@
 package injector
 
 import (
-	handler "backend/internal/handler/admin"
 	"backend/internal/repository"
 	"backend/internal/service"
 	"backend/internal/usecase"
@@ -9,10 +8,9 @@ import (
 	"gorm.io/gorm"
 )
 
-func InjectMetadataPolicyHandler(db *gorm.DB) *handler.MetadataPolicyHandler {
+func InjectMetadataPolicyUsecase(db *gorm.DB) usecase.MetadataPolicyUsecase {
 	// メタデータポリシー
 	metadataPolicyRepo := repository.NewMetadataPolicyRepository(db)
 	metadataPolicyService := service.NewMetadataPolicyService(metadataPolicyRepo)
-	metadataPolicyUsecase := usecase.NewMetadataPolicyUsecase(metadataPolicyService)
-	return handler.NewMetadataPolicyHandler(metadataPolicyUsecase)
+	return usecase.NewMetadataPolicyUsecase(metadataPolicyService)
 }

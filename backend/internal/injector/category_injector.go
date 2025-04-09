@@ -1,7 +1,6 @@
 package injector
 
 import (
-	handler "backend/internal/handler/admin"
 	"backend/internal/repository"
 	"backend/internal/service"
 	"backend/internal/usecase"
@@ -9,10 +8,9 @@ import (
 	"gorm.io/gorm"
 )
 
-func InjectCategoryHandler(db *gorm.DB) *handler.CategoryHandler {
+func InjectCategoryUsecase(db *gorm.DB) usecase.CategoryUsecase {
 	// カテゴリー
 	categoryRepo := repository.NewCategoryRepository(db)
 	categoryService := service.NewCategoryService(categoryRepo)
-	categoryUsecase := usecase.NewCategoryUsecase(categoryService)
-	return handler.NewCategoryHandler(categoryUsecase)
+	return usecase.NewCategoryUsecase(categoryService)
 }
