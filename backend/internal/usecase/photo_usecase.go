@@ -12,6 +12,7 @@ import (
 type PhotoUsecase interface {
 	GetPhotoByIDs(ids []int64) ([]*dto.PhotoDetail, error)
 	GetPaginatedPhotos(page, limit int) (*dto.PaginatedPhotoResponse, error)
+	GetPublicPhotoDetail(ctx context.Context, photoID int64) (*dto.PublicPhotoDetailDTO, error)
 	UploadPhotos(ctx context.Context, userID int64, files []*multipart.FileHeader) (*dto.PhotoUploadResponse, error)
 	BulkUpdatePhotos(ctx context.Context, reqs dto.PhotoBulkUpdateRequest) error
 	DeletePhotosByIDs(ids []int64) error
@@ -49,6 +50,19 @@ func (u *photoUsecase) GetPaginatedPhotos(page, limit int) (*dto.PaginatedPhotoR
 		Page:   page,
 		Limit:  limit,
 	}, nil
+}
+
+// idに紐づく写真情報と詳細情報を取得
+func (u *photoUsecase) GetPublicPhotoDetail(ctx context.Context, photoID int64) (*dto.PublicPhotoDetailDTO, error) {
+	detail, err := u.photoService.GetPublicPhotoDetail(ctx, photoID)
+	if err != nil {
+		return nil, err
+	}
+	if detail == nil {
+		return nil, nil
+	}
+
+	return converter.ToPublicPhotoDetailResponse(detail), nil
 }
 
 // 複数画像を保存

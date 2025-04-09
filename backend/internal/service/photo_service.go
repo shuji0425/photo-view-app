@@ -19,6 +19,7 @@ import (
 type PhotoService interface {
 	GetPhotosByIDs(ids []int64) ([]*domain.Photo, error)
 	GetPaginatedPhotos(page, limit int) ([]*domain.Photo, int64, error)
+	GetPublicPhotoDetail(ctx context.Context, photoID int64) (*domain.PublicPhotoDetail, error)
 	SaveUploadPhotos(ctx context.Context, userID int64, files []*multipart.FileHeader) ([]int64, error)
 	SavePhotosWithMeta(ctx context.Context, photos []*domain.Photo, exifs []*domain.PhotoExif, gpsList []*domain.PhotoGPS, savedPaths []string) ([]int64, error)
 	UpdatePhotoWithTags(ctx context.Context, req *domain.Photo) error
@@ -44,6 +45,11 @@ func (s *photoService) GetPhotosByIDs(ids []int64) ([]*domain.Photo, error) {
 // ページネーション付きで画像を取得
 func (s *photoService) GetPaginatedPhotos(page, limit int) ([]*domain.Photo, int64, error) {
 	return s.photoRepo.FindPaginated(page, limit)
+}
+
+// idから写真と詳細情報を取得（ポリシーによりtrueのみ取得）
+func (s *photoService) GetPublicPhotoDetail(ctx context.Context, photoID int64) (*domain.PublicPhotoDetail, error) {
+	return s.photoRepo.FindPublicPhotoDetail(ctx, photoID)
 }
 
 // 画像保存（DBとフォルダに）
