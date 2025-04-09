@@ -7,8 +7,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import { PublicPhoto } from "@/types/public/photo";
-import Image from "next/image";
 import type { Swiper as SwiperType } from "swiper";
+import { FlipCard } from "./FlipCard";
 
 type Props = {
   photos: PublicPhoto[];
@@ -42,13 +42,7 @@ export const MainSwiper = ({
       {photos.map((photo) => (
         <SwiperSlide key={photo.id}>
           <div className="w-full h-full flex items-center justify-center bg-black relative">
-            <Image
-              src={photo.url}
-              alt={photo.title ?? "photo"}
-              fill
-              sizes="100vw"
-              className="object-contain p-1"
-            />
+            <FlipCard photo={photo} />
           </div>
         </SwiperSlide>
       ))}
