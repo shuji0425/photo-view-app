@@ -30,8 +30,8 @@ export const MainSwiper = ({
     <Swiper
       onSlideChange={(swiper) => {
         onSlideChange(swiper.realIndex);
-        onInit?.(swiper);
       }}
+      onSwiper={onInit}
       modules={[Thumbs]}
       thumbs={{ swiper: thumbsSwiper }}
       touchRatio={1.5}
