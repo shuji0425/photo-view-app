@@ -106,6 +106,7 @@ func (r *photoRepository) FindPublicPhotoDetail(ctx context.Context, photoID int
 		Preload("Exif").
 		Preload("GPS").
 		Preload("Tags").
+		Preload("User").
 		Preload("User.MetadataVisibilityPolicy").
 		Where("photos.id = ? AND photos.is_visible = TRUE", photoID).
 		First(&photo).Error
@@ -119,10 +120,16 @@ func (r *photoRepository) FindPublicPhotoDetail(ctx context.Context, photoID int
 		return nil, err
 	}
 
+	// policy 取得
+	var policy *model.MetadataVisibilityPolicy
+	if photo.User != nil {
+		policy = photo.User.MetadataVisibilityPolicy
+	}
+
 	return &domain.PublicPhotoDetail{
 		Photo: converter.ToDomainPhoto(&photo),
-		Exif:  converter.ToDomainExifWithPolicy(photo.Exif, photo.User.MetadataVisibilityPolicy),
-		GPS:   converter.ToDomainGPSWithPolicy(photo.GPS, photo.User.MetadataVisibilityPolicy),
+		Exif:  converter.ToDomainExifWithPolicy(photo.Exif, policy),
+		GPS:   converter.ToDomainGPSWithPolicy(photo.GPS, policy),
 		Tags:  converter.ToDomainTags(photo.Tags),
 	}, nil
 }
