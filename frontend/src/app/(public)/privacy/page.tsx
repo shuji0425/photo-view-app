@@ -2,7 +2,7 @@
 
 export default function PrivacyPolicyPage() {
   return (
-    <main className="p-4 space-y-4 max-w-2xl mx-auto">
+    <main className="min-h-full p-6 space-y-6 max-w-2xl mx-auto bg-gray-100 text-gray-700">
       <h1 className="text-2xl font-bold">プライバシーポリシー</h1>
 
       <section>
