@@ -45,33 +45,43 @@ func ExtractExifAndGPS(path string) (*domain.PhotoExif, *domain.PhotoGPS) {
 	// 値の取得関数
 	// 文字列
 	getString := func(tag exif.FieldName) *string {
-		if val, err := x.Get(tag); err != nil {
-			str := val.String()
-			return &str
+		val, err := x.Get(tag)
+		if err != nil || val == nil {
+			return nil
 		}
-		return nil
+
+		str := val.String()
+		return &str
 	}
 
 	// 浮動小数
 	getFloat := func(tag exif.FieldName) *float64 {
-		if val, err := x.Get(tag); err != nil {
-			f, err := strconv.ParseFloat(val.String(), 64)
-			if err == nil {
-				return &f
-			}
+		val, err := x.Get(tag)
+		if err != nil || val == nil {
+			return nil
 		}
-		return nil
+
+		rat, err := val.Rat(0)
+		if err != nil {
+			return nil
+		}
+
+		f, _ := rat.Float64()
+		return &f
 	}
 
 	// 整数
 	getInt := func(tag exif.FieldName) *int {
-		if val, err := x.Get(tag); err != nil {
-			i, err := strconv.Atoi(val.String())
-			if err == nil {
-				return &i
-			}
+		val, err := x.Get(tag)
+		if err != nil || val == nil {
+			return nil
 		}
-		return nil
+
+		i, err := strconv.Atoi(val.String())
+		if err != nil {
+			return nil
+		}
+		return &i
 	}
 
 	// 撮影日時

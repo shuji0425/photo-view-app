@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"log"
 	"mime/multipart"
+	"os"
 	"path/filepath"
 )
 
@@ -60,7 +61,7 @@ func (s *photoService) SaveUploadPhotos(ctx context.Context, userID int64, files
 	}
 
 	// 画像を保存
-	urls, err := s.imageSaver.SaveMultiple(files, "photos", generateFilename)
+	imageInfos, err := s.imageSaver.SaveMultipleAdWebP(files, "photos", generateFilename)
 	if err != nil {
 		return nil, fmt.Errorf("画像の保存に失敗しました: %w", err)
 	}
@@ -70,8 +71,9 @@ func (s *photoService) SaveUploadPhotos(ctx context.Context, userID int64, files
 	var exifList []*domain.PhotoExif
 	var gpsList []*domain.PhotoGPS
 
-	for _, url := range urls {
-		path := filepath.Join(s.imageSaver.BasePath(), url)
+	for _, info := range imageInfos {
+		path := info.TempPath
+		url := info.URL
 
 		// アスペクト比計算
 		aspectRatio := 1.0
@@ -80,11 +82,15 @@ func (s *photoService) SaveUploadPhotos(ctx context.Context, userID int64, files
 		}
 
 		exif, gps := imageutil.ExtractExifAndGPS(path)
+		_ = os.Remove(path)
 
 		// domain.Photoを構築
 		photo := builder.BuildPhoto(url, aspectRatio, userID)
 		exif.PhotoID = 0 // exifとgpsは仮
 		gps.PhotoID = 0
+
+		log.Printf("抽出されたExif: %+v", exif)
+		log.Printf("抽出されたGPS: %+v", gps)
 
 		photoList = append(photoList, photo)
 		exifList = append(exifList, exif)

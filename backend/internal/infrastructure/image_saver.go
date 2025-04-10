@@ -1,6 +1,7 @@
 package infrastructure
 
 import (
+	"backend/pkg/imageutil"
 	"fmt"
 	"mime/multipart"
 	"os"
@@ -11,6 +12,7 @@ import (
 type ImageSaver interface {
 	Save(file *multipart.FileHeader, category string, filename string) (string, error)
 	SaveMultiple(files []*multipart.FileHeader, category string, generateFilename func(int) string) ([]string, error)
+	SaveMultipleAdWebP(files []*multipart.FileHeader, category string, generateFilename func(int) string) ([]SavedImageInfo, error)
 	BasePath() string
 	PhotoBasePath() string
 	Delete(url string) error
@@ -19,6 +21,12 @@ type ImageSaver interface {
 // 構造体
 type imageSaver struct {
 	baseDir string
+}
+
+// Exif用の構造体
+type SavedImageInfo struct {
+	URL      string
+	TempPath string
 }
 
 // 依存注入
@@ -60,6 +68,43 @@ func (s *imageSaver) SaveMultiple(files []*multipart.FileHeader, category string
 		urls = append(urls, fmt.Sprintf("/images/%s/%s", category, filename))
 	}
 	return urls, nil
+}
+
+// WebP形式で保存（Exif保持したJPEGを一時保存してから変換）
+func (s *imageSaver) SaveMultipleAdWebP(files []*multipart.FileHeader, category string, generateFilename func(int) string) ([]SavedImageInfo, error) {
+	savePath := filepath.Join(s.PhotoBasePath(), category)
+	if err := os.MkdirAll(savePath, os.ModePerm); err != nil {
+		return nil, err
+	}
+
+	var infos []SavedImageInfo
+	for i, file := range files {
+		// ファイル名
+		webpFilename := generateFilename(i)
+		tempFilename := webpFilename[:len(webpFilename)-5] + ".jpg"
+
+		// ファイルパス
+		tempPath := filepath.Join(savePath, tempFilename)
+		webpPath := filepath.Join(savePath, webpFilename)
+
+		// 一旦JPEGで保存
+		if err := saveUploadedFile(file, tempPath); err != nil {
+			return nil, err
+		}
+
+		// WebPに変換
+		if err := imageutil.ConvertToWebP(tempPath, webpPath, 1024); err != nil {
+			return nil, err
+		}
+
+		// 保存情報を追加
+		infos = append(infos, SavedImageInfo{
+			URL:      fmt.Sprintf("/images/%s/%s", category, webpFilename),
+			TempPath: tempPath,
+		})
+	}
+
+	return infos, nil
 }
 
 // 共通ファイル保存処理
