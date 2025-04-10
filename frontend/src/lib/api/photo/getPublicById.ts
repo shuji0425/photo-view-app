@@ -10,6 +10,6 @@ export const getPublicPhotoById = async (
   photoId: number
 ): Promise<PublicPhotoDetail> => {
   return apiFetch<PublicPhotoDetail>(
-    `${process.env.NEXT_PUBLIC_API_URL}/public/photos/${photoId}`
+    `${process.env.NEXT_PUBLIC_API_URL}/public/photo/${photoId}`
   );
 };

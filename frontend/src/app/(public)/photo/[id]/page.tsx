@@ -6,8 +6,14 @@ import { BackButton } from "@/components/ui/BackButton";
 import Image from "next/image";
 import { PublicPhotoDetail } from "@/types/public/photo";
 import { getPublicPhotoById } from "@/lib/api/photo/getPublicById";
+import { ExifInfoSection } from "@/components/photo/display/ExifInfo";
+import { GPSInfoSection } from "@/components/photo/display/GPSInfo";
+import { TagList } from "@/components/photo/display/TagList";
 
-export const PhotoDetailPage = () => {
+/**
+ * 写真詳細画面
+ */
+export default function PhotoDetailPage() {
   const params = useParams();
   const [photo, setPhoto] = useState<PublicPhotoDetail | null>(null);
 
@@ -25,7 +31,7 @@ export const PhotoDetailPage = () => {
   }, [params]);
 
   if (!photo) {
-    return <p>写真が見つかりませんでした。</p>;
+    return <p className="p-4">写真が見つかりませんでした。</p>;
   }
 
   return (
@@ -37,14 +43,14 @@ export const PhotoDetailPage = () => {
         alt={photo.title ?? "photo"}
         width={1200}
         height={800}
-        className="w-full object-container mb-4"
+        className="w-full object-container my-4"
       />
 
       {photo.title && (
         <h1 className="text-2xl font-bold mb-2">{photo.title}</h1>
       )}
       {photo.takenAt && (
-        <p className="text-sm text-gray-500 mb-2">
+        <p className="text-sm mb-2">
           撮影日: {new Date(photo.takenAt).toLocaleString()}
         </p>
       )}
@@ -53,6 +59,12 @@ export const PhotoDetailPage = () => {
           {photo.description}
         </p>
       )}
+      {/* 撮影情報 */}
+      {photo.exif && <ExifInfoSection exif={photo.exif} />}
+      {/* GPS */}
+      {photo.gps && <GPSInfoSection gps={photo.gps} />}
+      {/* タグ */}
+      {photo.tags.length > 0 && <TagList tags={photo.tags} />}
     </div>
   );
-};
+}
