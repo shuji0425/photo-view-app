@@ -20,7 +20,7 @@ export default function HamburgerMenu() {
       <AnimatePresence>
         {isOpen && (
           <motion.nav
-            className="fixed top-0 left-0 w-full h-full bg-white z-40 flex flex-col items-center justify-center gap-8 text-xl"
+            className="fixed top-0 left-0 w-full h-full z-40 bg-gray-200 flex flex-col items-center justify-center gap-8 text-gray-700 text-xl"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

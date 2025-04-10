@@ -10,7 +10,7 @@ type Props = {
  * @param Props プロフィール情報
  */
 export const ProfileHeader = ({ profile }: Props) => (
-  <div className="mt-8">
+  <div className="mt-1">
     {/* カバー画像 */}
     {/* {profile.coverImage && (
       <Image

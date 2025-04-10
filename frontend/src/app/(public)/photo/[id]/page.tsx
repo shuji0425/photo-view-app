@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { BackButton } from "@/components/ui/BackButton";
 import Image from "next/image";
 import { PublicPhotoDetail } from "@/types/public/photo";
 import { getPublicPhotoById } from "@/lib/api/photo/getPublicById";
 import { ExifInfoSection } from "@/components/photo/display/ExifInfo";
 import { GPSInfoSection } from "@/components/photo/display/GPSInfo";
 import { TagList } from "@/components/photo/display/TagList";
+import { FooterNavBar } from "@/components/ui/FooterNavBar";
 
 /**
  * 写真詳細画面
@@ -36,8 +36,6 @@ export default function PhotoDetailPage() {
 
   return (
     <div className="p-4 max-w-3xl mx-auto text-gray-700 bg-gray-100">
-      <BackButton />
-
       <Image
         src={photo.imageUrl}
         alt={photo.title ?? "photo"}
@@ -65,6 +63,8 @@ export default function PhotoDetailPage() {
       {photo.gps && <GPSInfoSection gps={photo.gps} />}
       {/* タグ */}
       {photo.tags.length > 0 && <TagList tags={photo.tags} />}
+
+      <FooterNavBar />
     </div>
   );
 }
