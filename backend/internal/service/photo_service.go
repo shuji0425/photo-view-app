@@ -89,9 +89,6 @@ func (s *photoService) SaveUploadPhotos(ctx context.Context, userID int64, files
 		exif.PhotoID = 0 // exifとgpsは仮
 		gps.PhotoID = 0
 
-		log.Printf("抽出されたExif: %+v", exif)
-		log.Printf("抽出されたGPS: %+v", gps)
-
 		photoList = append(photoList, photo)
 		exifList = append(exifList, exif)
 		gpsList = append(gpsList, gps)

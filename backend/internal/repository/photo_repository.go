@@ -6,6 +6,7 @@ import (
 	"backend/internal/model"
 	"context"
 	"errors"
+	"log"
 
 	"gorm.io/gorm"
 )
@@ -126,6 +127,12 @@ func (r *photoRepository) FindPublicPhotoDetail(ctx context.Context, photoID int
 		policy = photo.User.MetadataVisibilityPolicy
 	}
 
+	if photo.User == nil {
+		log.Println("photo.User is nil")
+	} else if photo.User.MetadataVisibilityPolicy == nil {
+		log.Println("MetadataVisibilityPolicy is nil")
+	}
+
 	return &domain.PublicPhotoDetail{
 		Photo: converter.ToDomainPhoto(&photo),
 		Exif:  converter.ToDomainExifWithPolicy(photo.Exif, policy),
@@ -185,7 +192,7 @@ func (r *photoRepository) UpdateWithTags(ctx context.Context, req *domain.Photo)
 
 		if err := tx.Model(&model.Photo{}).
 			Where("id = ?", photoModel.ID).
-			Select("is_visible", "title", "description", "category_id", "taken_at").
+			Select("is_visible", "title", "description", "category_id", "taken_at", "user_id").
 			Updates(photoModel).Error; err != nil {
 			return err
 		}

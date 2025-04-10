@@ -14,7 +14,7 @@ type PhotoUsecase interface {
 	GetPaginatedPhotos(page, limit int) (*dto.PaginatedPhotoResponse, error)
 	GetPublicPhotoDetail(ctx context.Context, photoID int64) (*dto.PublicPhotoDetailDTO, error)
 	UploadPhotos(ctx context.Context, userID int64, files []*multipart.FileHeader) (*dto.PhotoUploadResponse, error)
-	BulkUpdatePhotos(ctx context.Context, reqs dto.PhotoBulkUpdateRequest) error
+	BulkUpdatePhotos(ctx context.Context, reqs dto.PhotoBulkUpdateRequest, userID *int64) error
 	DeletePhotosByIDs(ids []int64) error
 }
 
@@ -77,11 +77,11 @@ func (u *photoUsecase) UploadPhotos(ctx context.Context, userID int64, files []*
 }
 
 // 複数の画像とタグ情報を更新
-func (u *photoUsecase) BulkUpdatePhotos(ctx context.Context, reqs dto.PhotoBulkUpdateRequest) error {
+func (u *photoUsecase) BulkUpdatePhotos(ctx context.Context, reqs dto.PhotoBulkUpdateRequest, userID *int64) error {
 	for i := range reqs.Updates {
 		req := reqs.Updates[i]
 		// 1件でもエラーが出たら終了
-		domainPhoto := converter.ToPhotoFromUpdateDTO(&req)
+		domainPhoto := converter.ToPhotoFromUpdateDTO(&req, userID)
 		if err := u.photoService.UpdatePhotoWithTags(ctx, domainPhoto); err != nil {
 			return err
 		}

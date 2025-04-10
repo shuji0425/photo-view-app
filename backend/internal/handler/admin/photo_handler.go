@@ -3,6 +3,7 @@ package handler
 import (
 	"backend/internal/dto"
 	"backend/internal/usecase"
+	"backend/pkg/contextutil"
 	"net/http"
 	"strconv"
 	"strings"
@@ -118,11 +119,18 @@ func (h *PhotoHandler) BulkUpdatePhotos(c *gin.Context) {
 		return
 	}
 
+	// ユーザーIDを取得
+	userID, err := contextutil.GetUserID(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "ログイン情報が取得できません"})
+		return
+	}
+
 	// コンテキストを取得
 	ctx := c.Request.Context()
 
 	// 保存処理
-	if err := h.photoUsecase.BulkUpdatePhotos(ctx, req); err != nil {
+	if err := h.photoUsecase.BulkUpdatePhotos(ctx, req, &userID); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "更新に失敗しました"})
 		return
 	}
