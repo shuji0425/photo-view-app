@@ -33,8 +33,6 @@ export const FlipCard = ({ photo }: Props) => {
     lastTap = now;
   };
 
-  console.log("class Name:", fitClassName);
-
   return (
     <div
       className="w-full h-full perspective cursor-pointer p-1"

@@ -1,6 +1,8 @@
 "use client";
 
 import { GPSInfo } from "@/types/photoGps";
+import { motion } from "framer-motion";
+import { MapPin } from "lucide-react";
 
 type Props = {
   gps: GPSInfo;
@@ -13,10 +15,23 @@ export const GPSInfoSection = ({ gps }: Props) => {
   if (!gps.latitude || !gps.longitude) return null;
 
   return (
-    <div className="mt-6 rounded shadow p-4 text-sm">
+    <motion.div
+      className="mt-6 rounded shadow p-4 text-sm"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
       <h2 className="text-lg font-semibold mb-2">位置情報</h2>
-      <p>緯度: {gps.latitude}</p>
-      <p>経度: {gps.longitude}</p>
-    </div>
+      <ul className="space-y-1">
+        <li className="flex items-center gap-2">
+          <MapPin size={16} />
+          <p>緯度: {gps.latitude}</p>
+        </li>
+        <li className="flex items-center gap-2">
+          <MapPin size={16} />
+          <p>経度: {gps.longitude}</p>
+        </li>
+      </ul>
+    </motion.div>
   );
 };
