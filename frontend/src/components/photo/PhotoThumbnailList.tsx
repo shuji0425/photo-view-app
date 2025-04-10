@@ -1,8 +1,8 @@
 import Image from "next/image";
-import type { Photo } from "@/types/photo";
+import { PublicPhoto } from "@/types/public/photo";
 
 type Props = {
-  photos: Photo[];
+  photos: PublicPhoto[];
   currentIndex: number;
   onSelect: (index: number) => void;
 };

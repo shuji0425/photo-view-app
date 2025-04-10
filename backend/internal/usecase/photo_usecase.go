@@ -12,8 +12,9 @@ import (
 type PhotoUsecase interface {
 	GetPhotoByIDs(ids []int64) ([]*dto.PhotoDetail, error)
 	GetPaginatedPhotos(page, limit int) (*dto.PaginatedPhotoResponse, error)
+	GetPublicPhotoDetail(ctx context.Context, photoID int64) (*dto.PublicPhotoDetailDTO, error)
 	UploadPhotos(ctx context.Context, userID int64, files []*multipart.FileHeader) (*dto.PhotoUploadResponse, error)
-	BulkUpdatePhotos(ctx context.Context, reqs dto.PhotoBulkUpdateRequest) error
+	BulkUpdatePhotos(ctx context.Context, reqs dto.PhotoBulkUpdateRequest, userID *int64) error
 	DeletePhotosByIDs(ids []int64) error
 }
 
@@ -51,6 +52,19 @@ func (u *photoUsecase) GetPaginatedPhotos(page, limit int) (*dto.PaginatedPhotoR
 	}, nil
 }
 
+// idに紐づく写真情報と詳細情報を取得
+func (u *photoUsecase) GetPublicPhotoDetail(ctx context.Context, photoID int64) (*dto.PublicPhotoDetailDTO, error) {
+	detail, err := u.photoService.GetPublicPhotoDetail(ctx, photoID)
+	if err != nil {
+		return nil, err
+	}
+	if detail == nil {
+		return nil, nil
+	}
+
+	return converter.ToPublicPhotoDetailResponse(detail), nil
+}
+
 // 複数画像を保存
 func (u *photoUsecase) UploadPhotos(ctx context.Context, userID int64, files []*multipart.FileHeader) (*dto.PhotoUploadResponse, error) {
 	ids, err := u.photoService.SaveUploadPhotos(ctx, userID, files)
@@ -63,11 +77,11 @@ func (u *photoUsecase) UploadPhotos(ctx context.Context, userID int64, files []*
 }
 
 // 複数の画像とタグ情報を更新
-func (u *photoUsecase) BulkUpdatePhotos(ctx context.Context, reqs dto.PhotoBulkUpdateRequest) error {
+func (u *photoUsecase) BulkUpdatePhotos(ctx context.Context, reqs dto.PhotoBulkUpdateRequest, userID *int64) error {
 	for i := range reqs.Updates {
 		req := reqs.Updates[i]
 		// 1件でもエラーが出たら終了
-		domainPhoto := converter.ToPhotoFromUpdateDTO(&req)
+		domainPhoto := converter.ToPhotoFromUpdateDTO(&req, userID)
 		if err := u.photoService.UpdatePhotoWithTags(ctx, domainPhoto); err != nil {
 			return err
 		}

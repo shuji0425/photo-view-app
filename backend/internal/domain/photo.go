@@ -17,3 +17,11 @@ type Photo struct {
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
+
+// 写真詳細
+type PublicPhotoDetail struct {
+	Photo *Photo
+	Exif  *PhotoExif
+	GPS   *PhotoGPS
+	Tags  []*Tag
+}

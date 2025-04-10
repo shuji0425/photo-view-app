@@ -1,11 +1,9 @@
-import type { Photo } from "@/types/photo";
+import { PublicPhoto } from "@/types/public/photo";
 import PhotoCardFrame from "./PhotoCardFrame";
 import PhotoDetails from "./PhotoDetails";
 import Link from "next/link";
 
-export default function PhotoFlipBack({ photo }: { photo: Photo }) {
-  const ratio = photo.width / photo.height;
-
+export default function PhotoFlipBack({ photo }: { photo: PublicPhoto }) {
   return (
     <div className="absolute inset-0 backface-hidden rotate-y-180">
       <PhotoCardFrame>
@@ -16,7 +14,7 @@ export default function PhotoFlipBack({ photo }: { photo: Photo }) {
             <div
               className="absolute left-0 top-0 right-0 bottom-0 m-auto p-1"
               style={{
-                aspectRatio: ratio,
+                aspectRatio: photo.aspectRatio,
                 maxWidth: "100%",
                 maxHeight: "100%",
                 width: "auto",

@@ -1,13 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import type { Photo } from "@/types/photo";
+import { PublicPhoto } from "@/types/public/photo";
 import PhotoMainView from "./PhotoMainView";
-// import PhotoDetails from "./PhotoDetails";
 import PhotoThumbnailList from "./PhotoThumbnailList";
 
 type Props = {
-  photos: Photo[];
+  photos: PublicPhoto[];
 };
 
 export default function PhotoViewer({ photos }: Props) {

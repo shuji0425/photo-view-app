@@ -1,5 +1,7 @@
+import { Tag } from "@/types/tag";
+
 type CategoryTagProps = {
-  tag: string;
+  tag: Tag;
   isSelected?: boolean;
   onClick?: () => void;
 };
@@ -16,7 +18,7 @@ export default function CategoryTag({
         isSelected ? "bg-black text-white" : "bg-gray-100 text-gray-700"
       }`}
     >
-      #{tag}
+      #{tag.name}
     </button>
   );
 }

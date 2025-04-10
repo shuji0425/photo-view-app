@@ -5,6 +5,8 @@ import (
 	"backend/internal/domain"
 	"backend/internal/model"
 	"context"
+	"errors"
+	"log"
 
 	"gorm.io/gorm"
 )
@@ -13,6 +15,7 @@ import (
 type PhotoRepository interface {
 	FindPaginated(page, limit int) ([]*domain.Photo, int64, error)
 	GetPhotoByIDs(ids []int64) ([]*domain.Photo, error)
+	FindPublicPhotoDetail(ctx context.Context, photoID int64) (*domain.PublicPhotoDetail, error)
 	CreatePhotoWithMeta(ctx context.Context, photo *domain.Photo, exif *domain.PhotoExif, gps *domain.PhotoGPS) (int64, error)
 	UpdateWithTags(ctx context.Context, req *domain.Photo) error
 	DeleteByIDs(ids []int64) error
@@ -95,6 +98,49 @@ func (r *photoRepository) GetPhotoByIDs(ids []int64) ([]*domain.Photo, error) {
 	return photos, nil
 }
 
+// 公開写真の詳細情報を取得
+func (r *photoRepository) FindPublicPhotoDetail(ctx context.Context, photoID int64) (*domain.PublicPhotoDetail, error) {
+	var photo model.Photo
+
+	// 写真とそれに紐づくデータを取得（modelに紐付け必要）
+	err := r.db.WithContext(ctx).
+		Preload("Exif").
+		Preload("GPS").
+		Preload("Tags").
+		Preload("User").
+		Preload("User.MetadataVisibilityPolicy").
+		Where("photos.id = ? AND photos.is_visible = TRUE", photoID).
+		First(&photo).Error
+
+	// 見つからない場合は終了
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, nil
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	// policy 取得
+	var policy *model.MetadataVisibilityPolicy
+	if photo.User != nil {
+		policy = photo.User.MetadataVisibilityPolicy
+	}
+
+	if photo.User == nil {
+		log.Println("photo.User is nil")
+	} else if photo.User.MetadataVisibilityPolicy == nil {
+		log.Println("MetadataVisibilityPolicy is nil")
+	}
+
+	return &domain.PublicPhotoDetail{
+		Photo: converter.ToDomainPhoto(&photo),
+		Exif:  converter.ToDomainExifWithPolicy(photo.Exif, policy),
+		GPS:   converter.ToDomainGPSWithPolicy(photo.GPS, policy),
+		Tags:  converter.ToDomainTags(photo.Tags),
+	}, nil
+}
+
 // 1枚の写真情報を登録
 func (r *photoRepository) CreatePhotoWithMeta(
 	ctx context.Context,
@@ -146,7 +192,7 @@ func (r *photoRepository) UpdateWithTags(ctx context.Context, req *domain.Photo)
 
 		if err := tx.Model(&model.Photo{}).
 			Where("id = ?", photoModel.ID).
-			Select("is_visible", "title", "description", "category_id", "taken_at").
+			Select("is_visible", "title", "description", "category_id", "taken_at", "user_id").
 			Updates(photoModel).Error; err != nil {
 			return err
 		}

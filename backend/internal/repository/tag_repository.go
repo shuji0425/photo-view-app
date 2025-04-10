@@ -5,6 +5,7 @@ import (
 	"backend/internal/domain"
 	"backend/internal/model"
 	"context"
+	"errors"
 
 	"gorm.io/gorm"
 )
@@ -12,8 +13,10 @@ import (
 // インターフェース
 type TagRepository interface {
 	GetAll(ctx context.Context) ([]*domain.Tag, error)
-	FindOrCreateTags(tx *gorm.DB, names []string) ([]int64, error)
 	FindByQuery(ctx context.Context, query string) ([]*domain.Tag, error)
+	FindDefaultTag(ctx context.Context) (*domain.Tag, error)
+	FindTagsHavingPhotos(ctx context.Context) ([]*domain.Tag, error)
+	FindOrCreateTags(tx *gorm.DB, names []string) ([]int64, error)
 	UpdateSortOrders(ctx context.Context, updates []domain.TagSortUpdate) error
 }
 
@@ -41,6 +44,66 @@ func (r *tagRepository) GetAll(ctx context.Context) ([]*domain.Tag, error) {
 		Find(&tags).Error; err != nil {
 		return nil, err
 	}
+	return converter.ToDomainTags(tags), nil
+}
+
+// 名前に部分一致するタグを取得する
+func (r *tagRepository) FindByQuery(ctx context.Context, query string) ([]*domain.Tag, error) {
+	var models []*model.Tag
+
+	// クエリが空なら空配列を返却
+	if query == "" {
+		return []*domain.Tag{}, nil
+	}
+
+	// name に部分一致するタグを取得
+	if err := r.db.WithContext(ctx).
+		Where("name LIKE ?", "%"+query+"%").
+		Order("sort_order ASC").
+		Limit(10).
+		Find(&models).Error; err != nil {
+		return nil, err
+	}
+
+	return converter.ToDomainTags(models), nil
+}
+
+// デフォルトでタグ1件を取得
+func (r *tagRepository) FindDefaultTag(ctx context.Context) (*domain.Tag, error) {
+	var tag model.Tag
+
+	// 並び順が1番若いタグを取得（0は最後）
+	err := r.db.WithContext(ctx).
+		Joins("JOIN photo_tags pt ON pt.tag_id = tags.id").
+		Order("CASE WHEN tags.sort_order = 0 THEN 999999 ELSE tags.sort_order END ASC").
+		Limit(1).
+		Find(&tag).Error
+
+	if err != nil || tag.ID == 0 {
+		return nil, errors.New("タグがありません")
+	}
+
+	return converter.ToDomainTag(&tag), nil
+}
+
+// タグ一覧を取得(写真に紐づいてないタグは除外)
+func (r *tagRepository) FindTagsHavingPhotos(ctx context.Context) ([]*domain.Tag, error) {
+	var tags []*model.Tag
+
+	err := r.db.WithContext(ctx).
+		Table("tags").
+		Select("tags.id, tags.name, tags.sort_order").
+		Joins("JOIN photo_tags ON tags.id = photo_tags.tag_id").
+		Joins("JOIN photos ON photos.id = photo_tags.photo_id").
+		Where("photos.is_visible = TRUE").
+		Group("tags.id").
+		Having("COUNT(photo_tags.photo_id) > 0").
+		Order("CASE WHEN tags.sort_order = 0 THEN 999999 ELSE tags.sort_order END ASC").Scan(&tags).Error
+
+	if err != nil {
+		return nil, err
+	}
+
 	return converter.ToDomainTags(tags), nil
 }
 
@@ -90,27 +153,6 @@ func (r *tagRepository) FindOrCreateTags(tx *gorm.DB, names []string) ([]int64, 
 	}
 
 	return ids, nil
-}
-
-// 名前に部分一致するタグを取得する
-func (r *tagRepository) FindByQuery(ctx context.Context, query string) ([]*domain.Tag, error) {
-	var models []*model.Tag
-
-	// クエリが空なら空配列を返却
-	if query == "" {
-		return []*domain.Tag{}, nil
-	}
-
-	// name に部分一致するタグを取得
-	if err := r.db.WithContext(ctx).
-		Where("name LIKE ?", "%"+query+"%").
-		Order("sort_order ASC").
-		Limit(10).
-		Find(&models).Error; err != nil {
-		return nil, err
-	}
-
-	return converter.ToDomainTags(models), nil
 }
 
 // 並び順を更新する

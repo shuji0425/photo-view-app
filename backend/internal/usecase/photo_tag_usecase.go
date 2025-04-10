@@ -11,6 +11,7 @@ import (
 // インターフェース
 type PhotoTagUsecase interface {
 	GetPhotosByTagID(ctx context.Context, tagID int64) ([]*dto.PhotoWithSortOrder, error)
+	GetPhotosByTagIDForPublic(ctx context.Context, tagID int64) ([]*dto.PhotoPublicDTO, error)
 	UpdateSortOrders(ctx context.Context, tagID int64, updates []domain.PhotoTagSortUpdate) error
 }
 
@@ -37,4 +38,16 @@ func (u *photoTagUsecase) GetPhotosByTagID(ctx context.Context, tagID int64) ([]
 // 並び順を更新
 func (u *photoTagUsecase) UpdateSortOrders(ctx context.Context, tagID int64, updates []domain.PhotoTagSortUpdate) error {
 	return u.photoTagService.UpdateSortOrders(ctx, tagID, updates)
+}
+
+// ----------- 公開用 -----------------
+
+// 指定タグに紐づく写真を取得（公開用）
+func (u *photoTagUsecase) GetPhotosByTagIDForPublic(ctx context.Context, tagID int64) ([]*dto.PhotoPublicDTO, error) {
+	photos, err := u.photoTagService.GetPhotosByTagID(ctx, tagID)
+	if err != nil {
+		return nil, err
+	}
+
+	return converter.ToDtoPhotosPublic(photos), nil
 }

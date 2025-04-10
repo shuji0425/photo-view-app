@@ -4,6 +4,7 @@ import { ProfileBio } from "@/components/profile/display/ProfileBio";
 import { ProfileHeader } from "@/components/profile/display/ProfileHeader";
 import { ProfileInfo } from "@/components/profile/display/ProfileInfo";
 import { ProfileSNS } from "@/components/profile/display/ProfileSNS";
+import { FooterNavBar } from "@/components/ui/FooterNavBar";
 import { fetchPublicAdminProfile } from "@/lib/api/profile/public";
 import { notFound } from "next/navigation";
 
@@ -13,7 +14,7 @@ export default async function ProfilePage() {
   if (!profile || !profile.isPublic) return notFound();
 
   return (
-    <div className="max-w-xl mx-auto px-4 py-8">
+    <div className="max-w-xl mx-auto px-4 py-8 bg-gray-100 text-gray-700">
       <ProfileHeader profile={profile} />
       <ProfileBio bio={profile.bio} />
       <ProfileInfo
@@ -22,6 +23,7 @@ export default async function ProfilePage() {
         birthPlace={profile.birthPlace}
       />
       <ProfileSNS links={profile.snsLinks} />
+      <FooterNavBar />
     </div>
   );
 }

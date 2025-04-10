@@ -28,7 +28,7 @@ export default function AdminLayout({
 
   // 通常管理画面レイアウト
   return (
-    <div className="flex w-full text-gray-900 min-h-[calc(100vh-48px)]">
+    <div className="flex w-full text-gray-900 min-h-screen bg-gray-50">
       <aside className="w-64 border-r">
         <AdminSidebar />
       </aside>

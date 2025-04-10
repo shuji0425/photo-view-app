@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useSwipeable } from "react-swipeable";
-import type { Photo } from "@/types/photo";
+import { PublicPhoto } from "@/types/public/photo";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -13,7 +13,7 @@ import PhotoFlipBack from "./PhotoFlipBack";
 import PhotoCardFrame from "./PhotoCardFrame";
 
 type Props = {
-  photo: Photo;
+  photo: PublicPhoto;
   onPrev: () => void;
   onNext: () => void;
 };

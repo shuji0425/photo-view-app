@@ -2,6 +2,7 @@ package converter
 
 import (
 	"backend/internal/domain"
+	"backend/internal/dto"
 	"backend/internal/model"
 )
 
@@ -42,5 +43,25 @@ func ToPhotoExifDomain(m *model.PhotoExif) *domain.PhotoExif {
 		WhiteBalance: m.WhiteBalance,
 		Orientation:  m.Orientation,
 		TakenAt:      m.TakenAt,
+	}
+}
+
+// domain -> dto
+func ToExifDTO(exif *domain.PhotoExif) *dto.PhotoExifResponse {
+	if exif == nil {
+		return nil
+	}
+
+	return &dto.PhotoExifResponse{
+		CameraMake:   exif.CameraMake,
+		CameraModel:  exif.CameraModel,
+		LensModel:    exif.LensModel,
+		ISO:          exif.ISO,
+		FNumber:      exif.FNumber,
+		ExposureTime: exif.ExposureTime,
+		FocalLength:  exif.FocalLength,
+		WhiteBalance: exif.WhiteBalance,
+		Orientation:  exif.Orientation,
+		TakenAt:      exif.TakenAt,
 	}
 }

@@ -15,8 +15,8 @@ export const ProfileSNS = ({ links }: Props) => {
     <div className="mt-6">
       <h2 className="font-semibold mb-2 text-lg">SNS</h2>
       <ul className="flex flex-wrap gap-3">
-        {links.map((link) => (
-          <li key={link.url}>
+        {links.map((link, idx) => (
+          <li key={idx}>
             <a
               href={link.url}
               target="_blank"

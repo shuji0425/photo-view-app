@@ -2,6 +2,7 @@ package converter
 
 import (
 	"backend/internal/domain"
+	"backend/internal/dto"
 	"backend/internal/model"
 )
 
@@ -28,5 +29,28 @@ func ToPhotoGPSDomain(m *model.PhotoGPS) *domain.PhotoGPS {
 		Latitude:  m.Latitude,
 		Longitude: m.Longitude,
 		IsVisible: m.IsVisible,
+	}
+}
+
+// domain -> dto
+func ToGPSDTO(gps *domain.PhotoGPS) *dto.PhotoGPSResponse {
+	if gps == nil {
+		return nil
+	}
+
+	return &dto.PhotoGPSResponse{
+		Latitude:  gps.Latitude,
+		Longitude: gps.Longitude,
+	}
+}
+
+// MetadataVisibilityPolicy に従って、GPS情報をマスキングしつつ domain 変換
+func ToDomainGPSWithPolicy(gps *model.PhotoGPS, policy *model.MetadataVisibilityPolicy) *domain.PhotoGPS {
+	if gps == nil || policy == nil || !policy.ShowGPS {
+		return nil
+	}
+	return &domain.PhotoGPS{
+		Latitude:  gps.Latitude,
+		Longitude: gps.Longitude,
 	}
 }

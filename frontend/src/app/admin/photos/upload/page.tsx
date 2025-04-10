@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 import { ActionButton } from "@/components/ui/ActionButton";
 import { useAuth } from "@/hooks/useAuth";
-import { ImageDropzone } from "@/components/ui/ImageDropzone";
 import { usePhotoUpload } from "@/hooks/photo/usePhotoUpload";
+import { ImageDropzoneRaw } from "@/components/dropzone/ImageDropzoneRaw";
 
 /**
  * 画像アップロード画面
@@ -12,7 +12,6 @@ import { usePhotoUpload } from "@/hooks/photo/usePhotoUpload";
  */
 export default function PhotoUploadPage() {
   const [files, setFiles] = useState<File[]>([]);
-  const [previews, setPreviews] = useState<string[]>([]);
   const { user, isLoading: authLoading } = useAuth();
   const { upload, isUploading, progress } = usePhotoUpload(
     Number(user?.id ?? 0)
@@ -34,12 +33,7 @@ export default function PhotoUploadPage() {
         </div>
       )}
 
-      <ImageDropzone
-        files={files}
-        previews={previews}
-        setFiles={setFiles}
-        setPreviews={setPreviews}
-      />
+      <ImageDropzoneRaw files={files} setFiles={setFiles} />
 
       <ActionButton
         label="アップロード"

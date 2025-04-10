@@ -1,7 +1,6 @@
 package injector
 
 import (
-	"backend/internal/handler"
 	"backend/internal/repository"
 	"backend/internal/service"
 	"backend/internal/usecase"
@@ -10,9 +9,8 @@ import (
 )
 
 // タグの依存注入
-func InjectTagHandler(db *gorm.DB) *handler.TagHandler {
+func InjectTagUsecase(db *gorm.DB) usecase.TagUsecase {
 	tagRepo := repository.NewTagRepository(db)
 	tagService := service.NewTagService(tagRepo)
-	tagUsecate := usecase.NewTagUsecase(tagService)
-	return handler.NewTagHandler(tagUsecate)
+	return usecase.NewTagUsecase(tagService)
 }

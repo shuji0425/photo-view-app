@@ -1,10 +1,16 @@
 package domain
 
+import "time"
+
 // タグに紐づく写真と並び順
 type PhotoWithSortOrder struct {
-	PhotoID   int64
-	URL       string
-	SortOrder int
+	PhotoID     int64
+	ImageURL    string
+	AspectRatio float64
+	Title       *string
+	Description *string
+	TakenAt     *time.Time
+	SortOrder   int
 }
 
 // 並び順更新用

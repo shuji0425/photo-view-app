@@ -1,7 +1,6 @@
 package injector
 
 import (
-	"backend/internal/handler"
 	"backend/internal/repository"
 	"backend/internal/service"
 	"backend/internal/usecase"
@@ -9,11 +8,10 @@ import (
 	"gorm.io/gorm"
 )
 
-func InjectAuthHandler(db *gorm.DB) *handler.AuthHandler {
+func InjectAuthUsecase(db *gorm.DB) usecase.AuthUsecase {
 	// ユーザー
 	userRepo := repository.NewUserRepository(db)
 	// 認証
 	authService := service.NewAuthService(userRepo)
-	authUsecase := usecase.NewAuthUsecase(authService)
-	return handler.NewAuthHandler(authUsecase)
+	return usecase.NewAuthUsecase(authService)
 }

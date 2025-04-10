@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"log"
 	"mime/multipart"
+	"os"
 	"path/filepath"
 )
 
@@ -19,6 +20,7 @@ import (
 type PhotoService interface {
 	GetPhotosByIDs(ids []int64) ([]*domain.Photo, error)
 	GetPaginatedPhotos(page, limit int) ([]*domain.Photo, int64, error)
+	GetPublicPhotoDetail(ctx context.Context, photoID int64) (*domain.PublicPhotoDetail, error)
 	SaveUploadPhotos(ctx context.Context, userID int64, files []*multipart.FileHeader) ([]int64, error)
 	SavePhotosWithMeta(ctx context.Context, photos []*domain.Photo, exifs []*domain.PhotoExif, gpsList []*domain.PhotoGPS, savedPaths []string) ([]int64, error)
 	UpdatePhotoWithTags(ctx context.Context, req *domain.Photo) error
@@ -46,6 +48,11 @@ func (s *photoService) GetPaginatedPhotos(page, limit int) ([]*domain.Photo, int
 	return s.photoRepo.FindPaginated(page, limit)
 }
 
+// idから写真と詳細情報を取得（ポリシーによりtrueのみ取得）
+func (s *photoService) GetPublicPhotoDetail(ctx context.Context, photoID int64) (*domain.PublicPhotoDetail, error) {
+	return s.photoRepo.FindPublicPhotoDetail(ctx, photoID)
+}
+
 // 画像保存（DBとフォルダに）
 func (s *photoService) SaveUploadPhotos(ctx context.Context, userID int64, files []*multipart.FileHeader) ([]int64, error) {
 	// ユーザーごとのファイル名生成
@@ -54,7 +61,7 @@ func (s *photoService) SaveUploadPhotos(ctx context.Context, userID int64, files
 	}
 
 	// 画像を保存
-	urls, err := s.imageSaver.SaveMultiple(files, "photos", generateFilename)
+	imageInfos, err := s.imageSaver.SaveMultipleAdWebP(files, "photos", generateFilename)
 	if err != nil {
 		return nil, fmt.Errorf("画像の保存に失敗しました: %w", err)
 	}
@@ -64,8 +71,9 @@ func (s *photoService) SaveUploadPhotos(ctx context.Context, userID int64, files
 	var exifList []*domain.PhotoExif
 	var gpsList []*domain.PhotoGPS
 
-	for _, url := range urls {
-		path := filepath.Join(s.imageSaver.BasePath(), url)
+	for _, info := range imageInfos {
+		path := info.TempPath
+		url := info.URL
 
 		// アスペクト比計算
 		aspectRatio := 1.0
@@ -74,6 +82,7 @@ func (s *photoService) SaveUploadPhotos(ctx context.Context, userID int64, files
 		}
 
 		exif, gps := imageutil.ExtractExifAndGPS(path)
+		_ = os.Remove(path)
 
 		// domain.Photoを構築
 		photo := builder.BuildPhoto(url, aspectRatio, userID)
