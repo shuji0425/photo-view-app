@@ -76,12 +76,14 @@ export default function PhotoEditPage() {
       ))}
 
       {photos.length > 0 && (
-        <ActionButton
-          type="submit"
-          color="green"
-          label="すべて保存"
-          onClick={handleSubmit(onSubmit)}
-        />
+        <div className="text-center">
+          <ActionButton
+            type="submit"
+            color="green"
+            label="すべて保存"
+            onClick={handleSubmit(onSubmit)}
+          />
+        </div>
       )}
     </>
   );

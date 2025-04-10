@@ -35,7 +35,7 @@ export const PhotoEditCard = ({
   categories,
 }: Props) => {
   return (
-    <section className="border rounded p-4 mb-6 shadow-sm bg-white">
+    <section className="border rounded p-6 mb-8 shadow-sm bg-white max-w-screen-md mx-auto">
       <div className="relative w-full aspect-[4/3] overflow-hidden rounded">
         {/* 画像 */}
         <Image

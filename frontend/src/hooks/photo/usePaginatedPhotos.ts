@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { PhotoDetail } from "@/types/photo";
 import { fetchPhotos } from "../../lib/queries/photo/fetchPhotos";
 
-export const usePaginatedPhotos = (initialPage = 1, limit = 5) => {
+export const usePaginatedPhotos = (initialPage = 1, limit = 15) => {
   const [photos, setPhotos] = useState<PhotoDetail[]>([]);
   const photosRef = useRef<PhotoDetail[]>([]);
   const [page, setPage] = useState(initialPage);
