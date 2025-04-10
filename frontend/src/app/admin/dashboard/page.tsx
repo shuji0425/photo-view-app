@@ -23,48 +23,49 @@ export default function AdminDashboardPage() {
   // ログイン済みの表示
   return (
     <AdminMainWrapper>
-      <h1 className="text-2xl font-bold mb-4 text-left">
-        ようこそ {user?.username} さん！
-      </h1>
-      <p className="mb-4 text-left text-gray-600">
-        あなたは {user?.role === "admin" ? "管理者" : "ユーザー"}{" "}
+      <h1 className="max-w-3xl">ようこそ {user?.username} さん！</h1>
+      <p className="text-gray-600 text-base mb-6">
+        あなたは
+        <span className="font-semibold">
+          {user?.role === "admin" ? "管理者" : "ユーザー"}
+        </span>
         としてログインしています。
       </p>
 
       {/* ボタン */}
-      <div className="mt-4">
+      <div className="space-y-3">
         {/* ログアウト */}
-        <LogoutButton onLogout={logout} />
+        <div>
+          <LogoutButton onLogout={logout} />
+        </div>
 
         {/* プロフィール */}
         {!profile && (
-          <NavButton
-            href="/admin/profile"
-            label="プロフィール作成"
-            color="yellow"
-          />
+          <div>
+            <NavButton
+              href="/admin/profile"
+              label="プロフィール作成"
+              color="yellow"
+            />
+          </div>
         )}
 
         {/* アカウント情報変更 */}
-        <div>
+        <div className="grid sm:grid-cols-3 gap-3">
           <NavButton
             href="/admin/settings/basic"
             label="アカウント情報変更"
             color="blue"
           />
-        </div>
 
-        {/* パスワード変更 */}
-        <div className="mt-2">
+          {/* パスワード変更 */}
           <NavButton
             href="/admin/settings/password"
             label="パスワード変更"
             color="blue"
           />
-        </div>
 
-        {/* 表示ポリシー変更 */}
-        <div className="mt-2">
+          {/* 表示ポリシー変更 */}
           <NavButton
             href="/admin/settings/metadata-policy"
             label="表示ポリシー変更"
