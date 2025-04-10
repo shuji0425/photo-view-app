@@ -3,13 +3,21 @@
 import { motion } from "framer-motion";
 import { Tag } from "lucide-react";
 import type { Tag as TagType } from "@/types/tag";
+import { useRouter } from "next/navigation";
 
 type Props = {
   tags: TagType[];
 };
 
 export const TagList = ({ tags }: Props) => {
+  const router = useRouter();
+
   if (tags.length === 0) return null;
+
+  // クリックでホーム画面へ遷移
+  const handleClick = (tagId: number) => {
+    router.push(`/?tag_id=${tagId}`);
+  };
 
   return (
     <motion.div
@@ -24,12 +32,13 @@ export const TagList = ({ tags }: Props) => {
       </h2>
       <div className="flex flex-wrap gap-2 mt-2">
         {tags.map((tag) => (
-          <span
+          <button
             key={tag.id}
-            className="px-3 py-1 text-xs bg-gray-200 rounded-full text-gray-700"
+            onClick={() => handleClick(tag.id)}
+            className="px-3 py-1 text-xs bg-gray-200 rounded-full text-gray-700 cursor-pointer"
           >
             #{tag.name}
-          </span>
+          </button>
         ))}
       </div>
     </motion.div>
