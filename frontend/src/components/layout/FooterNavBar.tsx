@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, User, Share2 } from "lucide-react";
+import { Home, User } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
 /**
@@ -14,7 +14,6 @@ export const FooterNavBar = () => {
   const navItems = [
     { href: "/", icon: Home, label: "ホーム" },
     { href: "/profile", icon: User, label: "プロフィール" },
-    { href: "/share", icon: Share2, label: "シェア" },
   ];
 
   return (

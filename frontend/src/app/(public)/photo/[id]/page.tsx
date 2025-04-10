@@ -8,7 +8,7 @@ import { getPublicPhotoById } from "@/lib/api/photo/getPublicById";
 import { ExifInfoSection } from "@/components/photo/display/ExifInfo";
 import { GPSInfoSection } from "@/components/photo/display/GPSInfo";
 import { TagList } from "@/components/photo/display/TagList";
-import { FooterNavBar } from "@/components/ui/FooterNavBar";
+import { FooterNavBar } from "@/components/layout/FooterNavBar";
 
 /**
  * 写真詳細画面
