@@ -2,10 +2,10 @@
 
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import Image from "next/image";
 import { useImageProcessor } from "@/hooks/useImageProcessor";
-import { X } from "lucide-react";
 import { usePreviewManager } from "@/hooks/usePreviewManager";
+import { ImagePreviewGrid } from "./ImagePreviewGrid";
+import { useDropzoneManager } from "@/hooks/useDropzoneManager";
 
 type ImageDropzoneProps = {
   files: File[];
@@ -18,6 +18,7 @@ type ImageDropzoneProps = {
 export const ImageDropzone = ({ files, setFiles }: ImageDropzoneProps) => {
   const { convertMultiple } = useImageProcessor();
   const previewManager = usePreviewManager(files);
+  const { handleRemove } = useDropzoneManager({ files, setFiles });
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
@@ -35,12 +36,6 @@ export const ImageDropzone = ({ files, setFiles }: ImageDropzoneProps) => {
     multiple: true,
   });
 
-  const handleRemove = (index: number) => {
-    const newFiles = [...files];
-    newFiles.splice(index, 1);
-    setFiles(newFiles);
-  };
-
   return (
     <div
       {...getRootProps()}
@@ -53,31 +48,12 @@ export const ImageDropzone = ({ files, setFiles }: ImageDropzoneProps) => {
         ここに画像をドラッグ&ドロップ、またはクリックして選択（最大10枚)
       </p>
 
-      {previewManager.mode === "multiple" &&
-        previewManager.previewUrls.length > 0 && (
-          <div className="grid grid-cols-3 gap-2 mt-4">
-            {previewManager.previewUrls.map((src, idx) => (
-              <div key={idx} className="relative w-full aspect-square border">
-                <Image
-                  src={src}
-                  alt={`preview-${idx}`}
-                  fill
-                  className="object-cover rounded"
-                />
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleRemove(idx);
-                  }}
-                  className="absolute top-1 right-1 bg-white bg-opacity-70 hover:bg-red-500 hover:text-white rounded-full p-1"
-                >
-                  <X size={16} />
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
+      {previewManager.mode === "multiple" && (
+        <ImagePreviewGrid
+          previewUrls={previewManager.previewUrls}
+          onRemove={handleRemove}
+        />
+      )}
     </div>
   );
 };

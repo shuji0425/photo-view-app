@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 import { ActionButton } from "@/components/ui/ActionButton";
 import { useAuth } from "@/hooks/useAuth";
-import { ImageDropzone } from "@/components/ui/ImageDropzone";
 import { usePhotoUpload } from "@/hooks/photo/usePhotoUpload";
+import { ImageDropzoneRaw } from "@/components/dropzone/ImageDropzoneRaw";
 
 /**
  * 画像アップロード画面
@@ -33,7 +33,7 @@ export default function PhotoUploadPage() {
         </div>
       )}
 
-      <ImageDropzone files={files} setFiles={setFiles} />
+      <ImageDropzoneRaw files={files} setFiles={setFiles} />
 
       <ActionButton
         label="アップロード"
