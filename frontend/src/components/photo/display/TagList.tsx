@@ -13,7 +13,7 @@ export const TagList = ({ tags }: Props) => {
 
   return (
     <motion.div
-      className="mt-6 rounded shadow p-4 text-sm"
+      className="mt-6 bg-white rounded shadow p-4 text-sm"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}

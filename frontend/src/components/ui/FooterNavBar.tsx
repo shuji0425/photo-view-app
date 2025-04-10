@@ -18,11 +18,18 @@ export const FooterNavBar = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 inset-x-0 bg-gray-100 border-gray-200 shadow-sm z-50">
+    <nav
+      role="navigation"
+      className="fixed bottom-0 inset-x-0 bg-gray-200 border-gray-300 shadow-sm z-50"
+    >
       <ul className="flex justify-around items-center h-14">
         {navItems.map(({ href, icon: Icon, label }) => (
           <li key={href}>
-            <Link href={href} className="flex flex-col items-center text-xs">
+            <Link
+              href={href}
+              aria-label={label}
+              className="flex flex-col items-center text-xs"
+            >
               <Icon
                 size={20}
                 className={cn(

@@ -50,7 +50,11 @@ func ExtractExifAndGPS(path string) (*domain.PhotoExif, *domain.PhotoGPS) {
 			return nil
 		}
 
-		str := val.String()
+		str, err := val.StringVal()
+		if err != nil {
+			return nil
+		}
+
 		return &str
 	}
 
@@ -61,11 +65,7 @@ func ExtractExifAndGPS(path string) (*domain.PhotoExif, *domain.PhotoGPS) {
 			return nil
 		}
 
-		rat, err := val.Rat(0)
-		if err != nil {
-			return nil
-		}
-
+		rat, _ := val.Rat(0)
 		f, _ := rat.Float64()
 		return &f
 	}

@@ -28,12 +28,12 @@ export const ExifInfoSection = ({ exif }: Props) => {
   }[] = [
     {
       icon: <Camera size={16} />,
-      label: "カメラメーカー",
+      label: "メーカー",
       value: exif.cameraMake,
     },
     {
       icon: <Camera size={16} />,
-      label: "カメラ機種",
+      label: "機種",
       value: exif.cameraModel,
     },
     { icon: <Wand2 size={16} />, label: "レンズ", value: exif.lensModel },
@@ -68,7 +68,7 @@ export const ExifInfoSection = ({ exif }: Props) => {
 
   return (
     <motion.div
-      className="mt-6 bg-white rounded shadow p-4 text-sm text-gray-800"
+      className="mt-6 bg-white rounded shadow p-4 text-sm"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
@@ -80,7 +80,7 @@ export const ExifInfoSection = ({ exif }: Props) => {
           .map((entry, idx) => (
             <li key={idx} className="flex items-center gap-2">
               {entry.icon}
-              <span className="font-medium">{entry.label}:</span>
+              <span className="font-medium min-w-[70px]">{entry.label} : </span>
               <span>{entry.value}</span>
             </li>
           ))}

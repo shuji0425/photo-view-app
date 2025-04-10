@@ -35,34 +35,48 @@ export default function PhotoDetailPage() {
   }
 
   return (
-    <div className="p-4 max-w-3xl mx-auto text-gray-700 bg-gray-100">
-      <Image
-        src={photo.imageUrl}
-        alt={photo.title ?? "photo"}
-        width={1200}
-        height={800}
-        className="w-full object-container my-4"
-      />
+    <div className="flex-1 max-w-xl mx-auto bg-gray-100 text-gray-700 flex flex-col">
+      <main className="pb-16">
+        <div className="p-4">
+          {/* 画像表示 */}
+          <div className="w-full mb-4 flex justify-center bg-white rounded shadow p-4">
+            <Image
+              src={photo.imageUrl}
+              alt={photo.title ?? "photo"}
+              width={1200}
+              height={800}
+              className="object-contain max-h-[80vh] w-full h-auto"
+            />
+          </div>
 
-      {photo.title && (
-        <h1 className="text-2xl font-bold mb-2">{photo.title}</h1>
-      )}
-      {photo.takenAt && (
-        <p className="text-sm mb-2">
-          撮影日: {new Date(photo.takenAt).toLocaleString()}
-        </p>
-      )}
-      {photo.description && (
-        <p className="text-base mb-2 line-clamp-3 whitespace-pre-wrap">
-          {photo.description}
-        </p>
-      )}
-      {/* 撮影情報 */}
-      {photo.exif && <ExifInfoSection exif={photo.exif} />}
-      {/* GPS */}
-      {photo.gps && <GPSInfoSection gps={photo.gps} />}
-      {/* タグ */}
-      {photo.tags.length > 0 && <TagList tags={photo.tags} />}
+          {/* 写真紹介 */}
+          <div className="bg-white rounded shadow p-4">
+            {photo.title && (
+              <h1 className="text-2xl font-bold mb-2">{photo.title}</h1>
+            )}
+            {photo.takenAt && (
+              <p className="text-sm mb-2">
+                撮影日:{" "}
+                {new Date(photo.takenAt).toLocaleDateString("ja-JP", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </p>
+            )}
+            {photo.description && (
+              <p className="text-base mb-2 whitespace-pre-wrap">
+                {photo.description}
+              </p>
+            )}
+          </div>
+
+          {/* 詳細情報 */}
+          {photo.exif && <ExifInfoSection exif={photo.exif} />}
+          {photo.gps && <GPSInfoSection gps={photo.gps} />}
+          {photo.tags.length > 0 && <TagList tags={photo.tags} />}
+        </div>
+      </main>
 
       <FooterNavBar />
     </div>
