@@ -39,10 +39,10 @@ export const MainSwiper = ({
       speed={450}
       className="w-full h-full"
     >
-      {photos.map((photo) => (
+      {photos.map((photo, idx) => (
         <SwiperSlide key={photo.id}>
           <div className="w-full h-full flex items-center justify-center bg-black relative">
-            <FlipCard photo={photo} />
+            <FlipCard photo={photo} isFirst={idx === 0} />
           </div>
         </SwiperSlide>
       ))}

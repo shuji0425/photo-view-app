@@ -10,12 +10,13 @@ import { useFitMode } from "@/hooks/useFitMode";
 
 type Props = {
   photo: PublicPhoto;
+  isFirst: boolean;
 };
 
 /**
  * フリップカード
  */
-export const FlipCard = ({ photo }: Props) => {
+export const FlipCard = ({ photo, isFirst }: Props) => {
   const [flipped, setFlipped] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const { className: fitClassName } = useFitMode({
@@ -45,17 +46,36 @@ export const FlipCard = ({ photo }: Props) => {
         style={{ transformStyle: "preserve-3d" }}
       >
         {/* 表面 */}
-        <div ref={containerRef} className="absolute inset-0 backface-hidden">
-          <Image
-            src={photo.url}
-            alt={photo.title ?? "photo"}
-            fill
-            className="object-contain"
-          />
+        <div
+          className={cn(
+            "absolute inset-0 backface-hidden",
+            flipped && "hidden"
+          )}
+        >
+          <div
+            ref={containerRef}
+            className="relative w-full h-full"
+            style={{ aspectRatio: photo.aspectRatio }}
+          >
+            <Image
+              src={photo.url}
+              alt={photo.title ?? "photo"}
+              fill
+              priority={isFirst}
+              loading={isFirst ? "eager" : "lazy"}
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="object-contain"
+            />
+          </div>
         </div>
 
         {/* 裏面 */}
-        <div className="absolute inset-0 rotate-y-180 backface-hidden overflow-hidden">
+        <div
+          className={cn(
+            "absolute inset-0 rotate-y-180 backface-hidden overflow-hidden",
+            !flipped && "hidden"
+          )}
+        >
           <div
             className={cn(
               "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2",
