@@ -17,36 +17,39 @@ type Props = {
 export const useFitMode = ({ photoAspectRatio, containerRef }: Props) => {
   const [className, setClassName] = useState("w-full h-auto");
 
-  useEffect(() => {
+  const updateFitMode = () => {
     const container = containerRef.current;
     if (!container) return;
 
-    const update = () => {
-      const { width, height } = container.getBoundingClientRect();
-      const screenAspectRatio = width / height;
+    // 画面のアスペクト比を計算
+    const width = container.offsetWidth;
+    const height = container.offsetHeight;
+    const screenAspectRatio = width / height;
 
-      if (photoAspectRatio < 1 - EPSILON) {
-        // 縦長の画像
-        setClassName("h-full w-auto");
-      } else if (screenAspectRatio < 1 - EPSILON) {
-        // 縦長画面で横画像 → 横にフィット
-        setClassName("w-full h-auto");
-      } else if (photoAspectRatio < screenAspectRatio - EPSILON) {
-        // 画像のAR < 画面 → 縦にフィット
-        setClassName("h-full w-auto");
-      } else {
-        // それ以外 → 横にフィット
-        setClassName("w-full h-auto");
-      }
+    if (photoAspectRatio < 1 - EPSILON) {
+      // 縦長の画像
+      setClassName("h-full w-auto");
+    } else if (screenAspectRatio < 1 - EPSILON) {
+      // 縦長画面で横画像 → 横にフィット
+      setClassName("w-full h-auto");
+    } else if (photoAspectRatio < screenAspectRatio - EPSILON) {
+      // 画像のAR < 画面 → 縦にフィット
+      setClassName("h-full w-auto");
+    } else {
+      // それ以外 → 横にフィット
+      setClassName("w-full h-auto");
+    }
+  };
+
+  useEffect(() => {
+    // 初期化＋リサイズ時に実行
+    updateFitMode();
+
+    window.addEventListener("resize", updateFitMode);
+    return () => {
+      window.removeEventListener("resize", updateFitMode);
     };
-
-    update();
-
-    const resizeObserver = new ResizeObserver(update);
-    resizeObserver.observe(container);
-
-    return () => resizeObserver.disconnect();
-  }, [photoAspectRatio, containerRef]);
+  });
 
   return { className };
 };
