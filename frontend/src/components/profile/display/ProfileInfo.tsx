@@ -9,18 +9,18 @@ type Props = {
 export const ProfileInfo = ({ website, location, birthPlace }: Props) => {
   const items = [
     {
-      label: "Website",
+      label: "Webサイト",
       value: website,
       isLink: true,
       icon: <FaLink className="text-gray-500" />,
     },
     {
-      label: "Location",
+      label: "所在地",
       value: location,
       icon: <FaMapMarkerAlt className="text-gray-500" />,
     },
     {
-      label: "Birth Place",
+      label: "出身地",
       value: birthPlace,
       icon: <FaMapMarkedAlt className="text-gray-500" />,
     },

@@ -10,12 +10,13 @@ import { useFitMode } from "@/hooks/useFitMode";
 
 type Props = {
   photo: PublicPhoto;
+  isFirst: boolean;
 };
 
 /**
  * フリップカード
  */
-export const FlipCard = ({ photo }: Props) => {
+export const FlipCard = ({ photo, isFirst }: Props) => {
   const [flipped, setFlipped] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const { className: fitClassName } = useFitMode({
@@ -50,6 +51,9 @@ export const FlipCard = ({ photo }: Props) => {
             src={photo.url}
             alt={photo.title ?? "photo"}
             fill
+            priority={isFirst}
+            loading={isFirst ? "eager" : "lazy"}
+            sizes="(max-width: 768px) 100vw, 50vw"
             className="object-contain"
           />
         </div>
@@ -59,7 +63,8 @@ export const FlipCard = ({ photo }: Props) => {
           <div
             className={cn(
               "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2",
-              "text-black bg-gray-100 p-4 flex flex-col justify-between",
+              "text-black bg-gray-100 px-6 py-8 sm:px-10 sm:py-12",
+              "flex flex-col justify-center items-center text-center gap-4",
               "max-w-full max-h-full",
               fitClassName
             )}
@@ -67,17 +72,17 @@ export const FlipCard = ({ photo }: Props) => {
           >
             <div>
               {photo.title && (
-                <h2 className="text-lg font-bold mb-1 line-clamp-1">
+                <h2 className="text-xl sm:text-2xl font-bold mb-2">
                   {photo.title}
                 </h2>
               )}
               {photo.takenAt && (
-                <p className="text-sm mb-2">
-                  撮影日: {new Date(photo.takenAt).toLocaleString()}
+                <p className="text-sm sm:text-base text-gray-600 mb-3">
+                  撮影日: {new Date(photo.takenAt).toLocaleDateString()}
                 </p>
               )}
               {photo.description && (
-                <p className="text-base mb-2 line-clamp-3 whitespace-pre-wrap">
+                <p className="text-base sm:text-lg leading-relaxed whitespace-pre-wrap mb-4">
                   {photo.description}
                 </p>
               )}
@@ -85,7 +90,7 @@ export const FlipCard = ({ photo }: Props) => {
             <div className="text-right">
               <Link
                 href={`/photo/${photo.id}`}
-                className="inline-block mt-2 px-4 py-2 bg-black text-white text-sm rounded-full hover:bg-gray-800 transition"
+                className="inline-block px-5 py-2 bg-black text-white text-sm rounded-full hover:bg-gray-800 transition"
               >
                 詳細ページへ
               </Link>

@@ -7,10 +7,10 @@ type Props = {
 export function NavLinks({ onClickLink }: Props) {
   return (
     <>
-      <Link href="/" onClick={onClickLink}>
+      <Link href="/" onClick={onClickLink} className="cursor-pointer">
         ホーム
       </Link>
-      <Link href="/profile" onClick={onClickLink}>
+      <Link href="/profile" onClick={onClickLink} className="cursor-pointer">
         プロフィール
       </Link>
       {/* 別タブ */}
@@ -19,6 +19,7 @@ export function NavLinks({ onClickLink }: Props) {
         target="_blank"
         rel="noopener noreferrer"
         onClick={onClickLink}
+        className="cursor-pointer"
       >
         利用規約
       </a>
@@ -27,6 +28,7 @@ export function NavLinks({ onClickLink }: Props) {
         target="_blank"
         rel="noopener noreferrer"
         onClick={onClickLink}
+        className="cursor-pointer"
       >
         プライバシーポリシー
       </a>
@@ -35,6 +37,7 @@ export function NavLinks({ onClickLink }: Props) {
         target="_blank"
         rel="noopener noreferrer"
         onClick={onClickLink}
+        className="cursor-pointer"
       >
         お問い合わせ
       </a>

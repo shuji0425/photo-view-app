@@ -70,7 +70,7 @@ export const PhotoSelectGrid = ({ photos, reload }: Props) => {
       )}
 
       {/* グリッド表示 */}
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-5 gap-2">
         {filteredPhotos.map((photo) => (
           <div
             key={photo.id}

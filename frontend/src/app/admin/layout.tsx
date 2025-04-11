@@ -18,9 +18,9 @@ export default function AdminLayout({
   if (!showSidebar) {
     // ログイン画面の中央寄せレイアウト
     return (
-      <div className="flex items-center justify-center h-full w-full text-gray-900">
-        <main className="p-6 w-full max-w-screen-md">
-          <div className="bg-white p-6 shadow-md rounded-xl">{children}</div>
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 text-gray-900 px-4">
+        <main className="w-full max-w-md bg-white p-8 shadow-lg rounded-lg">
+          {children}
         </main>
       </div>
     );
@@ -28,11 +28,13 @@ export default function AdminLayout({
 
   // 通常管理画面レイアウト
   return (
-    <div className="flex w-full text-gray-900 min-h-screen bg-gray-50">
-      <aside className="w-64 border-r">
+    <div className="flex min-h-screen bg-gray-50 text-gray-900">
+      <aside className="w-64 h-screen sticky top-0 border-r bg-white shadow-sm z-10">
         <AdminSidebar />
       </aside>
-      <main className="h-full p-6 overflow-y-auto">{children}</main>
+      <main className="flex-1 p-8 overflow-y-auto">
+        <div className="max-w-screen-xl mx-auto">{children}</div>
+      </main>
     </div>
   );
 }
