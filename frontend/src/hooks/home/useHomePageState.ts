@@ -1,3 +1,5 @@
+"use client";
+
 import { Swiper as SwiperType } from "swiper";
 import { getTagDefault } from "@/lib/api/tag/getDefault";
 import { getPublicPhotosByTagId } from "@/lib/api/tag/getPublicPhotosByTagId";

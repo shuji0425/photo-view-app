@@ -1,52 +1,13 @@
-"use client";
-
-import { MainSwiper } from "@/components/home/MainSwiper";
-import { TagList } from "@/components/home/TagList";
-import { ThumbnailSwiper } from "@/components/home/ThumbnailSwiper";
-import { useHomePageState } from "@/hooks/home/useHomePageState";
+import { HomePage } from "@/components/home/HomePage";
+import { Suspense } from "react";
 
 /**
- * 公開ページ
+ * メインページ
  */
-export default function HomePage() {
-  const {
-    thumbsSwiper,
-    setThumbsSwiper,
-    setMainSwiper,
-    photos,
-    selectedTagId,
-    handleTagSelect,
-    activeIndex,
-    setActiveIndex,
-    handleThumbClick,
-  } = useHomePageState();
-
+export default function Home() {
   return (
-    <div className="h-full flex flex-col">
-      {/* タグリスト */}
-      <div className="shrink-0">
-        <TagList selectedTagId={selectedTagId} onSelect={handleTagSelect} />
-      </div>
-
-      {/* メイン画面 */}
-      <div className="flex-1">
-        <MainSwiper
-          photos={photos}
-          thumbsSwiper={thumbsSwiper}
-          onSlideChange={setActiveIndex}
-          onInit={setMainSwiper}
-        />
-      </div>
-
-      {/* サムネイル */}
-      <div className="shrink-0">
-        <ThumbnailSwiper
-          photos={photos}
-          onThumbsInit={setThumbsSwiper}
-          activeIndex={activeIndex}
-          onThumbClick={handleThumbClick}
-        />
-      </div>
-    </div>
+    <Suspense fallback={<div className="p-4">読み込み中...</div>}>
+      <HomePage />
+    </Suspense>
   );
 }
