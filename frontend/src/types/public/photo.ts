@@ -6,6 +6,8 @@ import { Tag } from "../tag";
 export type PublicPhoto = {
   id: number;
   url: string;
+  width: number;
+  height: number;
   aspectRatio: number;
   title?: string | null;
   description?: string | null;
@@ -17,6 +19,8 @@ export type PublicPhoto = {
 export type PublicPhotoDetail = {
   id: number;
   imageUrl: string;
+  width: number;
+  height: number;
   aspectRatio: number;
   title?: string | null;
   description?: string | null;

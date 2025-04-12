@@ -72,20 +72,26 @@ func (s *photoService) SaveUploadPhotos(ctx context.Context, userID int64, files
 	var gpsList []*domain.PhotoGPS
 
 	for _, info := range imageInfos {
-		path := info.TempPath
+		tempPath := info.TempPath
+		savePath := info.WebPPath
 		url := info.URL
 
-		// アスペクト比計算
+		// 画像サイズ取得
+		width, height := 0, 0
 		aspectRatio := 1.0
-		if ar, err := imageutil.GetAspectRatio(path); err == nil {
+		if w, h, ar, err := imageutil.GetImageInfo(savePath); err == nil {
+			width = w
+			height = h
 			aspectRatio = ar
 		}
+		log.Println("横:", width)
+		log.Println("縦:", height)
 
-		exif, gps := imageutil.ExtractExifAndGPS(path)
-		_ = os.Remove(path)
+		exif, gps := imageutil.ExtractExifAndGPS(tempPath)
+		_ = os.Remove(tempPath)
 
 		// domain.Photoを構築
-		photo := builder.BuildPhoto(url, aspectRatio, userID)
+		photo := builder.BuildPhoto(url, aspectRatio, width, height, userID)
 		exif.PhotoID = 0 // exifとgpsは仮
 		gps.PhotoID = 0
 

@@ -5,6 +5,8 @@ import "time"
 type Photo struct {
 	ID          int64  `gorm:"primaryKey"`
 	ImageURL    string `gorm:"unique;not null"`
+	Width       int
+	Height      int
 	AspectRatio float64
 	Title       *string
 	Description *string

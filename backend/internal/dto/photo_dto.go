@@ -11,6 +11,8 @@ type PhotoUploadResponse struct {
 type PhotoDetail struct {
 	ID          int64      `json:"id"`
 	ImageURL    string     `json:"image_url"`
+	Width       int        `json:"width"`
+	Height      int        `json:"height"`
 	AspectRatio float64    `json:"aspect_ratio"`
 	Title       *string    `json:"title,omitempty"`
 	Description *string    `json:"description,omitempty"`
@@ -49,6 +51,8 @@ type PhotoBulkUpdateRequest struct {
 type PhotoPublicDTO struct {
 	ID          int64      `json:"id"`
 	URL         string     `json:"url"`
+	Width       int        `json:"width"`
+	Height      int        `json:"height"`
 	AspectRatio float64    `json:"aspect_ratio"`
 	Title       *string    `json:"title,omitempty"`
 	Description *string    `json:"description,omitempty"`
@@ -60,6 +64,8 @@ type PhotoPublicDTO struct {
 type PublicPhotoDetailDTO struct {
 	ID          int64              `json:"id"`
 	ImageURL    string             `json:"image_url"`
+	Width       int                `json:"width"`
+	Height      int                `json:"height"`
 	AspectRatio float64            `json:"aspect_ratio"`
 	Title       *string            `json:"title,omitempty"`
 	Description *string            `json:"description,omitempty"`

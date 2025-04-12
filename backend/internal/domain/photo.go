@@ -6,6 +6,8 @@ import "time"
 type Photo struct {
 	ID          int64
 	ImageURL    string
+	Width       int
+	Height      int
 	AspectRatio float64
 	Title       *string
 	Description *string
