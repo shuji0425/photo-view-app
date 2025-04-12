@@ -19,26 +19,25 @@ type Props = {
 export const FlipCard = ({ photo, isFirst }: Props) => {
   const [flipped, setFlipped] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const lastTapRef = useRef<number>(0);
   const { className: fitClassName } = useFitMode({
     photoAspectRatio: photo.aspectRatio,
     containerRef: containerRef,
   });
 
   // ダブルタップ判定
-  let lastTap = 0;
-  const handleDoubleTap = () => {
+  const handleClick = () => {
     const now = Date.now();
-    if (now - lastTap < 300) {
+    if (now - lastTapRef.current < 300) {
       setFlipped((prev) => !prev);
     }
-    lastTap = now;
+    lastTapRef.current = now;
   };
 
   return (
     <div
       className="w-full h-full perspective cursor-pointer p-1 overflow-hidden"
-      onDoubleClick={() => setFlipped((prev) => !prev)}
-      onTouchEnd={handleDoubleTap}
+      onClick={handleClick}
     >
       <motion.div
         className="relative w-full h-full transition-transform duration-700"
