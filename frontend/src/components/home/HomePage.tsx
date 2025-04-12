@@ -1,24 +1,24 @@
 "use client";
 
-import { MainSwiper } from "@/components/home/MainSwiper";
 import { TagList } from "@/components/home/TagList";
-import { ThumbnailSwiper } from "@/components/home/ThumbnailSwiper";
 import { useHomePageState } from "@/hooks/home/useHomePageState";
+import { CustomSlider } from "./CustomSlider";
+import { CustomThumbnail } from "./CustomThumbnail";
 
 /**
  * 公開ページ
  */
 export const HomePage = () => {
   const {
-    thumbsSwiper,
-    setThumbsSwiper,
-    setMainSwiper,
+    // thumbsSwiper,
+    // setThumbsSwiper,
+    // setMainSwiper,
     photos,
     selectedTagId,
     handleTagSelect,
     activeIndex,
     setActiveIndex,
-    handleThumbClick,
+    // handleThumbClick,
   } = useHomePageState();
 
   return (
@@ -30,21 +30,19 @@ export const HomePage = () => {
 
       {/* メイン画面 */}
       <div className="flex-1">
-        <MainSwiper
+        <CustomSlider
           photos={photos}
-          thumbsSwiper={thumbsSwiper}
-          onSlideChange={setActiveIndex}
-          onInit={setMainSwiper}
+          currentIndex={activeIndex}
+          onIndexChange={setActiveIndex}
         />
       </div>
 
       {/* サムネイル */}
       <div className="shrink-0">
-        <ThumbnailSwiper
+        <CustomThumbnail
           photos={photos}
-          onThumbsInit={setThumbsSwiper}
           activeIndex={activeIndex}
-          onThumbClick={handleThumbClick}
+          onThumbClick={setActiveIndex}
         />
       </div>
     </div>

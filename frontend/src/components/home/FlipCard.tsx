@@ -36,7 +36,7 @@ export const FlipCard = ({ photo, isFirst }: Props) => {
 
   return (
     <div
-      className="w-full h-full perspective cursor-pointer p-1"
+      className="w-full h-full perspective cursor-pointer p-1 overflow-hidden"
       onDoubleClick={() => setFlipped((prev) => !prev)}
       onTouchEnd={handleDoubleTap}
     >
@@ -46,20 +46,28 @@ export const FlipCard = ({ photo, isFirst }: Props) => {
         style={{ transformStyle: "preserve-3d" }}
       >
         {/* 表面 */}
-        <div ref={containerRef} className="absolute inset-0 backface-hidden">
+        <div
+          ref={containerRef}
+          className="absolute inset-0 w-full h-full backface-hidden flex items-center justify-center"
+        >
           <Image
             src={photo.url}
             alt={photo.title ?? "photo"}
-            fill
+            width={photo.width}
+            height={photo.height}
             priority={isFirst}
             loading={isFirst ? "eager" : "lazy"}
             sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-contain"
+            className="object-contain w-full h-full max-w-full max-h-full"
           />
         </div>
 
         {/* 裏面 */}
-        <div className="absolute inset-0 rotate-y-180 backface-hidden overflow-hidden">
+        <div
+          className={cn(
+            "absolute inset-0 rotate-y-180 backface-hidden overflow-hidden"
+          )}
+        >
           <div
             className={cn(
               "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2",
