@@ -30,6 +30,8 @@ CREATE TABLE IF NOT EXISTS categories (
 CREATE TABLE IF NOT EXISTS photos (
   id INT AUTO_INCREMENT PRIMARY KEY,
   image_url VARCHAR(255) NOT NULL UNIQUE,    -- アップロードされた画URL
+  width INT NOT NULL DEFAULT 0,              -- 横幅
+  height INT NOT NULL DEFAULT 0,             -- 高さ
   aspect_ratio DECIMAL(5,2),                 -- アスペクト比
   title VARCHAR(255),                        -- タイトル（任意）
   description TEXT,                          -- 説明文（任意）

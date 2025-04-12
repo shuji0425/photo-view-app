@@ -2,6 +2,10 @@ include .env
 
 SEED_DIR=./mysql/init
 
+db-in:
+	docker-compose exec $(DB_CONTAINER) sh -c 'MYSQL_PWD=$(MYSQL_PASSWORD) mysql -u $(MYSQL_USER)'
+
+
 # MySQL にスキーマを流す
 db-migrate:
 	docker-compose exec $(DB_CONTAINER) sh -c 'MYSQL_PWD=$(MYSQL_PASSWORD) mysql -u $(MYSQL_USER) $(MYSQL_DATABASE) < 01_create_tables.sql'
