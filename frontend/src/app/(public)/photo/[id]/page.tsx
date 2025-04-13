@@ -1,77 +1,39 @@
-"use client";
-export { photoDetailMetadata as metadata } from "./metadata";
+import { getPublicPhotoById } from "@/lib/api/photo/getPublicById";
+import { photoDetailMetadata } from "./metadata";
+import { notFound } from "next/navigation";
+import { Metadata } from "next";
+import PhotoDetailPage from "@/components/photo/display/PhotoDetailPage";
 
-import { useParams } from "next/navigation";
-import Image from "next/image";
-import { ExifInfoSection } from "@/components/photo/display/ExifInfo";
-import { GPSInfoSection } from "@/components/photo/display/GPSInfo";
-import { TagList } from "@/components/photo/display/TagList";
-import { FooterNavBar } from "@/components/layout/FooterNavBar";
-import { usePublicPhotoById } from "@/lib/swr/usePublicPhotoById";
+type Props = {
+  params: Promise<{ id: string }>;
+};
 
 /**
- * 写真詳細画面
+ * 詳細ページのメタデータ
  */
-export default function PhotoDetailPage() {
-  const params = useParams();
-  const id = Number(params?.id);
-  const {
-    data: photo,
-    isLoading,
-    error,
-  } = usePublicPhotoById(isNaN(id) ? undefined : id);
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  const numericId = Number(id);
+  if (Number.isNaN(numericId)) {
+    return {
+      title: "写真詳細 | Enframe",
+      description: "無効なIDが指定されました。",
+    };
+  }
 
-  if (isLoading) return <p className="p-4">読み込み中...</p>;
-  if (error || !photo)
-    return <p className="p-4">写真が見つかりませんでした。</p>;
+  return await photoDetailMetadata(numericId);
+}
 
-  return (
-    <div className="min-h-full flex-1 max-w-xl mx-auto bg-gray-100 text-gray-700 flex flex-col">
-      <main className="pb-16">
-        <div className="p-4">
-          {/* 画像表示 */}
-          <div className="w-full max-h-[80vh] mb-4 flex justify-center bg-white rounded shadow p-4">
-            <Image
-              src={photo.imageUrl}
-              alt={photo.title ?? "photo"}
-              width={photo.width}
-              height={photo.height}
-              className="object-contain w-full h-auto"
-            />
-          </div>
+/**
+ * 詳細ページ
+ */
+export default async function Page({ params }: Props) {
+  const { id } = await params;
+  const numericId = Number(id);
+  if (Number.isNaN(numericId)) return notFound();
 
-          {/* 写真紹介 */}
-          {(photo.title || photo.takenAt || photo.description) && (
-            <div className="bg-white rounded shadow p-4">
-              {photo.title && (
-                <h2 className="text-2xl font-bold mb-2">{photo.title}</h2>
-              )}
-              {photo.takenAt && (
-                <p className="text-sm mb-2">
-                  撮影日:{" "}
-                  {new Date(photo.takenAt).toLocaleDateString("ja-JP", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </p>
-              )}
-              {photo.description && (
-                <p className="text-base mb-2 whitespace-pre-wrap">
-                  {photo.description}
-                </p>
-              )}
-            </div>
-          )}
+  const photo = await getPublicPhotoById(numericId).catch(() => null);
+  if (!photo) return notFound();
 
-          {/* 詳細情報 */}
-          {photo.exif && <ExifInfoSection exif={photo.exif} />}
-          {photo.gps && <GPSInfoSection gps={photo.gps} />}
-          {photo.tags.length > 0 && <TagList tags={photo.tags} />}
-        </div>
-      </main>
-
-      <FooterNavBar />
-    </div>
-  );
+  return <PhotoDetailPage initialPhoto={photo} />;
 }

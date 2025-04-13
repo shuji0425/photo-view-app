@@ -71,7 +71,8 @@ export const FlipCard = ({ photo, isFirst }: Props) => {
           <div
             className={cn(
               "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2",
-              "text-black bg-gray-100 px-6 py-8 sm:px-10 sm:py-12",
+              "text-black bg-gray-100",
+              "px-6 py-8 sm:px-10 sm:py-12",
               "flex flex-col justify-center items-center text-center gap-4",
               "max-w-full max-h-full",
               fitClassName
@@ -90,7 +91,7 @@ export const FlipCard = ({ photo, isFirst }: Props) => {
                 </p>
               )}
               {photo.description && (
-                <p className="text-base sm:text-lg leading-relaxed whitespace-pre-wrap mb-4">
+                <p className="text-base sm:text-lg leading-relaxed whitespace-pre-wrap break-words mb-4">
                   {photo.description}
                 </p>
               )}
