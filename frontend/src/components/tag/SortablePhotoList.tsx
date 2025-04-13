@@ -73,7 +73,12 @@ const SortablePhotoItem = ({ photo }: { photo: PhotoWithSortOrder }) => {
       {...listeners}
       className="relative aspect-square min-w-[150px] w-full border rounded overflow-hidden shadow-sm cursor-grab"
     >
-      <Image src={photo.url} alt="" fill className="object-cover" />
+      <Image
+        src={photo.url}
+        alt={`photo-${photo.id}`}
+        fill
+        className="object-cover"
+      />
     </li>
   );
 };
