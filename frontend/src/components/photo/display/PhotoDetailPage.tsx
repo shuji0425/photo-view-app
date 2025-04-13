@@ -40,6 +40,7 @@ export default function PhotoDetailPage({ initialPhoto }: Props) {
               alt={photo.title ?? "photo"}
               width={photo.width}
               height={photo.height}
+              priority
               className="object-contain w-full h-auto"
             />
           </div>
