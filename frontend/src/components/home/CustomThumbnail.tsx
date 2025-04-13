@@ -37,6 +37,7 @@ export const CustomThumbnail = ({
               fill
               sizes="(max-width: 768px) 20vw, 100px"
               className="object-cover"
+              priority={index === 0}
             />
           </div>
         ))}
