@@ -1,6 +1,5 @@
 "use client";
 
-import { Swiper as SwiperType } from "swiper";
 import { getTagDefault } from "@/lib/api/tag/getDefault";
 import { getPublicPhotosByTagId } from "@/lib/api/tag/getPublicPhotosByTagId";
 import { PublicPhoto } from "@/types/public/photo";
@@ -12,10 +11,8 @@ import { useRouter, useSearchParams } from "next/navigation";
  * @returns object
  */
 export const useHomePageState = () => {
-  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   const [photos, setPhotos] = useState<PublicPhoto[]>([]);
   const [selectedTagId, setSelectedTagId] = useState<number | null>(null);
-  const [mainSwiper, setMainSwiper] = useState<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
   const router = useRouter();
@@ -59,10 +56,7 @@ export const useHomePageState = () => {
   useEffect(() => {
     const index = photoIndexFromQuery ? Number(photoIndexFromQuery) : 0;
     setActiveIndex(index);
-    if (mainSwiper && photos.length > 0) {
-      mainSwiper?.slideTo(index);
-    }
-  }, [photos.length, photoIndexFromQuery, mainSwiper]);
+  }, [photos.length, photoIndexFromQuery]);
 
   // タグ選択後にURLに反映
   const handleTagSelect = (tagId: number) => {
@@ -71,25 +65,11 @@ export const useHomePageState = () => {
     router.replace(`/?tag_id=${tagId}&photo_index=0`);
   };
 
-  // サムネイル選択時
-  const handleThumbClick = (index: number) => {
-    setActiveIndex(index);
-    mainSwiper?.slideTo(index);
-    if (selectedTagId) {
-      router.replace(`/?tag_id=${selectedTagId}&photo_index=${index}`);
-    }
-  };
-
   return {
-    thumbsSwiper,
-    setThumbsSwiper,
-    mainSwiper,
-    setMainSwiper,
     photos,
     selectedTagId,
     handleTagSelect,
     activeIndex,
     setActiveIndex,
-    handleThumbClick,
   };
 };

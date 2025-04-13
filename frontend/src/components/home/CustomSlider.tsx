@@ -2,12 +2,16 @@
 
 import { useSwipeable } from "react-swipeable";
 import { PublicPhoto } from "@/types/public/photo";
-import { FlipCard } from "./FlipCard";
+import { AnimatePresence } from "framer-motion";
+import { SliderMotionItem } from "./SliderMotionItem";
+
+type Direction = "left" | "right";
 
 type Props = {
   photos: PublicPhoto[];
   currentIndex: number;
-  onIndexChange?: (index: number) => void;
+  direction: Direction;
+  onSwipe: (index: number) => void;
 };
 
 /**
@@ -16,23 +20,19 @@ type Props = {
 export const CustomSlider = ({
   photos,
   currentIndex,
-  onIndexChange,
+  direction,
+  onSwipe,
 }: Props) => {
-  // スライド時に何番目をみているか確認
-  const goTo = (index: number) => {
-    const newIndex = (index + photos.length) % photos.length;
-    onIndexChange?.(newIndex);
-  };
-
   // スライド方向の制御
   const handlers = useSwipeable({
-    onSwipedLeft: () => goTo(currentIndex + 1),
-    onSwipedRight: () => goTo(currentIndex - 1),
+    onSwipedLeft: () => onSwipe(currentIndex + 1),
+    onSwipedRight: () => onSwipe(currentIndex - 1),
     trackMouse: true,
+    trackTouch: true,
+    preventScrollOnSwipe: true,
   });
 
   const currentPhoto = photos[currentIndex];
-
   if (!currentPhoto) return null;
 
   return (
@@ -40,7 +40,13 @@ export const CustomSlider = ({
       {...handlers}
       className="w-full h-full flex items-center justify-center bg-black relative touch-pan-y"
     >
-      <FlipCard photo={currentPhoto} isFirst={currentIndex === 0} />
+      <AnimatePresence custom={direction} mode="wait">
+        <SliderMotionItem
+          photo={currentPhoto}
+          direction={direction}
+          currentIndex={currentIndex}
+        />
+      </AnimatePresence>
     </div>
   );
 };

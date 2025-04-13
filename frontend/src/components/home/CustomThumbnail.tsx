@@ -19,8 +19,8 @@ export const CustomThumbnail = ({
   onThumbClick,
 }: Props) => {
   return (
-    <div className="py-1 px-3 overflow-x-auto whitespace-nowrap scrollbar-hide">
-      <div className="flex gap-2 w-max">
+    <div className="py-2 px-3 overflow-x-auto whitespace-nowrap scrollbar-hide">
+      <div className="flex gap-2 w-max overflow-hidden">
         {photos.map((photo, index) => (
           <div
             key={photo.id}

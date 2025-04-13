@@ -47,7 +47,7 @@ export const FlipCard = ({ photo, isFirst }: Props) => {
         {/* 表面 */}
         <div
           ref={containerRef}
-          className="absolute inset-0 w-full h-full backface-hidden flex items-center justify-center"
+          className="relative w-full h-full backface-hidden flex items-center justify-center"
         >
           <Image
             src={photo.url}
@@ -57,7 +57,8 @@ export const FlipCard = ({ photo, isFirst }: Props) => {
             priority={isFirst}
             loading={isFirst ? "eager" : "lazy"}
             sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-contain w-full h-full max-w-full max-h-full"
+            className="object-contain w-full h-full max-w-full max-h-full overflow-hidden"
+            draggable={false}
           />
         </div>
 
