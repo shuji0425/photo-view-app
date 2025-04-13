@@ -44,7 +44,7 @@ export default function PhotoDetailPage() {
           {(photo.title || photo.takenAt || photo.description) && (
             <div className="bg-white rounded shadow p-4">
               {photo.title && (
-                <h1 className="text-2xl font-bold mb-2">{photo.title}</h1>
+                <h2 className="text-2xl font-bold mb-2">{photo.title}</h2>
               )}
               {photo.takenAt && (
                 <p className="text-sm mb-2">
