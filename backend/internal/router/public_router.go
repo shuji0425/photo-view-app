@@ -23,5 +23,7 @@ func SetupPublicRoutes(
 	tagGroup.GET("/:tag_id/photos", photo.GetPhotosByTag)
 
 	// 写真
-	r.GET("/photo/:photo_id", photo.GetPhotoDetail)
+	photoGroup := r.Group("/photos")
+	photoGroup.GET("/:photo_id", photo.GetPhotoDetail)
+	photoGroup.GET("/ids", photo.GetPublicPhotoIDs)
 }

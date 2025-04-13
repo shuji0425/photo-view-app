@@ -16,6 +16,7 @@ type PhotoRepository interface {
 	FindPaginated(page, limit int) ([]*domain.Photo, int64, error)
 	GetPhotoByIDs(ids []int64) ([]*domain.Photo, error)
 	FindPublicPhotoDetail(ctx context.Context, photoID int64) (*domain.PublicPhotoDetail, error)
+	GetPublicPhotoIDs(ctx context.Context) ([]int64, error)
 	CreatePhotoWithMeta(ctx context.Context, photo *domain.Photo, exif *domain.PhotoExif, gps *domain.PhotoGPS) (int64, error)
 	UpdateWithTags(ctx context.Context, req *domain.Photo) error
 	DeleteByIDs(ids []int64) error
@@ -139,6 +140,19 @@ func (r *photoRepository) FindPublicPhotoDetail(ctx context.Context, photoID int
 		GPS:   converter.ToDomainGPSWithPolicy(photo.GPS, policy),
 		Tags:  converter.ToDomainTags(photo.Tags),
 	}, nil
+}
+
+// 写真IDを取得
+func (r *photoRepository) GetPublicPhotoIDs(ctx context.Context) ([]int64, error) {
+	var ids []int64
+	err := r.db.WithContext(ctx).
+		Model(&model.Photo{}).
+		Where("is_visible = ?", true).
+		Pluck("id", &ids).Error
+	if err != nil {
+		return nil, err
+	}
+	return ids, nil
 }
 
 // 1枚の写真情報を登録

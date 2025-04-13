@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://photo.shuji1996.com/sitemap.xml

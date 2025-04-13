@@ -13,6 +13,7 @@ type PhotoUsecase interface {
 	GetPhotoByIDs(ids []int64) ([]*dto.PhotoDetail, error)
 	GetPaginatedPhotos(page, limit int) (*dto.PaginatedPhotoResponse, error)
 	GetPublicPhotoDetail(ctx context.Context, photoID int64) (*dto.PublicPhotoDetailDTO, error)
+	GetPublicPhotoIDs(ctx context.Context) ([]int64, error)
 	UploadPhotos(ctx context.Context, userID int64, files []*multipart.FileHeader) (*dto.PhotoUploadResponse, error)
 	BulkUpdatePhotos(ctx context.Context, reqs dto.PhotoBulkUpdateRequest, userID *int64) error
 	DeletePhotosByIDs(ids []int64) error
@@ -63,6 +64,11 @@ func (u *photoUsecase) GetPublicPhotoDetail(ctx context.Context, photoID int64) 
 	}
 
 	return converter.ToPublicPhotoDetailResponse(detail), nil
+}
+
+// 写真のID配列を取得
+func (u *photoUsecase) GetPublicPhotoIDs(ctx context.Context) ([]int64, error) {
+	return u.photoService.GetPublicPhotoIDs(ctx)
 }
 
 // 複数画像を保存
