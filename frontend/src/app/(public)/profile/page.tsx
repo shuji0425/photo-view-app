@@ -1,4 +1,4 @@
-export { generateMetadata } from "./metadata";
+export { profileMetadata as metadata } from "./metadata";
 
 import { ProfileBio } from "@/components/profile/display/ProfileBio";
 import { ProfileHeader } from "@/components/profile/display/ProfileHeader";

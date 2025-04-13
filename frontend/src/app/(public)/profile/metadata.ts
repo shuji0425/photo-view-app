@@ -1,38 +1,27 @@
 // app/profile/metadata.ts
 import { fetchPublicAdminProfile } from "@/lib/api/profile/public";
+import { SITE_URL } from "@/lib/constants/metadata";
+import { createGenericMetadata } from "@/lib/utils/seo";
 import { Metadata } from "next";
 
 /**
  * /profile ページのメタデータ（SEO）
  */
-export async function generateMetadata(): Promise<Metadata> {
-  const profile = await fetchPublicAdminProfile();
-
-  if (!profile || !profile.isPublic) {
+export const profileMetadata = async (): Promise<Metadata> => {
+  const metaTitle = "プロフィール";
+  try {
+    const profile = await fetchPublicAdminProfile();
+    return createGenericMetadata({
+      title: metaTitle,
+      description: profile?.bio ?? "プロフィールです。",
+      imageUrl: profile?.avatar ?? `${SITE_URL}/default-avatar.webp`,
+      pathname: `/profile`,
+      type: "profile",
+    });
+  } catch {
     return {
-      title: "プロフィール",
-      description: "公開プロフィールが設定されていません。",
+      title: metaTitle,
+      description: "プロフィールの取得中にエラーが発生しました。",
     };
   }
-
-  return {
-    title: `${profile.displayName} | プロフィール`,
-    description: profile.bio || "公開プロフィールです。",
-    openGraph: {
-      title: `${profile.displayName} | プロフィール`,
-      description: profile.bio || "公開プロフィールです。",
-      images: profile.coverImage ? [profile.coverImage] : undefined,
-      url: `${process.env.NEXT_PUBLIC_BASE_URL}/profile`,
-      type: "profile",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `${profile.displayName} | プロフィール`,
-      description: profile.bio || "公開プロフィールです。",
-      images: profile.coverImage ? [profile.coverImage] : undefined,
-    },
-    metadataBase: new URL(
-      process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000"
-    ),
-  };
-}
+};

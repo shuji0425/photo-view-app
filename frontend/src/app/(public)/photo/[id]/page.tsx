@@ -1,38 +1,29 @@
 "use client";
+export { photoDetailMetadata as metadata } from "./metadata";
 
-import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
-import { PublicPhotoDetail } from "@/types/public/photo";
-import { getPublicPhotoById } from "@/lib/api/photo/getPublicById";
 import { ExifInfoSection } from "@/components/photo/display/ExifInfo";
 import { GPSInfoSection } from "@/components/photo/display/GPSInfo";
 import { TagList } from "@/components/photo/display/TagList";
 import { FooterNavBar } from "@/components/layout/FooterNavBar";
+import { usePublicPhotoById } from "@/lib/swr/usePublicPhotoById";
 
 /**
  * 写真詳細画面
  */
 export default function PhotoDetailPage() {
   const params = useParams();
-  const [photo, setPhoto] = useState<PublicPhotoDetail | null>(null);
+  const id = Number(params?.id);
+  const {
+    data: photo,
+    isLoading,
+    error,
+  } = usePublicPhotoById(isNaN(id) ? undefined : id);
 
-  useEffect(() => {
-    const idParam = params?.id;
-    if (!idParam) return;
-    const fetchPhoto = async () => {
-      const photoId = Number(idParam);
-      if (isNaN(photoId)) return;
-
-      const data = await getPublicPhotoById(photoId);
-      setPhoto(data);
-    };
-    fetchPhoto();
-  }, [params]);
-
-  if (!photo) {
+  if (isLoading) return <p className="p-4">読み込み中...</p>;
+  if (error || !photo)
     return <p className="p-4">写真が見つかりませんでした。</p>;
-  }
 
   return (
     <div className="min-h-full flex-1 max-w-xl mx-auto bg-gray-100 text-gray-700 flex flex-col">

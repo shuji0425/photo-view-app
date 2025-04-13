@@ -1,6 +1,9 @@
 "use client";
 
+export const metadata = createNoIndexMetadata();
+
 import AdminSidebar from "@/components/layout/AdminSidebar";
+import { createNoIndexMetadata } from "@/lib/utils/seo";
 import { usePathname } from "next/navigation";
 import React from "react";
 
