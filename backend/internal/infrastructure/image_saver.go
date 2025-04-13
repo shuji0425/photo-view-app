@@ -27,6 +27,7 @@ type imageSaver struct {
 type SavedImageInfo struct {
 	URL      string
 	TempPath string
+	WebPPath string
 }
 
 // 依存注入
@@ -80,12 +81,12 @@ func (s *imageSaver) SaveMultipleAdWebP(files []*multipart.FileHeader, category 
 	var infos []SavedImageInfo
 	for i, file := range files {
 		// ファイル名
-		webpFilename := generateFilename(i)
-		tempFilename := webpFilename[:len(webpFilename)-5] + ".jpg"
+		webPFilename := generateFilename(i)
+		tempFilename := webPFilename[:len(webPFilename)-5] + ".jpg"
 
 		// ファイルパス
 		tempPath := filepath.Join(savePath, tempFilename)
-		webpPath := filepath.Join(savePath, webpFilename)
+		webPPath := filepath.Join(savePath, webPFilename)
 
 		// 一旦JPEGで保存
 		if err := saveUploadedFile(file, tempPath); err != nil {
@@ -93,14 +94,15 @@ func (s *imageSaver) SaveMultipleAdWebP(files []*multipart.FileHeader, category 
 		}
 
 		// WebPに変換
-		if err := imageutil.ConvertToWebP(tempPath, webpPath, 1024); err != nil {
+		if err := imageutil.ConvertToWebP(tempPath, webPPath, 1024); err != nil {
 			return nil, err
 		}
 
 		// 保存情報を追加
 		infos = append(infos, SavedImageInfo{
-			URL:      fmt.Sprintf("/images/%s/%s", category, webpFilename),
+			URL:      fmt.Sprintf("/images/%s/%s", category, webPFilename),
 			TempPath: tempPath,
+			WebPPath: webPPath,
 		})
 	}
 

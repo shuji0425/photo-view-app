@@ -43,8 +43,8 @@ export default function PhotoDetailPage() {
             <Image
               src={photo.imageUrl}
               alt={photo.title ?? "photo"}
-              width={1200}
-              height={800}
+              width={photo.width}
+              height={photo.height}
               className="object-contain w-full h-auto"
             />
           </div>

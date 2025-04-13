@@ -33,6 +33,8 @@ func ToPhotoModel(p *domain.Photo) *model.Photo {
 	return &model.Photo{
 		ID:          p.ID,
 		ImageURL:    p.ImageURL,
+		Width:       p.Width,
+		Height:      p.Height,
 		AspectRatio: p.AspectRatio,
 		Title:       p.Title,
 		Description: p.Description,
@@ -51,6 +53,8 @@ func ToDomainPhoto(m *model.Photo) *domain.Photo {
 	return &domain.Photo{
 		ID:          m.ID,
 		ImageURL:    m.ImageURL,
+		Width:       m.Width,
+		Height:      m.Height,
 		AspectRatio: m.AspectRatio,
 		Title:       m.Title,
 		Description: m.Description,
@@ -68,6 +72,8 @@ func ToPhotoDetail(p *domain.Photo) *dto.PhotoDetail {
 	return &dto.PhotoDetail{
 		ID:          p.ID,
 		ImageURL:    p.ImageURL,
+		Width:       p.Width,
+		Height:      p.Height,
 		AspectRatio: p.AspectRatio,
 		Title:       p.Title,
 		Description: p.Description,
@@ -103,6 +109,8 @@ func ToPublicPhotoDetailResponse(detail *domain.PublicPhotoDetail) *dto.PublicPh
 	return &dto.PublicPhotoDetailDTO{
 		ID:          detail.Photo.ID,
 		ImageURL:    detail.Photo.ImageURL,
+		Width:       detail.Photo.Width,
+		Height:      detail.Photo.Height,
 		AspectRatio: detail.Photo.AspectRatio,
 		Title:       detail.Photo.Title,
 		Description: detail.Photo.Description,

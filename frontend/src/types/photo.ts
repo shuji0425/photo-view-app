@@ -13,6 +13,8 @@ export type Photo = {
 export type PhotoDetail = {
   id: number;
   imageUrl: string;
+  width: number;
+  height: number;
   aspectRatio: number;
   title?: string | null;
   description?: string | null;

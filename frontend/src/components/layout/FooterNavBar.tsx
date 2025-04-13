@@ -12,9 +12,18 @@ export const FooterNavBar = () => {
   const pathname = usePathname();
   const router = useRouter();
 
+  // 戻るボタンの先を変える
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      router.back();
+    } else {
+      router.push("/");
+    }
+  };
+
   const navItems = [
     {
-      onclick: () => router.back(),
+      onclick: handleBack,
       icon: ArrowLeft,
       label: "戻る",
       isBack: true,

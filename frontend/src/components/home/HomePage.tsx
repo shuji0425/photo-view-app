@@ -1,25 +1,46 @@
 "use client";
 
-import { MainSwiper } from "@/components/home/MainSwiper";
 import { TagList } from "@/components/home/TagList";
-import { ThumbnailSwiper } from "@/components/home/ThumbnailSwiper";
 import { useHomePageState } from "@/hooks/home/useHomePageState";
+import { CustomSlider } from "./CustomSlider";
+import { CustomThumbnail } from "./CustomThumbnail";
+import { useSliderController } from "@/hooks/home/useSliderController";
+import { useRouter } from "next/navigation";
 
 /**
  * 公開ページ
  */
 export const HomePage = () => {
+  const router = useRouter();
   const {
-    thumbsSwiper,
-    setThumbsSwiper,
-    setMainSwiper,
     photos,
     selectedTagId,
     handleTagSelect,
     activeIndex,
     setActiveIndex,
-    handleThumbClick,
   } = useHomePageState();
+
+  const { goToAuto, direction } = useSliderController({
+    photos,
+    currentIndex: activeIndex,
+    onIndexChange: setActiveIndex,
+  });
+
+  // サムネイル選択時
+  const handleGoTo = (index: number) => {
+    if (photos.length === 0) return;
+
+    // ループ対応
+    const total = photos.length;
+    const normalizedIndex = (index + total) % total;
+
+    goToAuto(normalizedIndex);
+    if (selectedTagId !== null) {
+      router.replace(
+        `/?tag_id=${selectedTagId}&photo_index=${normalizedIndex}`
+      );
+    }
+  };
 
   return (
     <div className="h-full flex flex-col">
@@ -29,22 +50,21 @@ export const HomePage = () => {
       </div>
 
       {/* メイン画面 */}
-      <div className="flex-1">
-        <MainSwiper
+      <div className="flex-1 overflow-hidden">
+        <CustomSlider
           photos={photos}
-          thumbsSwiper={thumbsSwiper}
-          onSlideChange={setActiveIndex}
-          onInit={setMainSwiper}
+          currentIndex={activeIndex}
+          direction={direction}
+          onSwipe={handleGoTo}
         />
       </div>
 
       {/* サムネイル */}
       <div className="shrink-0">
-        <ThumbnailSwiper
+        <CustomThumbnail
           photos={photos}
-          onThumbsInit={setThumbsSwiper}
           activeIndex={activeIndex}
-          onThumbClick={handleThumbClick}
+          onThumbClick={handleGoTo}
         />
       </div>
     </div>

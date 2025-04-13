@@ -2,6 +2,8 @@
 export type PhotoDetailDTO = {
   id: number;
   image_url: string;
+  width: number;
+  height: number;
   aspect_ratio: number;
   title: string | null;
   description: string | null;

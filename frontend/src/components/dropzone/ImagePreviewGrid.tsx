@@ -15,7 +15,7 @@ export const ImagePreviewGrid = ({ previewUrls, onRemove }: Props) => {
   if (previewUrls.length === 0) return null;
 
   return (
-    <div className="grid grid-cols-3 gap-2 mt-4">
+    <div className="grid grid-cols-5 gap-2 mt-4">
       {previewUrls.map((src, idx) => (
         <div key={idx} className="relative w-full aspect-square border">
           <Image
