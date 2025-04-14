@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import React from "react";
-import { Toaster } from "react-hot-toast";
 import { SITE_NAME } from "@/lib/constants/metadata";
 import Script from "next/script";
+import ToasterClient from "@/components/ui/ToasterClient";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
@@ -62,7 +62,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} bg-white text-gray-900`}>
         {children}
-        <Toaster position="top-center" />
+        <ToasterClient />
       </body>
     </html>
   );

@@ -38,6 +38,9 @@ export const CustomThumbnail = ({
               sizes="(max-width: 768px) 20vw, 100px"
               className="object-cover"
               priority={index === 0}
+              loading={index === 0 ? "eager" : "lazy"}
+              fetchPriority={index === 0 ? "high" : "auto"}
+              decoding="async"
             />
           </div>
         ))}

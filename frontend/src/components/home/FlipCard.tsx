@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { PublicPhoto } from "@/types/public/photo";
 import { cn } from "@/lib/utils/cn";
 import { useFitMode } from "@/hooks/useFitMode";
+import { SafeMotion } from "../ui/SafeMotion";
 
 type Props = {
   photo: PublicPhoto;
@@ -39,7 +39,7 @@ export const FlipCard = ({ photo, isFirst }: Props) => {
       className="w-full h-full perspective cursor-pointer p-1 overflow-hidden"
       onClick={handleClick}
     >
-      <motion.div
+      <SafeMotion
         className="relative w-full h-full transition-transform duration-700"
         animate={{ rotateY: flipped ? 180 : 0 }}
         style={{ transformStyle: "preserve-3d" }}
@@ -106,7 +106,7 @@ export const FlipCard = ({ photo, isFirst }: Props) => {
             </div>
           </div>
         </div>
-      </motion.div>
+      </SafeMotion>
     </div>
   );
 };
