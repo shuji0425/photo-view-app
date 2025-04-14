@@ -1,7 +1,7 @@
 "use client";
 
+import { SafeMotion } from "@/components/ui/SafeMotion";
 import { ExifInfo } from "@/types/photoExif";
-import { motion } from "framer-motion";
 import {
   Aperture,
   Calendar,
@@ -67,7 +67,7 @@ export const ExifInfoSection = ({ exif }: Props) => {
   ];
 
   return (
-    <motion.div
+    <SafeMotion
       className="mt-6 bg-white rounded shadow p-4 text-sm"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -85,6 +85,6 @@ export const ExifInfoSection = ({ exif }: Props) => {
             </li>
           ))}
       </ul>
-    </motion.div>
+    </SafeMotion>
   );
 };

@@ -1,7 +1,7 @@
 "use client";
 
+import { SafeMotion } from "@/components/ui/SafeMotion";
 import { GPSInfo } from "@/types/photoGps";
-import { motion } from "framer-motion";
 import { MapPin } from "lucide-react";
 
 type Props = {
@@ -15,7 +15,7 @@ export const GPSInfoSection = ({ gps }: Props) => {
   if (!gps.latitude || !gps.longitude) return null;
 
   return (
-    <motion.div
+    <SafeMotion
       className="mt-6 bg-white rounded shadow p-4 text-sm"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -32,6 +32,6 @@ export const GPSInfoSection = ({ gps }: Props) => {
           <p>経度: {gps.longitude}</p>
         </li>
       </ul>
-    </motion.div>
+    </SafeMotion>
   );
 };
