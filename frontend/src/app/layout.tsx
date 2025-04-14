@@ -4,6 +4,7 @@ import "./globals.css";
 import React from "react";
 import { Toaster } from "react-hot-toast";
 import { SITE_NAME } from "@/lib/constants/metadata";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
@@ -32,6 +33,33 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
+      <head>
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-GT5R8G8Q2P"
+          strategy="lazyOnload"
+        />
+        <Script id="ga-init" strategy="lazyOnload">
+          {`
+            if ('requestIdleCallback' in window) {
+              requestIdleCallback(function () {
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-GT5R8G8Q2P');
+              });
+            } else {
+              // Fallback for older browsers
+              setTimeout(function () {
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-GT5R8G8Q2P');
+              }, 2000);
+            }
+          `}
+        </Script>
+      </head>
       <body className={`${inter.className} bg-white text-gray-900`}>
         {children}
         <Toaster position="top-center" />
