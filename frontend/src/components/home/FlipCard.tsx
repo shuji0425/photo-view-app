@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { PublicPhoto } from "@/types/public/photo";
@@ -24,17 +24,6 @@ export const FlipCard = ({ photo, isFirst }: Props) => {
     photoAspectRatio: photo.aspectRatio,
     containerRef: containerRef,
   });
-  const [hasLoaded, setHasLoaded] = useState(false);
-
-  useEffect(() => {
-    if ("requestIdleCallback" in window) {
-      const id = requestIdleCallback(() => setHasLoaded(true));
-      return () => cancelIdleCallback(id);
-    } else {
-      const timeout = setTimeout(() => setHasLoaded(true), 1000);
-      return () => clearTimeout(timeout);
-    }
-  }, []);
 
   // ダブルタップ判定
   const handleClick = () => {
@@ -53,7 +42,7 @@ export const FlipCard = ({ photo, isFirst }: Props) => {
       <SafeMotion
         className="relative w-full h-full transition-transform duration-700"
         initial={false}
-        animate={hasLoaded ? { rotateY: flipped ? 180 : 0 } : false}
+        animate={{ rotateY: flipped ? 180 : 0 }}
         style={{ transformStyle: "preserve-3d" }}
       >
         {/* 表面 */}
@@ -68,6 +57,8 @@ export const FlipCard = ({ photo, isFirst }: Props) => {
             height={photo.height}
             priority={isFirst}
             loading={isFirst ? "eager" : "lazy"}
+            fetchPriority={isFirst ? "high" : "auto"}
+            decoding="async"
             sizes="(max-width: 768px) 100vw, 50vw"
             className="object-contain w-full h-full max-w-full max-h-full overflow-hidden"
             draggable={false}

@@ -42,6 +42,9 @@ export default function PhotoDetailPage({ initialPhoto }: Props) {
               height={photo.height}
               priority
               className="object-contain w-full h-auto"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
             />
           </div>
 
