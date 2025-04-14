@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"backend/internal/middleware"
 	"backend/internal/usecase"
 	"net/http"
 
@@ -29,6 +30,8 @@ func (h *PublicTagHandler) GetDefaultTag(c *gin.Context) {
 		})
 		return
 	}
+	// キャッシュ
+	middleware.SetCache(c, 300)
 
 	c.JSON(http.StatusOK, tag)
 }
@@ -40,5 +43,8 @@ func (h *PublicTagHandler) GetTagsWithPhotos(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "取得に失敗しました"})
 		return
 	}
+	// キャッシュ
+	middleware.SetCache(c, 300)
+
 	c.JSON(http.StatusOK, tags)
 }

@@ -41,10 +41,10 @@ export default function PhotoDetailPage({ initialPhoto }: Props) {
               width={photo.width}
               height={photo.height}
               priority
-              className="object-contain w-full h-auto"
+              className="object-cover w-full h-auto"
               loading="eager"
               fetchPriority="high"
-              decoding="async"
+              sizes="(max-width: 768px) 100vw, 800px"
             />
           </div>
 
