@@ -41,22 +41,12 @@ export default function RootLayout({
         />
         <Script id="ga-init" strategy="lazyOnload">
           {`
-            if ('requestIdleCallback' in window) {
-              requestIdleCallback(function () {
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
+            window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              requestIdleCallback(() => {
                 gtag('js', new Date());
-                gtag('config', 'G-GT5R8G8Q2P');
-              });
-            } else {
-              // Fallback for older browsers
-              setTimeout(function () {
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', 'G-GT5R8G8Q2P');
-              }, 2000);
-            }
+                gtag('config', 'G-GT5R8G8Q2P', { anonymize_ip: true });
+            });
           `}
         </Script>
       </head>
