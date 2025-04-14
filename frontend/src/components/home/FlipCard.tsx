@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-import { motion } from "framer-motion";
+import React, { memo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { PublicPhoto } from "@/types/public/photo";
 import { cn } from "@/lib/utils/cn";
 import { useFitMode } from "@/hooks/useFitMode";
+import { motion } from "framer-motion";
 
 type Props = {
   photo: PublicPhoto;
@@ -16,7 +16,7 @@ type Props = {
 /**
  * フリップカード
  */
-export const FlipCard = ({ photo, isFirst }: Props) => {
+const FlipCardComponent = ({ photo, isFirst }: Props) => {
   const [flipped, setFlipped] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const lastTapRef = useRef<number>(0);
@@ -41,6 +41,7 @@ export const FlipCard = ({ photo, isFirst }: Props) => {
     >
       <motion.div
         className="relative w-full h-full transition-transform duration-700"
+        initial={false}
         animate={{ rotateY: flipped ? 180 : 0 }}
         style={{ transformStyle: "preserve-3d" }}
       >
@@ -56,6 +57,8 @@ export const FlipCard = ({ photo, isFirst }: Props) => {
             height={photo.height}
             priority={isFirst}
             loading={isFirst ? "eager" : "lazy"}
+            fetchPriority={isFirst ? "high" : "auto"}
+            decoding="async"
             sizes="(max-width: 768px) 100vw, 50vw"
             className="object-contain w-full h-full max-w-full max-h-full overflow-hidden"
             draggable={false}
@@ -71,7 +74,8 @@ export const FlipCard = ({ photo, isFirst }: Props) => {
           <div
             className={cn(
               "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2",
-              "text-black bg-gray-100 px-6 py-8 sm:px-10 sm:py-12",
+              "text-black bg-gray-100",
+              "px-6 py-8 sm:px-10 sm:py-12",
               "flex flex-col justify-center items-center text-center gap-4",
               "max-w-full max-h-full",
               fitClassName
@@ -90,7 +94,7 @@ export const FlipCard = ({ photo, isFirst }: Props) => {
                 </p>
               )}
               {photo.description && (
-                <p className="text-base sm:text-lg leading-relaxed whitespace-pre-wrap mb-4">
+                <p className="text-base sm:text-lg leading-relaxed whitespace-pre-wrap break-words mb-4">
                   {photo.description}
                 </p>
               )}
@@ -109,3 +113,7 @@ export const FlipCard = ({ photo, isFirst }: Props) => {
     </div>
   );
 };
+
+export const FlipCard = memo(FlipCardComponent, (prev, next) => {
+  return prev.photo.id === next.photo.id && prev.isFirst === next.isFirst;
+});

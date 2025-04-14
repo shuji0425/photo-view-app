@@ -1,8 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { FlipCard } from "./FlipCard";
 import { PublicPhoto } from "@/types/public/photo";
+import { SafeMotion } from "../ui/SafeMotion";
 
 type Props = {
   photo: PublicPhoto;
@@ -28,7 +28,7 @@ const variants = {
 export const SliderMotionItem = ({ photo, direction, currentIndex }: Props) => {
   const isFirst = currentIndex === 0;
   return (
-    <motion.div
+    <SafeMotion
       key={photo.id}
       custom={direction}
       variants={variants}
@@ -42,6 +42,6 @@ export const SliderMotionItem = ({ photo, direction, currentIndex }: Props) => {
       className="absolute w-full h-full flex items-center justify-center"
     >
       <FlipCard photo={photo} isFirst={isFirst} />
-    </motion.div>
+    </SafeMotion>
   );
 };

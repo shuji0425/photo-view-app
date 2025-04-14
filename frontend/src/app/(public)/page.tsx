@@ -1,3 +1,5 @@
+export { homeMetadata as metadata } from "./metadata";
+
 import { HomePage } from "@/components/home/HomePage";
 import { Suspense } from "react";
 

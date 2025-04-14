@@ -1,5 +1,7 @@
 // src/app/terms/page.tsx
 
+export { termsMetadata as metadata } from "./metadata";
+
 export default function TermsPage() {
   return (
     <main className="min-h-full p-6 space-y-6 max-w-2xl mx-auto bg-gray-100 text-gray-700">
@@ -36,6 +38,8 @@ export default function TermsPage() {
           <a
             href="https://forms.gle/6gDN5BrrNHn8GCp99"
             className="text-blue-600 underline"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             お問い合わせページ
           </a>

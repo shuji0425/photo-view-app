@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"backend/internal/middleware"
 	"backend/internal/usecase"
 	"net/http"
 	"strconv"
@@ -34,6 +35,9 @@ func (h *PublicPhotoHandler) GetPhotosByTag(c *gin.Context) {
 		return
 	}
 
+	// キャッシュ
+	middleware.SetCache(c, 60)
+
 	c.JSON(http.StatusOK, photos)
 }
 
@@ -56,5 +60,30 @@ func (h *PublicPhotoHandler) GetPhotoDetail(c *gin.Context) {
 		return
 	}
 
+	// キャッシュ
+	middleware.SetCache(c, 60)
+
 	c.JSON(http.StatusOK, detail)
+}
+
+// 写真IDの配列を取得
+func (h *PublicPhotoHandler) GetPublicPhotoIDs(c *gin.Context) {
+	ids, err := h.photoUsecase.GetPublicPhotoIDs(c.Request.Context())
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "取得に失敗しました"})
+		return
+	}
+	type response struct {
+		ID int64 `json:"id"`
+	}
+
+	result := make([]response, len(ids))
+	for i, id := range ids {
+		result[i] = response{ID: id}
+	}
+
+	// キャッシュ
+	middleware.SetCache(c, 30)
+
+	c.JSON(http.StatusOK, result)
 }

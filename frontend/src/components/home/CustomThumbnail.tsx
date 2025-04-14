@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils/cn";
 import { PublicPhoto } from "@/types/public/photo";
+import { memo } from "react";
 
 type Props = {
   photos: PublicPhoto[];
@@ -13,7 +14,7 @@ type Props = {
 /**
  * サムネイルスライダー
  */
-export const CustomThumbnail = ({
+const CustomThumbnailComponent = ({
   photos,
   activeIndex,
   onThumbClick,
@@ -38,6 +39,9 @@ export const CustomThumbnail = ({
               sizes="(max-width: 768px) 20vw, 100px"
               className="object-cover"
               priority={index === 0}
+              loading={index === 0 ? "eager" : "lazy"}
+              fetchPriority={index === 0 ? "high" : "auto"}
+              decoding="async"
             />
           </div>
         ))}
@@ -45,3 +49,11 @@ export const CustomThumbnail = ({
     </div>
   );
 };
+
+export const CustomThumbnail = memo(CustomThumbnailComponent, (prev, next) => {
+  return (
+    prev.activeIndex === next.activeIndex &&
+    prev.photos.length === next.photos.length &&
+    prev.photos.every((p, i) => p.id === next.photos[i]?.id)
+  );
+});

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"backend/internal/middleware"
 	"backend/internal/usecase"
 	"net/http"
 
@@ -24,5 +25,9 @@ func (h *PublicProfileHandler) GetPublicAdminProfile(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
+
+	// キャッシュ
+	middleware.SetCache(c, 300)
+
 	c.JSON(http.StatusOK, profile)
 }

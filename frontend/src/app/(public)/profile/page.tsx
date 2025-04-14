@@ -1,4 +1,4 @@
-export { generateMetadata } from "./metadata";
+export { profileMetadata as metadata } from "./metadata";
 
 import { ProfileBio } from "@/components/profile/display/ProfileBio";
 import { ProfileHeader } from "@/components/profile/display/ProfileHeader";
@@ -15,15 +15,18 @@ export default async function ProfilePage() {
 
   return (
     <div className="min-h-full flex-1 max-w-xl mx-auto px-6 py-8 bg-gray-100 text-gray-700">
-      <ProfileHeader profile={profile} />
-      <ProfileBio bio={profile.bio} />
-      <ProfileInfo
-        website={profile.website}
-        location={profile.location}
-        birthPlace={profile.birthPlace}
-      />
-      <ProfileSNS links={profile.snsLinks} />
-      <FooterNavBar />
+      <main className="pb-16">
+        <h2 className="text-2xl font-semibold mb-4">プロフィール</h2>
+        <ProfileHeader profile={profile} />
+        <ProfileBio bio={profile.bio} />
+        <ProfileInfo
+          website={profile.website}
+          location={profile.location}
+          birthPlace={profile.birthPlace}
+        />
+        <ProfileSNS links={profile.snsLinks} />
+        <FooterNavBar />
+      </main>
     </div>
   );
 }

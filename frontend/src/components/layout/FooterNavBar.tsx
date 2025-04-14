@@ -35,9 +35,9 @@ export const FooterNavBar = () => {
   return (
     <nav
       role="navigation"
-      className="fixed bottom-0 inset-x-0 bg-gray-200 border-gray-300 shadow-sm z-50"
+      className="fixed bottom-0 inset-x-0 bg-gray-200 border-gray-300 text-gray-900 font-semibold z-50"
     >
-      <ul className="flex justify-around items-center h-14">
+      <ul className="flex justify-around items-center h-13">
         {navItems.map(({ href, icon: Icon, label, onclick, isBack }) => (
           <li key={label}>
             {isBack ? (

@@ -1,9 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Tag } from "lucide-react";
 import type { Tag as TagType } from "@/types/tag";
 import { useRouter } from "next/navigation";
+import { SafeMotion } from "@/components/ui/SafeMotion";
 
 type Props = {
   tags: TagType[];
@@ -20,7 +20,7 @@ export const TagList = ({ tags }: Props) => {
   };
 
   return (
-    <motion.div
+    <SafeMotion
       className="mt-6 bg-white rounded shadow p-4 text-sm"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -41,6 +41,6 @@ export const TagList = ({ tags }: Props) => {
           </button>
         ))}
       </div>
-    </motion.div>
+    </SafeMotion>
   );
 };
