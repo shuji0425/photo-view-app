@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { PublicPhoto } from "@/types/public/photo";
@@ -24,6 +24,17 @@ export const FlipCard = ({ photo, isFirst }: Props) => {
     photoAspectRatio: photo.aspectRatio,
     containerRef: containerRef,
   });
+  const [hasLoaded, setHasLoaded] = useState(false);
+
+  useEffect(() => {
+    if ("requestIdleCallback" in window) {
+      const id = requestIdleCallback(() => setHasLoaded(true));
+      return () => cancelIdleCallback(id);
+    } else {
+      const timeout = setTimeout(() => setHasLoaded(true), 1000);
+      return () => clearTimeout(timeout);
+    }
+  }, []);
 
   // ダブルタップ判定
   const handleClick = () => {
@@ -41,7 +52,8 @@ export const FlipCard = ({ photo, isFirst }: Props) => {
     >
       <SafeMotion
         className="relative w-full h-full transition-transform duration-700"
-        animate={{ rotateY: flipped ? 180 : 0 }}
+        initial={false}
+        animate={hasLoaded ? { rotateY: flipped ? 180 : 0 } : false}
         style={{ transformStyle: "preserve-3d" }}
       >
         {/* 表面 */}
