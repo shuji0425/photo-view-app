@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { memo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { PublicPhoto } from "@/types/public/photo";
 import { cn } from "@/lib/utils/cn";
 import { useFitMode } from "@/hooks/useFitMode";
-import { SafeMotion } from "../ui/SafeMotion";
+import { motion } from "framer-motion";
 
 type Props = {
   photo: PublicPhoto;
@@ -16,7 +16,7 @@ type Props = {
 /**
  * フリップカード
  */
-export const FlipCard = ({ photo, isFirst }: Props) => {
+const FlipCardComponent = ({ photo, isFirst }: Props) => {
   const [flipped, setFlipped] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const lastTapRef = useRef<number>(0);
@@ -39,7 +39,7 @@ export const FlipCard = ({ photo, isFirst }: Props) => {
       className="w-full h-full perspective cursor-pointer p-1 overflow-hidden"
       onClick={handleClick}
     >
-      <SafeMotion
+      <motion.div
         className="relative w-full h-full transition-transform duration-700"
         initial={false}
         animate={{ rotateY: flipped ? 180 : 0 }}
@@ -109,7 +109,11 @@ export const FlipCard = ({ photo, isFirst }: Props) => {
             </div>
           </div>
         </div>
-      </SafeMotion>
+      </motion.div>
     </div>
   );
 };
+
+export const FlipCard = memo(FlipCardComponent, (prev, next) => {
+  return prev.photo.id === next.photo.id && prev.isFirst === next.isFirst;
+});
