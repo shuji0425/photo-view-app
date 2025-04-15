@@ -3,22 +3,20 @@
 # Please see the documentation for all configuration options:
 # https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 
-# version: 2
-# updates:
-#   - package-ecosystem: "" # See documentation for possible values
-#     directory: "/" # Location of package manifests
-#     schedule:
-#       interval: "weekly"
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/frontend"  # または "/" など
+  - package-ecosystem: "" # See documentation for possible values
+    directory: "/" # Location of package manifests
     schedule:
-      interval: "weekly"  # daily / weekly / monthly
-    open-pull-requests-limit: 5
+      interval: "weekly"
+  # frontend - npm/TypeScript
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
 
-  - package-ecosystem: "go"
+  # backend - Go modules
+  - package-ecosystem: "gomod"
     directory: "/backend"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 5
